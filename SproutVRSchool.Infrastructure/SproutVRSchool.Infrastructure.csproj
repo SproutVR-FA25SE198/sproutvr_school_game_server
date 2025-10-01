@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
+	</ItemGroup>
+
+</Project>
