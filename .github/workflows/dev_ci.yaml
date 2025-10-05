@@ -23,7 +23,7 @@ jobs:
                   dotnet-version: "9.x"
 
             - name: Restore NuGet Packages
-              run: dotnet restore ./SproutVRSchool.sln
+              run: dotnet restore ./SproutVRSchool.slnx
 
             - name: Run All Unit Tests
-              run: dotnet test ./SproutVRSchool.sln  --configuration Release --no-build --verbosity normal
+              run: dotnet test ./SproutVRSchool.slnx  --configuration Release --no-build --verbosity normal
