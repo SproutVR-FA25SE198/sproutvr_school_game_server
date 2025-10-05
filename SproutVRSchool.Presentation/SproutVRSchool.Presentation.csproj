@@ -1,12 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+	<PropertyGroup>
+	  <UserSecretsId>9735d792-d272-46e4-a91a-c35732ae1141</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
-		<ProjectReference Include="..\SproutVRSchool.Infrastructure\SproutVRSchool.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
+		<Folder Include="Controllers\" />
+		<Folder Include="Extensions\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
 	</ItemGroup>
 
 </Project>

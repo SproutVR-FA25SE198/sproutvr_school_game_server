@@ -1061,3 +1061,6 @@ FodyWeavers.xsd
 
 /docker-compose.dcproj
 /docker-compose.yml
+/SproutVRSchool.Presentation/appsettings.json
+/SproutVRSchool.Presentation/appsettings.json
+/SproutVRSchool.Presentation/appsettings.Development.json
