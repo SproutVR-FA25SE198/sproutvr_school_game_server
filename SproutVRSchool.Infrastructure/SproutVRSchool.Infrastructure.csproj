@@ -4,4 +4,8 @@
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Extensions\" />
+	</ItemGroup>
+
 </Project>

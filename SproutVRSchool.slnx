@@ -3,6 +3,7 @@
     <File Path=".dockerignore" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
+    <File Path="docker-compose.yml" />
   </Folder>
   <Project Path="SproutVRSchool.Application/SproutVRSchool.Application.csproj" />
   <Project Path="SproutVRSchool.Domain/SproutVRSchool.Domain.csproj" />
