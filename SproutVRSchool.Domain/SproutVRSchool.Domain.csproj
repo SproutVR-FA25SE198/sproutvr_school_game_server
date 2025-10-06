@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Extensions\" />
+    <Folder Include="Entities\MapObjects\" />
+    <Folder Include="Entities\Maps\" />
+    <Folder Include="Entities\Subjects\" />
+    <Folder Include="Entities\ObjectActivityTypes\" />
+    <Folder Include="Entities\TaskLocations\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
