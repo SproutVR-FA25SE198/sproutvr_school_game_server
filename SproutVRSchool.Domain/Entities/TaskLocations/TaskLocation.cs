@@ -13,9 +13,9 @@ namespace SproutVRSchool.Domain.Entities.TaskLocations;
 public sealed class TaskLocation : BaseEntity
 {
     public Guid MapId { get; set; }
+    public string LocationCode { get; set; }
     public string Name { get; set; }
     public string ImageUrl { get; set; }
-    public string LocationCode { get; set; }
 
     // navigation property
     public Map Map { get; set; }
