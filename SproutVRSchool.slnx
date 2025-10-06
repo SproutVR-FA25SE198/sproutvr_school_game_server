@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
+    <File Path=".github/workflows/dev_cd_to_dockerhub.yaml" />
+    <File Path=".github/workflows/dev_ci.yaml" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="docker-compose.yml" />
