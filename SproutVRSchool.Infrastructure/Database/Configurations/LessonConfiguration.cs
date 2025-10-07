@@ -49,19 +49,19 @@ internal sealed class LessonConfiguration : BaseEntityConfiguration<Lesson>
 
         // Relationships
         builder.HasOne(l => l.Subject)
-               .WithMany()
+               .WithMany(s => s.Lessons)
                .HasForeignKey(l => l.SubjectId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(l => l.Teacher)
-               .WithMany()
+               .WithMany(t => t.Lessons)
                .HasForeignKey(l => l.TeacherId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(l => l.VRLessons)
-               .WithOne()
+               .WithOne(vrl => vrl.Lesson)
                .HasForeignKey(vr => vr.LessonId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);

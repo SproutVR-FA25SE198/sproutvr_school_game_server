@@ -6,16 +6,26 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SproutVRSchool.Application.Abstractions.Data;
+using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Database;
 
 namespace SproutVRSchool.Infrastructure;
 
 public static partial class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection service,
+        IConfiguration configuration)
+    {
+        service.AddPersistence(configuration);
+        return service;
+    }
+
     /*
         Configure for DbContext
      */
-    public static IServiceCollection AddSchoolServerDbContext(
+    private static void AddPersistence(
         this IServiceCollection service,
         IConfiguration configuration)
     {
@@ -24,6 +34,10 @@ public static partial class ServiceCollectionExtensions
             o.UseNpgsql(configuration.GetConnectionString("Postgres"));
         });
 
-        return service;
+        service.AddScoped<SchoolServerDbContextSeeder>();
+
+        service.AddTransient<IFileReader, FileReader>();
+
+        service.AddTransient<IDataSeeder, JsonDataSeeder<SchoolServerDbContext>>();
     }
 }

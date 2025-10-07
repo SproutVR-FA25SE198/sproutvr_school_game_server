@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRTasks;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.VRTasks;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class VRTaskConfiguration : BaseEntityConfiguration<VRTask>
 {

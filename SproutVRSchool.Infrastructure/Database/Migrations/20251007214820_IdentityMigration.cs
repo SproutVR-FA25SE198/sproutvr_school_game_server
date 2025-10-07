@@ -338,7 +338,6 @@ public partial class IdentityMigration : Migration
                 Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                 ResourceUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                TeacherId1 = table.Column<Guid>(type: "uuid", nullable: true),
                 CreateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -359,12 +358,6 @@ public partial class IdentityMigration : Migration
                     principalTable: "Teachers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Restrict);
-                table.ForeignKey(
-                    name: "FK_Lessons_Teachers_TeacherId1",
-                    column: x => x.TeacherId1,
-                    principalSchema: "auth",
-                    principalTable: "Teachers",
-                    principalColumn: "Id");
             });
 
         migrationBuilder.CreateTable(
@@ -460,6 +453,7 @@ public partial class IdentityMigration : Migration
             {
                 MapObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 ActivityTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                Id = table.Column<Guid>(type: "uuid", nullable: false),
                 CreateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -489,6 +483,7 @@ public partial class IdentityMigration : Migration
             {
                 ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 TaskLocationId = table.Column<Guid>(type: "uuid", nullable: false),
+                Id = table.Column<Guid>(type: "uuid", nullable: false),
                 CreateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -594,6 +589,7 @@ public partial class IdentityMigration : Migration
                 VRLearningSessionId = table.Column<Guid>(type: "uuid", nullable: false),
                 StudentName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 NoTasksCompleted = table.Column<int>(type: "integer", nullable: false),
+                Id = table.Column<Guid>(type: "uuid", nullable: false),
                 CreateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdateAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -713,12 +709,6 @@ public partial class IdentityMigration : Migration
             schema: "app",
             table: "Lessons",
             column: "TeacherId");
-
-        migrationBuilder.CreateIndex(
-            name: "IX_Lessons_TeacherId1",
-            schema: "app",
-            table: "Lessons",
-            column: "TeacherId1");
 
         migrationBuilder.CreateIndex(
             name: "IX_MapObjects_MapId",

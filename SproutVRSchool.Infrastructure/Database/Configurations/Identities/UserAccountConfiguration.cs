@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations;
+namespace SproutVRSchool.Infrastructure.Database.Configurations.Identities;
 
 internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAccount>
 {

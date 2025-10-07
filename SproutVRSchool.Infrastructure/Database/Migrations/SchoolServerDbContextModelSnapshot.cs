@@ -320,9 +320,6 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                     b.Property<Guid>("TeacherId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("TeacherId1")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTimeOffset>("UpdateAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
@@ -335,8 +332,6 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
-
-                    b.HasIndex("TeacherId1");
 
                     b.ToTable("Lessons", "app");
                 });
@@ -489,6 +484,9 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTimeOffset>("UpdateAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
@@ -513,6 +511,9 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("UpdateAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -627,6 +628,9 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("NoTasksCompleted")
                         .HasColumnType("integer");
@@ -962,14 +966,10 @@ namespace SproutVRSchool.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("SproutVRSchool.Domain.Entities.Identities.Teacher", "Teacher")
-                        .WithMany()
+                        .WithMany("Lessons")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("SproutVRSchool.Domain.Entities.Identities.Teacher", null)
-                        .WithMany("Lessons")
-                        .HasForeignKey("TeacherId1");
 
                     b.Navigation("Subject");
 

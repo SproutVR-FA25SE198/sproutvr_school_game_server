@@ -6,7 +6,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.Subjects;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.Subjects;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class SubjectConfiguration : BaseEntityConfiguration<Subject>
 {

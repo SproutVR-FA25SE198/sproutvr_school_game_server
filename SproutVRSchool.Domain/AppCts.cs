@@ -13,4 +13,12 @@ public static class AppCts
         public const string AUTH_SCHEMA = "auth";
         public const string APP_SCHEMA = "app";
     }
+
+    public static class SeederFilePaths
+    {
+        // Get the folder at runtime
+
+
+        // Each json file path
+    }
 }

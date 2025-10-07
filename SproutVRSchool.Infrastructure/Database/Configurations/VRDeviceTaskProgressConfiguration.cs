@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRDeviceTaskProgresses;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.VRDeviceTaskProgresses;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguration<VRDeviceTaskProgress>
 {

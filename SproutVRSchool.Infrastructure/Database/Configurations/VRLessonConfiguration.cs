@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.VRLessons;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
 {
