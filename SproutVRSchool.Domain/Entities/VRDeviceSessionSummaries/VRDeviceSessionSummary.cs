@@ -11,6 +11,6 @@ public sealed class VRDeviceSessionSummary : BaseEntity
     public int NoTasksCompleted { get; set; }
 
     // Navigation properties
-    public VRDevice Device { get; set; }
+    public VRDevice VRDevice { get; set; }
     public VRLearningSession VRLearningSession { get; set; }
 }

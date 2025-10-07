@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SproutVRSchool.Domain.Entities.Maps;
 using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
+using SproutVRSchool.Domain.Entities.ObjectLocations;
 using SproutVRSchool.Domain.Entities.TaskLocations;
+using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Domain.Entities.MapObjects;
 
@@ -18,6 +20,7 @@ public sealed class MapObject : BaseEntity
 
     // navigation property
     public Map Map { get; set; }
+    public ICollection<ObjectLocation> ObjectLocations { get; set; } = [];
+    public ICollection<VRTask> VRTasks { get; set; } = [];
     public ICollection<ObjectActivityType> ObjectActivityTypes { get; set; } = [];
-
 }

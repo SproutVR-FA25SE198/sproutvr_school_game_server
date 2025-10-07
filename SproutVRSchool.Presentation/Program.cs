@@ -1,15 +1,23 @@
+using SproutVRSchool.Infrastructure;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // ======================================
-// Add services to the container.
+// === Built-in services
 // ======================================
 
 builder.Services.AddControllers();
 
+// ======================================
+// === User-defined services
+// ======================================
+
+builder.Services.AddSchoolServerDbContext(builder.Configuration);
+
 WebApplication app = builder.Build();
 
 // ======================================
-// Configure the HTTP request pipeline.
+// === Middlewares
 // ======================================
 
 app.MapControllers();
