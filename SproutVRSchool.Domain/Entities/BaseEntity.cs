@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SproutVRSchool.Domain.Entities;
 
-public class BaseEntity
+public abstract class BaseEntity
 {
     public Guid Id { get; set; }
     public DateTimeOffset CreateAtUtc { get; set; }

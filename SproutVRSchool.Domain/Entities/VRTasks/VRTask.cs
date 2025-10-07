@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
-using SproutVRSchool.Domain.Entities.DeviceTaskProgresses;
 using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
+using SproutVRSchool.Domain.Entities.VRDeviceTaskProgresses;
 
 namespace SproutVRSchool.Domain.Entities.VRTasks;
 
@@ -21,5 +21,5 @@ public sealed class VRTask : BaseEntity
     public TaskLocation TaskLocation { get; set; }
     public MapObject MapObject { get; set; }
     public ActivityType ActivityType { get; set; }
-    public ICollection<DeviceTaskProgress> DeviceTaskProgresses { get; set; } = [];
+    public ICollection<VRDeviceTaskProgress> DeviceTaskProgresses { get; set; } = [];
 }
