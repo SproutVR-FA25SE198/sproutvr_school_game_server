@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.VRDeviceSessionSummaries;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class VRDeviceSessionSummaryConfiguration : BaseEntityConfiguration<VRDeviceSessionSummary>
 {
     public override void Configure(EntityTypeBuilder<VRDeviceSessionSummary> builder)
     {
+        // override the hasKey from BaseEntityConfiguration
+        builder.Ignore(vdss => vdss.Id);
         base.Configure(builder);
 
         // Schema
         builder.ToTable("VRDeviceSessionSummaries", schema: AppCts.DB.APP_SCHEMA);
 
         // Composite Primary Key
-        // override the hasKey from BaseEntityConfiguration
-        builder.Ignore(vdss => vdss.Id);
         builder.HasKey(vdss => new { vdss.VRLearningSessionId, vdss.VRDeviceId });
 
         // Foreign Keys

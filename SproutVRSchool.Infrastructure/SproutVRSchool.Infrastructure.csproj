@@ -2,10 +2,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Database\Migrations\" />
+		<Folder Include="Database\SeederFiles\" />
 		<Folder Include="Extensions\" />
 	</ItemGroup>
 

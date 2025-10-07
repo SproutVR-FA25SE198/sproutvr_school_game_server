@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.ObjectActivityTypes;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class ObjectActivityTypeConfiguration : BaseEntityConfiguration<ObjectActivityType>
 {
     public override void Configure(EntityTypeBuilder<ObjectActivityType> builder)
     {
+        // override the hasKey from BaseEntityConfiguration first then run the base class
+        builder.Ignore(ol => ol.Id);
         base.Configure(builder);
 
         // Schema
         builder.ToTable("ObjectActivityTypes", schema: AppCts.DB.APP_SCHEMA);
 
         // Composite Primary Key
-        // override the hasKey from BaseEntityConfiguration
-        builder.Ignore(ol => ol.Id);
         builder.HasKey(oat => new { oat.MapObjectId, oat.ActivityTypeId });
 
         // Foreign Keys

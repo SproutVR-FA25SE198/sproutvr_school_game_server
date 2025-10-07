@@ -1,4 +1,5 @@
 using SproutVRSchool.Infrastructure;
+using SproutVRSchool.Presentation.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +13,25 @@ builder.Services.AddControllers();
 // === User-defined services
 // ======================================
 
-builder.Services.AddSchoolServerDbContext(builder.Configuration);
-
-WebApplication app = builder.Build();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // ======================================
 // === Middlewares
 // ======================================
+
+WebApplication app = builder.Build();
+IWebHostEnvironment env = app.Services.GetRequiredService<IWebHostEnvironment>();
+IConfigurationSection miscConfigs = app.Configuration.GetSection("Miscs");
+
+if (env.IsDevelopment())
+{
+    app.ApplyDatabaseDrop(miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false);
+    app.ApplyDatabaseMigrations();
+}
+else if (env.IsProduction())
+{
+    app.ApplyDatabaseMigrations();
+}
 
 app.MapControllers();
 

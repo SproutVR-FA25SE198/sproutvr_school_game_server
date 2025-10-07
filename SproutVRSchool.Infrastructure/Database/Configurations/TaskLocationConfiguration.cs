@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.TaskLocations;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class TaskLocationConfiguration : BaseEntityConfiguration<TaskLocation>
 {

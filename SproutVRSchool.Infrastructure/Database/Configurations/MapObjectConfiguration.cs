@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.MapObjects;
 
-namespace SproutVRSchool.Infrastructure.Database.Configurations.MapObjects;
+namespace SproutVRSchool.Infrastructure.Database.Configurations;
 
 internal sealed class MapObjectConfiguration : BaseEntityConfiguration<MapObject>
 {
@@ -37,13 +37,13 @@ internal sealed class MapObjectConfiguration : BaseEntityConfiguration<MapObject
 
         // Relationships
         builder.HasOne(mo => mo.Map)
-               .WithMany()
+               .WithMany(m => m.MapObjects)
                .HasForeignKey(mo => mo.MapId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(mo => mo.ObjectActivityTypes)
-               .WithOne()
+               .WithOne(oat => oat.MapObject)
                .HasForeignKey(oa => oa.MapObjectId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
