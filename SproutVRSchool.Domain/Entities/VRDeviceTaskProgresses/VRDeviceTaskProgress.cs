@@ -12,7 +12,7 @@ public sealed class VRDeviceTaskProgress : BaseEntity
     public string QuestionText { get; set; }
     public bool IsCorrect { get; set; }
     public string AnswerText { get; set; }
-    public DateTimeOffset? CompletionTimeAtUtc { get; set; }
+    public DateTimeOffset CompletionTimeAtUtc { get; set; }
 
     // Navigation properties
     public VRDevice VRDevice { get; set; }

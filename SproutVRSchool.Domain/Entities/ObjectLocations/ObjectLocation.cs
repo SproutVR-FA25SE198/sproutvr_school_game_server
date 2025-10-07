@@ -11,7 +11,7 @@ namespace SproutVRSchool.Domain.Entities.ObjectLocations;
 public sealed class ObjectLocation : BaseEntity
 {
     public Guid ObjectId { get; set; }
-    public Guid LocationId { get; set; }
+    public Guid TaskLocationId { get; set; }
 
     // navigation property
     public TaskLocation TaskLocation { get; set; }

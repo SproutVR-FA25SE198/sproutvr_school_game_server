@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
+		<ProjectReference Include="..\SproutVRSchool.Infrastructure\SproutVRSchool.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,6 +16,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
 	</ItemGroup>
 

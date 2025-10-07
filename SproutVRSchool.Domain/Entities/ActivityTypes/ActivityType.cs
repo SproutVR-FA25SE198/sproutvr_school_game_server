@@ -11,5 +11,5 @@ public sealed class ActivityType : BaseEntity
 
     // navigation property
     public ICollection<ObjectActivityType> ObjectActivityTypes { get; set; } = [];
-    public ICollection<VRTask> Tasks { get; set; } = [];
+    public ICollection<VRTask> VRTasks { get; set; } = [];
 }

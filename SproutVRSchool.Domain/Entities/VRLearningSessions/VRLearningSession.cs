@@ -1,4 +1,5 @@
-﻿using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
+﻿using SproutVRSchool.Domain.Entities.Identities;
+using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
 using SproutVRSchool.Domain.Entities.VRDeviceTaskProgresses;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
@@ -15,6 +16,7 @@ public sealed class VRLearningSession : BaseEntity
 
     // Navigation properties
     public VRLesson VRLesson { get; set; }
+    public Teacher Teacher { get; set; }
     public ICollection<VRDeviceTaskProgress> VRDeviceTaskProgresses { get; set; } = [];
     public ICollection<VRDeviceSessionSummary> VRDeviceSessionSummaries { get; set; } = [];
 }

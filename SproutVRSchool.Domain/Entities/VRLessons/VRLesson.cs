@@ -11,7 +11,7 @@ namespace SproutVRSchool.Domain.Entities.VRLessons;
 
 public sealed class VRLesson : BaseEntity
 {
-    public Guid VRLearningSessionId { get; set; }
+    public Guid LessonId { get; set; }
     public Guid MapId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
