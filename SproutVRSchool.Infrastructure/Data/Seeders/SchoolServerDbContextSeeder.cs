@@ -14,7 +14,7 @@ using SproutVRSchool.Domain.Entities.ObjectLocations;
 using SproutVRSchool.Domain.Entities.Subjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 
-namespace SproutVRSchool.Infrastructure.Data;
+namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
 public class SchoolServerDbContextSeeder
 {

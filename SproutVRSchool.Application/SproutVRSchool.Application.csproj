@@ -5,7 +5,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Extensions\" />
+		<Folder Include="Abstractions\Services\" />
+		<Folder Include="Extensions\" />
 	</ItemGroup>
 
 </Project>

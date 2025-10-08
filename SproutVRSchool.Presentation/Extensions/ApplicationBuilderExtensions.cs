@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SproutVRSchool.Infrastructure.Data;
+using SproutVRSchool.Infrastructure.Data.Seeders;
 
 namespace SproutVRSchool.Presentation.Extensions;
 

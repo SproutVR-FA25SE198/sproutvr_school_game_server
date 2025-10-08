@@ -7,7 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Data;
+using SproutVRSchool.Domain.Abstractions;
 using SproutVRSchool.Infrastructure.Data;
+using SproutVRSchool.Infrastructure.Data.Seeders;
+using SproutVRSchool.Infrastructure.FileServices;
+using SproutVRSchool.Infrastructure.Repositories;
 
 namespace SproutVRSchool.Infrastructure;
 
@@ -18,11 +22,14 @@ public static partial class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         service.AddPersistence(configuration);
+
+        service.AddRepositories();
+
         return service;
     }
 
     /*
-        Configure for DbContext
+        Configure for DbContext & Seedings
      */
     private static void AddPersistence(
         this IServiceCollection service,
@@ -35,8 +42,14 @@ public static partial class ServiceCollectionExtensions
 
         service.AddScoped<SchoolServerDbContextSeeder>();
 
-        service.AddTransient<IFileReader, FileReader>();
+        service.AddTransient<IFileReader, JsonFileReader>();
 
         service.AddTransient<IDataSeeder, JsonDataSeeder<SchoolServerDbContext>>();
+    }
+
+    private static void AddRepositories(this IServiceCollection service)
+    {
+        service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        service.AddScoped<IUnitOfWork, UnitOfWork<SchoolServerDbContext>>();
     }
 }
