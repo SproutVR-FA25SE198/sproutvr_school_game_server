@@ -1,0 +1,30 @@
+﻿[
+  {
+    "Id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "Name": "Trắc nghiệm",
+    "ActivityCode": "quiz",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Name": "Thông tin",
+    "ActivityCode": "info",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Name": "Tương tác",
+    "ActivityCode": "interact",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+    "Name": "Thao tác cầm nắm",
+    "ActivityCode": "grab",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  }
+]

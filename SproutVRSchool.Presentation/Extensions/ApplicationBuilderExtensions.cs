@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SproutVRSchool.Infrastructure.Database;
+using SproutVRSchool.Infrastructure.Data;
 
 namespace SproutVRSchool.Presentation.Extensions;
 
@@ -36,7 +36,7 @@ internal static class ApplicationBuilderExtensions
     /// </summary>
     /// <param name="app"></param>
     /// <returns></returns>
-    public static async Task ApplyDbSeederDevelopment(this IApplicationBuilder app)
+    public static async Task ApplySeedingDevelopment(this IApplicationBuilder app)
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
         SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
@@ -48,7 +48,7 @@ internal static class ApplicationBuilderExtensions
     /// </summary>
     /// <param name="app"></param>
     /// <returns></returns>
-    public static async Task ApplyDbSeederProduction(this IApplicationBuilder app)
+    public static async Task ApplySeedingProduction(this IApplicationBuilder app)
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
         SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
