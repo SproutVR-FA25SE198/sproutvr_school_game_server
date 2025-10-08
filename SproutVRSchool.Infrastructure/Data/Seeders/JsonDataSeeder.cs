@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain.Entities;
 
-namespace SproutVRSchool.Infrastructure.Data;
+namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
 public class JsonDataSeeder<TDbContext> : IDataSeeder
     where TDbContext : DbContext

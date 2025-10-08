@@ -1,9 +1,9 @@
 ﻿using SproutVRSchool.Application.Abstractions.Data;
 using System.Text;
 
-namespace SproutVRSchool.Infrastructure.Data;
+namespace SproutVRSchool.Infrastructure.FileServices;
 
-public class FileReader : IFileReader
+public class JsonFileReader : IFileReader
 {
     public async Task<string> ReadFileAsync(string filePath)
     {
