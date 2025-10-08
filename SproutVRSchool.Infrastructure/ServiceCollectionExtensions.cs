@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Infrastructure.Data;
-using SproutVRSchool.Infrastructure.Database;
 
 namespace SproutVRSchool.Infrastructure;
 

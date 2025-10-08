@@ -27,10 +27,12 @@ if (env.IsDevelopment())
 {
     app.ApplyDatabaseDrop(miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false);
     app.ApplyDatabaseMigrations();
+    await app.ApplySeedingDevelopment();
 }
 else if (env.IsProduction())
 {
     app.ApplyDatabaseMigrations();
+    await app.ApplySeedingProduction();
 }
 
 app.MapControllers();
