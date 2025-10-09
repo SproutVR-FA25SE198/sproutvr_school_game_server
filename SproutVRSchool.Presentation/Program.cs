@@ -1,4 +1,4 @@
-using SproutVRSchool.Infrastructure;
+using SproutVRSchool.Infrastructure.Extensions;
 using SproutVRSchool.Presentation.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

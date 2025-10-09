@@ -1,4 +1,4 @@
-﻿namespace SproutVRSchool.Application.Abstractions.Data;
+﻿namespace SproutVRSchool.Application.Abstractions.FileServices;
 
 public interface IFileReader
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SproutVRSchool.Application.Abstractions.Data;
+using SproutVRSchool.Application.Abstractions.FileServices;
 
 namespace SproutVRSchool.Infrastructure.FileServices;
 
