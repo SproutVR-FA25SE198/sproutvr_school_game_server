@@ -7,13 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Data;
+using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain.Abstractions;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.FileServices;
 using SproutVRSchool.Infrastructure.Repositories;
 
-namespace SproutVRSchool.Infrastructure;
+namespace SproutVRSchool.Infrastructure.Extensions;
 
 public static partial class ServiceCollectionExtensions
 {

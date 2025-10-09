@@ -1,4 +1,4 @@
-﻿using SproutVRSchool.Application.Abstractions.Data;
+﻿using SproutVRSchool.Application.Abstractions.FileServices;
 using System.Text;
 
 namespace SproutVRSchool.Infrastructure.FileServices;
