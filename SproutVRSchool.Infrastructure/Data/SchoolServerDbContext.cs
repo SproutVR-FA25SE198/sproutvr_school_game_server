@@ -25,7 +25,7 @@ using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Infrastructure.Data;
 
-public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserAccountRole, Guid>
+public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserAccountRole, Guid>, ISchoolServerDbContext
 {
     // =============================
     // ==== DbSets

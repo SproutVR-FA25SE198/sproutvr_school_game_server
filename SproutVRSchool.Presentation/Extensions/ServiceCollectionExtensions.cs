@@ -23,8 +23,7 @@ internal static partial class ServiceCollectionExtensions
     // === Entry Point for service collections
     // =========================================
     public static IServiceCollection AddPresentation(
-        this IServiceCollection service,
-        IConfiguration configuration)
+        this IServiceCollection service)
     {
 
         service.AddApiVersioning();

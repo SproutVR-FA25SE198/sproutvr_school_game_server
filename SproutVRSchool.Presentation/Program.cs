@@ -1,3 +1,4 @@
+using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Infrastructure.Extensions;
 using SproutVRSchool.Presentation.Extensions;
 
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 // ======================================
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddPresentation();
 
 // ======================================
 // === Middlewares

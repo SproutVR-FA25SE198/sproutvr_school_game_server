@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace SproutVRSchool.Application.Extensions;
+
+public static partial class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddApplication(
+        this IServiceCollection service)
+    {
+        AddMediaR(service);
+
+        return service;
+    }
+
+    /*
+        Add MediatR for CQRS pattern
+     */
+    private static void AddMediaR(IServiceCollection service)
+    {
+        // Mediator
+        service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly));
+
+        // Validation
+        service.AddValidatorsFromAssembly(typeof(ServiceCollectionServiceExtensions).Assembly);
+    }
+}

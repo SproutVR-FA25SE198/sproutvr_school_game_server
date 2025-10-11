@@ -45,6 +45,8 @@ public static partial class ServiceCollectionExtensions
 
         service.AddTransient<IFileReader, JsonFileReader>();
 
+        service.AddScoped<ISchoolServerDbContext>(provider => provider.GetRequiredService<SchoolServerDbContext>());
+
         service.AddTransient<IDataSeeder, JsonDataSeeder<SchoolServerDbContext>>();
     }
 
