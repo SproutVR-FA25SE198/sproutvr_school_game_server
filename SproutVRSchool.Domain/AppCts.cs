@@ -14,6 +14,11 @@ public static class AppCts
         public const string APP_SCHEMA = "app";
     }
 
+    public static class TimeOffSet
+    {
+        public const int VN = +7;
+    }
+
     public static class Api
     {
         public const string V1 = "1";

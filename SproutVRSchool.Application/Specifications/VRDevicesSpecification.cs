@@ -16,9 +16,9 @@ public class VRDevicesSpecification : BaseSpecification<VRDevice>
     /// <param name="searchVRDevicesParam"></param>
     public VRDevicesSpecification(SearchVRDevicesParams searchVRDevicesParam)
         : base(x =>
-            (string.IsNullOrEmpty(searchVRDevicesParam.Name) || x.Name.Contains(searchVRDevicesParam.Name, StringComparison.InvariantCultureIgnoreCase)) &&
-            (string.IsNullOrEmpty(searchVRDevicesParam.SerialNumber) || x.SerialNumber.Contains(searchVRDevicesParam.SerialNumber)) &&
-            (!searchVRDevicesParam.VRDeviceStatus.HasValue || x.Status == searchVRDevicesParam.VRDeviceStatus))
+            (string.IsNullOrEmpty(searchVRDevicesParam.Name) || x.Name.Contains(searchVRDevicesParam.Name)) &&
+            (string.IsNullOrEmpty(searchVRDevicesParam.SerialNumber) || x.Name.Contains(searchVRDevicesParam.SerialNumber) &&
+            (!searchVRDevicesParam.VRDeviceStatus.HasValue || x.Status == searchVRDevicesParam.VRDeviceStatus)))
     {
         // Pagination
         if (searchVRDevicesParam.IsPaginated)
@@ -27,6 +27,11 @@ public class VRDevicesSpecification : BaseSpecification<VRDevice>
         }
 
         // Sorting
+        if (string.IsNullOrEmpty(searchVRDevicesParam.SortBy))
+        {
+            searchVRDevicesParam.SortBy = "nameAsc";
+        }
+
         switch (searchVRDevicesParam.SortBy)
         {
             case "nameAsc":

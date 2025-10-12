@@ -13,5 +13,5 @@ public class SearchVRDevicesParams : PagingParams
     public string? Name { get; set; }
     public string? SerialNumber { get; set; }
     public VRDeviceStatus? VRDeviceStatus { get; set; }
-    public string SortBy { get; set; } = string.Empty;
+    public string? SortBy { get; set; } = string.Empty;
 }
