@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using SproutVRSchool.Application.Behaviors;
 
 namespace SproutVRSchool.Application.Extensions;
 
@@ -24,9 +25,21 @@ public static partial class ServiceCollectionExtensions
     private static void AddMediaR(IServiceCollection service)
     {
         // Mediator
-        service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly));
+        service.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
 
-        // Validation
+            // Add Pipeline Behaviors
+            cfg.AddOpenBehaviors([
+                    typeof(LoggingBehavior<,>),
+                    typeof(ValidationBehavior<,>)
+                ]);
+
+        });
+
+        // Fluent Validation
         service.AddValidatorsFromAssembly(typeof(ServiceCollectionServiceExtensions).Assembly);
+
+
     }
 }
