@@ -16,7 +16,7 @@ using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Entities.VRLessons;
 using SproutVRSchool.Domain.Entities.VRTasks;
 
-namespace SproutVRSchool.Infrastructure.Data;
+namespace SproutVRSchool.Application.Abstractions.Data;
 
 public interface ISchoolServerDbContext
 {

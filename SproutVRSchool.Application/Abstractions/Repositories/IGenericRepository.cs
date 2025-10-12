@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SproutVRSchool.Domain.Entities;
 
-namespace SproutVRSchool.Domain.Abstractions;
+namespace SproutVRSchool.Application.Abstractions.Repositories;
 
 public interface IGenericRepository<T> where T : BaseEntity
 {

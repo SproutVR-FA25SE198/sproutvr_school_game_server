@@ -35,6 +35,7 @@ if (env.IsDevelopment())
 else if (env.IsProduction())
 {
     app.ApplyDatabaseMigrations();
+    app.UseExceptionHandler("/error");
     await app.ApplySeedingProduction();
 }
 

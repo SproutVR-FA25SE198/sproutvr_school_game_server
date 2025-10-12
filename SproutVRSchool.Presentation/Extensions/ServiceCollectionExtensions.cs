@@ -28,6 +28,7 @@ internal static partial class ServiceCollectionExtensions
     {
 
         service.AddApiVersioning();
+        service.AddExceptionHandlers();
 
         return service;
     }

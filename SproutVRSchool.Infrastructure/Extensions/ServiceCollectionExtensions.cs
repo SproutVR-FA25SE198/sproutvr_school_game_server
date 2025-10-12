@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
-using SproutVRSchool.Domain.Abstractions;
+using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.FileServices;

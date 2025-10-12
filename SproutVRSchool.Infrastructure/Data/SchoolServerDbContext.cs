@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
 using SproutVRSchool.Domain.Entities.Identities;
@@ -70,7 +71,7 @@ public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserA
         base.OnModelCreating(builder);
 
         // Set the default schema for the Identity tables
-        builder.HasDefaultSchema(AppCts.DB.AUTH_SCHEMA);
+        builder.HasDefaultSchema(AppCts.Db.AUTH_SCHEMA);
 
         // Apply all configurations from the current assembly
         builder.ApplyConfigurationsFromAssembly(typeof(SchoolServerDbContext).Assembly);

@@ -8,7 +8,7 @@ namespace SproutVRSchool.Domain;
 
 public static class AppCts
 {
-    public static class DB
+    public static class Db
     {
         public const string AUTH_SCHEMA = "auth";
         public const string APP_SCHEMA = "app";
