@@ -7,7 +7,7 @@ using SproutVRSchool.Application.Abstractions.Clock;
 
 namespace SproutVRSchool.Infrastructure.Clock;
 
-internal class DateTimeProvider : IDateTimeProvider
+internal sealed class DateTimeProvider : IDateTimeProvider
 {
     // ============================
     // === Zones

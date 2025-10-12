@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using SproutVRSchool.Application.Exceptions;
 
@@ -9,19 +10,22 @@ internal sealed class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         // If no validator, just proceed
         if (!_validators.Any())
         {
-            return next(cancellationToken);
+            return await next(cancellationToken);
         }
 
         // Collecting errors of all validators in under 1 request
         var requestContext = new ValidationContext<TRequest>(request);
 
-        IEnumerable<ValidationError> errors = _validators
-            .Select(v => v.Validate(requestContext))
+        // Parallel execution of async validation
+        ValidationResult[] validationResults = await Task.WhenAll(_validators
+            .Select(v => v.ValidateAsync(requestContext, cancellationToken)));
+
+        IEnumerable<ValidationError> errors = validationResults
             .Where(r => !r.IsValid && r.Errors.Any())
             .SelectMany(r => r.Errors)
             .Select(err => new ValidationError(err.PropertyName, err.ErrorMessage));
@@ -32,6 +36,6 @@ internal sealed class ValidationBehavior<TRequest, TResponse>
         }
 
         // If no error, proceed
-        return next(cancellationToken);
+        return await next(cancellationToken);
     }
 }

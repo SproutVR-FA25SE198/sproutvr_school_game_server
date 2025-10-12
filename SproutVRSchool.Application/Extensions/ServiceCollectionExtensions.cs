@@ -37,9 +37,7 @@ public static partial class ServiceCollectionExtensions
 
         });
 
-        // Fluent Validation
+        // Validatiors of Fluent Validation
         service.AddValidatorsFromAssembly(typeof(ServiceCollectionServiceExtensions).Assembly);
-
-
     }
 }
