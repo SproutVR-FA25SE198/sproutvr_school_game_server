@@ -12,6 +12,7 @@ internal sealed class GeneralExceptionHandler(
     {
         _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
 
+        // Handle all other exceptions
         var problemDetails = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,

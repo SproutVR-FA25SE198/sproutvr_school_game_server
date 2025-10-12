@@ -18,7 +18,7 @@ internal sealed class LessonConfiguration : BaseEntityConfiguration<Lesson>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("Lessons", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("Lessons", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(l => l.SubjectId).IsRequired();

@@ -35,10 +35,14 @@ if (env.IsDevelopment())
 else if (env.IsProduction())
 {
     app.ApplyDatabaseMigrations();
-    app.UseExceptionHandler("/error");
     await app.ApplySeedingProduction();
 }
 
+app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
+    string.Join("\n", endpointSources.SelectMany(source => source.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
+
+app.UseExceptionHandler();
+
 app.MapControllers();
 
-await app.RunAsync().ConfigureAwait(false);
+await app.RunAsync();

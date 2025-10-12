@@ -61,16 +61,31 @@ internal static partial class ServiceCollectionExtensions
                     new HeaderApiVersionReader("X-Version"),
                     new MediaTypeApiVersionReader("X-Version"),
                     new UrlSegmentApiVersionReader());
+        }).AddApiExplorer(opt =>
+        {
+            opt.SubstituteApiVersionInUrl = true;
         });
 
         // suport for versioning in swagger
         service.AddEndpointsApiExplorer();
     }
 
+    /*
+        Configure Exception Handlers Pipeline
+     */
     private static void AddExceptionHandlers(
         this IServiceCollection service)
     {
-        service.AddTransient<IExceptionHandler, ValidationExceptionHandler>();
-        service.AddTransient<IExceptionHandler, GeneralExceptionHandler>();
+        service.AddProblemDetails(cfg =>
+        {
+            cfg.CustomizeProblemDetails = (context) =>
+            {
+                context.ProblemDetails.Extensions["requestId"] = context.HttpContext.TraceIdentifier;
+            };
+        });
+
+        service.AddExceptionHandler<ValidationExceptionHandler>();
+        service.AddExceptionHandler<NotFoundExceptionHandler>();
+        service.AddExceptionHandler<GeneralExceptionHandler>();
     }
 }

@@ -14,7 +14,7 @@ internal sealed class MasterSubjectConfiguration : BaseEntityConfiguration<Maste
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("MasterSubjects", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("MasterSubjects", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
 

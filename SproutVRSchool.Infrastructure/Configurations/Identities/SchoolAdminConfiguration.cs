@@ -15,7 +15,7 @@ internal sealed class SchoolAdminConfiguration : IEntityTypeConfiguration<School
     public void Configure(EntityTypeBuilder<SchoolAdmin> builder)
     {
         // Schema
-        builder.ToTable("SchoolAdmins", schema: AppCts.DB.AUTH_SCHEMA);
+        builder.ToTable("SchoolAdmins", schema: AppCts.Db.AUTH_SCHEMA);
 
         // Indexing
         builder.HasIndex(sa => sa.OrganizationId);

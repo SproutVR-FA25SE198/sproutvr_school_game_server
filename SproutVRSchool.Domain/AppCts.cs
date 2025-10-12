@@ -16,11 +16,13 @@ public static class AppCts
 
     public static class Api
     {
-        public const string V1 = "1.0";
+        public const string V1 = "1";
         public const string V1_1 = "1.1";
-        public const string V2 = "2.0";
+        public const string V2 = "2";
+
         public const int DEFAULT_PAGE_INDEX = 1;
         public const int DEFAULT_PAGE_SIZE = 10;
+        public const int DEFAULT_TOTAL_PAGES = 1;
         public const int DEFAULT_COUNT = 0;
     }
 

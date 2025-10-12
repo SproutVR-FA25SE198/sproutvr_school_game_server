@@ -15,7 +15,7 @@ internal sealed class SubjectConfiguration : BaseEntityConfiguration<Subject>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("Subjects", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("Subjects", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(s => s.MasterSubjectId).IsRequired();

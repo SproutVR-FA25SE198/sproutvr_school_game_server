@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.FileServices;
@@ -25,6 +27,8 @@ public static partial class ServiceCollectionExtensions
         service.AddPersistence(configuration);
 
         service.AddRepositories();
+
+        service.AddProviders();
 
         return service;
     }
@@ -54,5 +58,10 @@ public static partial class ServiceCollectionExtensions
     {
         service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         service.AddScoped<IUnitOfWork, UnitOfWork<SchoolServerDbContext>>();
+    }
+
+    private static void AddProviders(this IServiceCollection service)
+    {
+        service.AddScoped<IDateTimeProvider, DateTimeProvider>();
     }
 }

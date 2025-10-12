@@ -13,7 +13,7 @@ internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguratio
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("VRDeviceTaskProgresses", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("VRDeviceTaskProgresses", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(vrtp => vrtp.VRDeviceId).IsRequired();

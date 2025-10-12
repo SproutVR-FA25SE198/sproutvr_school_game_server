@@ -15,7 +15,7 @@ internal sealed class VRDeviceSessionSummaryConfiguration : BaseEntityConfigurat
         builder.Ignore(vdss => vdss.Id);
 
         // Schema
-        builder.ToTable("VRDeviceSessionSummaries", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("VRDeviceSessionSummaries", schema: AppCts.Db.APP_SCHEMA);
 
         // Composite Primary Key
         builder.HasKey(vdss => new { vdss.VRLearningSessionId, vdss.VRDeviceId });
