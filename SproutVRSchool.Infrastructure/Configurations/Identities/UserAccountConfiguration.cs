@@ -16,7 +16,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
     public void Configure(EntityTypeBuilder<UserAccount> builder)
     {
         // Schema
-        builder.ToTable("UserAccounts", schema: AppCts.DB.AUTH_SCHEMA);
+        builder.ToTable("UserAccounts", schema: AppCts.Db.AUTH_SCHEMA);
 
         // Indexing
         builder.HasIndex(ua => ua.Email);

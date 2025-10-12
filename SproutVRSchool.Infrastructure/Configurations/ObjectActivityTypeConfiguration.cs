@@ -15,7 +15,7 @@ internal sealed class ObjectActivityTypeConfiguration : BaseEntityConfiguration<
         builder.Ignore(ol => ol.Id);
 
         // Schema
-        builder.ToTable("ObjectActivityTypes", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("ObjectActivityTypes", schema: AppCts.Db.APP_SCHEMA);
 
         // Composite Primary Key
         builder.HasKey(oat => new { oat.MapObjectId, oat.ActivityTypeId });

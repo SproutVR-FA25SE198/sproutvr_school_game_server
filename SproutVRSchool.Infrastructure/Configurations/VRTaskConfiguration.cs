@@ -13,7 +13,7 @@ internal sealed class VRTaskConfiguration : BaseEntityConfiguration<VRTask>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("VRTasks", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("VRTasks", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(vrt => vrt.TaskLocationId).IsRequired();

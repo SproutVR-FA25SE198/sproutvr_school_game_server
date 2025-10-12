@@ -13,7 +13,7 @@ internal sealed class TaskLocationConfiguration : BaseEntityConfiguration<TaskLo
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("TaskLocations", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("TaskLocations", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(tl => tl.MapId).IsRequired();

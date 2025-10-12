@@ -17,7 +17,7 @@ internal sealed class ActivityTypeConfiguration : BaseEntityConfiguration<Activi
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("ActivityTypes", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("ActivityTypes", schema: AppCts.Db.APP_SCHEMA);
 
         // Indexing
         builder.HasIndex(at => at.ActivityCode).IsUnique();

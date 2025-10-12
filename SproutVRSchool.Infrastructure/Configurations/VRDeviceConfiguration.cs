@@ -14,7 +14,7 @@ internal sealed class VRDeviceConfiguration : BaseEntityConfiguration<VRDevice>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("VRDevices", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("VRDevices", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
 

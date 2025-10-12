@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SproutVRSchool.Domain.Abstractions;
+using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Domain.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 

@@ -13,7 +13,7 @@ internal sealed class MapObjectConfiguration : BaseEntityConfiguration<MapObject
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("MapObjects", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("MapObjects", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(mo => mo.MapId).IsRequired();

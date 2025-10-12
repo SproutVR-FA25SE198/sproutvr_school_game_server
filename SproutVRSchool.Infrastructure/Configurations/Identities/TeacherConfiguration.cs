@@ -15,7 +15,7 @@ internal sealed class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
     public void Configure(EntityTypeBuilder<Teacher> builder)
     {
         // Schema
-        builder.ToTable("Teachers", schema: AppCts.DB.AUTH_SCHEMA);
+        builder.ToTable("Teachers", schema: AppCts.Db.AUTH_SCHEMA);
 
         // Indexing
 

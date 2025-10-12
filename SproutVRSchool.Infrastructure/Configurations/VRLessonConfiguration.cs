@@ -14,7 +14,7 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("VRLessons", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("VRLessons", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(vrl => vrl.LessonId).IsRequired();

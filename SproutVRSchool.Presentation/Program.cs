@@ -1,3 +1,4 @@
+using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Infrastructure.Extensions;
 using SproutVRSchool.Presentation.Extensions;
 
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 // ======================================
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddPresentation();
 
 // ======================================
 // === Middlewares
@@ -35,6 +38,11 @@ else if (env.IsProduction())
     await app.ApplySeedingProduction();
 }
 
+app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
+    string.Join("\n", endpointSources.SelectMany(source => source.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
+
+app.UseExceptionHandler();
+
 app.MapControllers();
 
-await app.RunAsync().ConfigureAwait(false);
+await app.RunAsync();

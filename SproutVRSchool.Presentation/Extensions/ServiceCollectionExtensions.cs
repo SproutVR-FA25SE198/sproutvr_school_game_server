@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
-using SproutVRSchool.Domain.Abstractions;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.FileServices;
 using SproutVRSchool.Infrastructure.Repositories;
+using SproutVRSchool.Presentation.ExceptionHandlers;
 
 namespace SproutVRSchool.Presentation.Extensions;
 
@@ -23,11 +24,11 @@ internal static partial class ServiceCollectionExtensions
     // === Entry Point for service collections
     // =========================================
     public static IServiceCollection AddPresentation(
-        this IServiceCollection service,
-        IConfiguration configuration)
+        this IServiceCollection service)
     {
 
         service.AddApiVersioning();
+        service.AddExceptionHandlers();
 
         return service;
     }
@@ -60,10 +61,31 @@ internal static partial class ServiceCollectionExtensions
                     new HeaderApiVersionReader("X-Version"),
                     new MediaTypeApiVersionReader("X-Version"),
                     new UrlSegmentApiVersionReader());
+        }).AddApiExplorer(opt =>
+        {
+            opt.SubstituteApiVersionInUrl = true;
         });
 
         // suport for versioning in swagger
         service.AddEndpointsApiExplorer();
     }
 
+    /*
+        Configure Exception Handlers Pipeline
+     */
+    private static void AddExceptionHandlers(
+        this IServiceCollection service)
+    {
+        service.AddProblemDetails(cfg =>
+        {
+            cfg.CustomizeProblemDetails = (context) =>
+            {
+                context.ProblemDetails.Extensions["requestId"] = context.HttpContext.TraceIdentifier;
+            };
+        });
+
+        service.AddExceptionHandler<ValidationExceptionHandler>();
+        service.AddExceptionHandler<NotFoundExceptionHandler>();
+        service.AddExceptionHandler<GeneralExceptionHandler>();
+    }
 }

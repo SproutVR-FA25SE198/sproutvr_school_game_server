@@ -15,7 +15,7 @@ internal sealed class ObjectLocationConfiguration : BaseEntityConfiguration<Obje
         builder.Ignore(ol => ol.Id);
 
         // Schema
-        builder.ToTable("ObjectLocations", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("ObjectLocations", schema: AppCts.Db.APP_SCHEMA);
 
         // Composite Primary Key
         builder.HasKey(ol => new { ol.TaskLocationId, ol.ObjectId });

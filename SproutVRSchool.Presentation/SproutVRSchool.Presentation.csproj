@@ -20,8 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Areas\Auth\v1\" />
-		<Folder Include="Areas\Teacher\v1\" />
+		<Folder Include="Areas\Auth\" />
+		<Folder Include="Areas\Teacher\" />
 	</ItemGroup>
 
 </Project>

@@ -15,7 +15,7 @@ internal sealed class MapConfiguration : BaseEntityConfiguration<Map>
         base.Configure(builder);
 
         // Schema
-        builder.ToTable("Maps", schema: AppCts.DB.APP_SCHEMA);
+        builder.ToTable("Maps", schema: AppCts.Db.APP_SCHEMA);
 
         // Foreign Keys
         builder.Property(m => m.SubjectId).IsRequired();
