@@ -20,11 +20,11 @@ internal sealed class ActivityTypeConfiguration : BaseEntityConfiguration<Activi
         builder.ToTable("ActivityTypes", schema: AppCts.Db.APP_SCHEMA);
 
         // Indexing
-        builder.HasIndex(at => at.ActivityCode).IsUnique();
 
         // Properties
         builder.Property(at => at.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(at => at.ActivityCode)

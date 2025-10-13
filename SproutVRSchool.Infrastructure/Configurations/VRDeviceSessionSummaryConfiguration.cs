@@ -29,6 +29,7 @@ internal sealed class VRDeviceSessionSummaryConfiguration : BaseEntityConfigurat
         // Properties
         builder.Property(vdss => vdss.StudentName)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(vdss => vdss.NoTasksCompleted)

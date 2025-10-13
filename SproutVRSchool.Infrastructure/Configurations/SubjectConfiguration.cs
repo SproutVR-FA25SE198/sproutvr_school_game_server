@@ -27,10 +27,12 @@ internal sealed class SubjectConfiguration : BaseEntityConfiguration<Subject>
         // Properties
         builder.Property(s => s.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(s => s.Description)
             .IsRequired()
+            .HasColumnType("text")
             .HasMaxLength(1000);
 
         builder.Property(s => s.ImageUrl)

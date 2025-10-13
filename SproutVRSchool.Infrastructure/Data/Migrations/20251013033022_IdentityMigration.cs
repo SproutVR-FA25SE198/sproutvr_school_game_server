@@ -18,13 +18,16 @@ public partial class IdentityMigration : Migration
         migrationBuilder.EnsureSchema(
             name: "auth");
 
+        migrationBuilder.AlterDatabase()
+            .Annotation("Npgsql:PostgresExtension:citext", ",,");
+
         migrationBuilder.CreateTable(
             name: "ActivityTypes",
             schema: "app",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 ActivityCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -55,8 +58,8 @@ public partial class IdentityMigration : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
@@ -105,9 +108,9 @@ public partial class IdentityMigration : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                SerialNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                SerialNumber = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -146,8 +149,8 @@ public partial class IdentityMigration : Migration
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 MasterSubjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
@@ -305,9 +308,9 @@ public partial class IdentityMigration : Migration
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                MapCode = table.Column<string>(type: "text", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                MapCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
@@ -333,8 +336,8 @@ public partial class IdentityMigration : Migration
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 ResourceUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
@@ -367,7 +370,7 @@ public partial class IdentityMigration : Migration
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 MapId = table.Column<Guid>(type: "uuid", nullable: false),
                 ObjectCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -391,8 +394,8 @@ public partial class IdentityMigration : Migration
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 MapId = table.Column<Guid>(type: "uuid", nullable: false),
-                LocationCode = table.Column<string>(type: "text", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                LocationCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -417,8 +420,8 @@ public partial class IdentityMigration : Migration
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 LessonId = table.Column<Guid>(type: "uuid", nullable: false),
                 MapId = table.Column<Guid>(type: "uuid", nullable: false),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 MaxDuration = table.Column<TimeSpan>(type: "interval", nullable: false),
                 PresetJsonUrl = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
@@ -512,8 +515,8 @@ public partial class IdentityMigration : Migration
                 TaskLocationId = table.Column<Guid>(type: "uuid", nullable: false),
                 MapObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 ActivityTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                TaskNumber = table.Column<int>(type: "integer", nullable: false),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                TaskNumber = table.Column<string>(type: "citext", nullable: false),
+                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
@@ -584,7 +587,7 @@ public partial class IdentityMigration : Migration
             {
                 VRDeviceId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRLearningSessionId = table.Column<Guid>(type: "uuid", nullable: false),
-                StudentName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                StudentName = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 NoTasksCompleted = table.Column<int>(type: "integer", nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -617,9 +620,9 @@ public partial class IdentityMigration : Migration
                 VRDeviceId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRTaskId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRLearningSessionId = table.Column<Guid>(type: "uuid", nullable: false),
-                QuestionText = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                QuestionText = table.Column<string>(type: "citext", maxLength: 255, nullable: false),
                 IsCorrect = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                AnswerText = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                AnswerText = table.Column<string>(type: "citext", maxLength: 255, nullable: false),
                 CompletionTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -649,13 +652,6 @@ public partial class IdentityMigration : Migration
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Restrict);
             });
-
-        migrationBuilder.CreateIndex(
-            name: "IX_ActivityTypes_ActivityCode",
-            schema: "app",
-            table: "ActivityTypes",
-            column: "ActivityCode",
-            unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
@@ -713,19 +709,6 @@ public partial class IdentityMigration : Migration
             column: "MapId");
 
         migrationBuilder.CreateIndex(
-            name: "IX_MapObjects_ObjectCode",
-            schema: "app",
-            table: "MapObjects",
-            column: "ObjectCode",
-            unique: true);
-
-        migrationBuilder.CreateIndex(
-            name: "IX_Maps_MapCode",
-            schema: "app",
-            table: "Maps",
-            column: "MapCode");
-
-        migrationBuilder.CreateIndex(
             name: "IX_Maps_SubjectId",
             schema: "app",
             table: "Maps",
@@ -761,12 +744,6 @@ public partial class IdentityMigration : Migration
             table: "Subjects",
             column: "Name",
             unique: true);
-
-        migrationBuilder.CreateIndex(
-            name: "IX_TaskLocations_LocationCode",
-            schema: "app",
-            table: "TaskLocations",
-            column: "LocationCode");
 
         migrationBuilder.CreateIndex(
             name: "IX_TaskLocations_MapId",

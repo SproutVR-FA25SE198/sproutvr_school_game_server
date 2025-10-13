@@ -13,6 +13,7 @@ using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
 using SproutVRSchool.Domain.Entities.ObjectLocations;
 using SproutVRSchool.Domain.Entities.Subjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
+using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
@@ -53,6 +54,7 @@ public class SchoolServerDbContextSeeder
         _dataSeeder.AddRelativePath<TaskLocation>(AppCts.SeederFilePaths.TaskLocationFilePath);
         _dataSeeder.AddRelativePath<ObjectActivityType>(AppCts.SeederFilePaths.ObjectActivityTypeFilePath);
         _dataSeeder.AddRelativePath<ObjectLocation>(AppCts.SeederFilePaths.ObjectLocationFilePath);
+        _dataSeeder.AddRelativePath<VRDevice>(AppCts.SeederFilePaths.VRDeviceFilePath);
 
         // seeding all tables
         await _dataSeeder.SeedAllTablesAsync();
@@ -67,6 +69,7 @@ public class SchoolServerDbContextSeeder
         // add subsequent files to seed here
         _dataSeeder.AddRelativePath<MasterSubject>(AppCts.SeederFilePaths.MasterSubjectFilePath);
         _dataSeeder.AddRelativePath<Subject>(AppCts.SeederFilePaths.SubjectFilePath);
+        _dataSeeder.AddRelativePath<VRDevice>(AppCts.SeederFilePaths.VRDeviceFilePath);
 
         // seeding all tables
         await _dataSeeder.SeedAllTablesAsync();

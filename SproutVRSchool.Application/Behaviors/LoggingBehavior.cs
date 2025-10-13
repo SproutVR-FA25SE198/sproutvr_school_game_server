@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,7 @@ internal sealed class LoggingBehavior<TRequest, TResponse>(
             requestName,
             dateTimeProvider.VietNamDateTimeNow,
             dateTimeProvider.UtcDateTimeNow,
-            request);
+            JsonSerializer.Serialize(request));
 
         var stopwatch = Stopwatch.StartNew();
 

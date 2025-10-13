@@ -22,18 +22,20 @@ internal sealed class MapConfiguration : BaseEntityConfiguration<Map>
 
         // Indexing
         builder.HasIndex(m => m.SubjectId);
-        builder.HasIndex(m => m.MapCode);
 
         // Properties
         builder.Property(m => m.MapCode)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(m => m.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(m => m.Description)
             .IsRequired()
+            .HasColumnType("text")
             .HasMaxLength(1000);
 
         builder.Property(m => m.ImageUrl)

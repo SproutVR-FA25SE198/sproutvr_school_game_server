@@ -27,10 +27,12 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
         // Properties
         builder.Property(vrl => vrl.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(vrl => vrl.Description)
             .IsRequired()
+            .HasColumnType("text")
             .HasMaxLength(1000);
 
         builder.Property(vrl => vrl.MaxDuration)
