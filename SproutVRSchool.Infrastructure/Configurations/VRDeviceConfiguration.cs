@@ -24,10 +24,12 @@ internal sealed class VRDeviceConfiguration : BaseEntityConfiguration<VRDevice>
         // Properties
         builder.Property(vrd => vrd.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(vrd => vrd.SerialNumber)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(vrd => vrd.Status)

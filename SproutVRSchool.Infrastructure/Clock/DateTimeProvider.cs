@@ -13,7 +13,10 @@ internal sealed class DateTimeProvider : IDateTimeProvider
     // === Zones
     // ============================
 
-    private static readonly TimeZoneInfo VietNamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+    private readonly TimeZoneInfo VietNamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
+    public DateTimeOffset ConvertToVietNamTime(DateTimeOffset dateTime) =>
+    TimeZoneInfo.ConvertTime(dateTime, VietNamTimeZone);
 
     // ============================
     // === Methods
@@ -22,4 +25,5 @@ internal sealed class DateTimeProvider : IDateTimeProvider
     public DateTimeOffset UtcDateTimeNow => DateTimeOffset.UtcNow;
 
     public DateTimeOffset VietNamDateTimeNow => TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, VietNamTimeZone);
+
 }

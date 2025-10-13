@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "Name": "Meta Quest 2",
+    "Status": 1,
+    "SerialNumber": "VRD-MQ2-001A",
+    "CreatedAtUtc": "2024-09-01T10:00:00Z",
+    "UpdatedAtUtc": "2024-09-01T10:00:00Z"
+  },
+  {
+    "Id": "b1c2d3e4-f5a6-7890-1234-567890abcde0",
+    "Name": "Pico Neo 3 Pro",
+    "Status": 2,
+    "SerialNumber": "VRD-PN3-002B",
+    "CreatedAtUtc": "2024-09-15T14:30:00Z",
+    "UpdatedAtUtc": "2024-10-05T08:15:00Z"
+  },
+  {
+    "Id": "c1d2e3f4-a5b6-7890-1234-567890abcde1",
+    "Name": "HTC Vive Focus 3",
+    "Status": 1,
+    "SerialNumber": "VRD-VF3-003C",
+    "CreatedAtUtc": "2024-10-01T09:00:00Z",
+    "UpdatedAtUtc": "2024-10-01T09:00:00Z"
+  }
+]

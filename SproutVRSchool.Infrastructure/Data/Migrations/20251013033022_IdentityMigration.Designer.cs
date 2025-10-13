@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251008015446_IdentityMigration")]
+    [Migration("20251013033022_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -147,7 +148,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -155,9 +156,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActivityCode")
-                        .IsUnique();
 
                     b.ToTable("ActivityTypes", "app");
                 });
@@ -296,12 +294,12 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("ResourceUrl")
                         .IsRequired()
@@ -356,7 +354,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("ObjectCode")
                         .IsRequired()
@@ -371,9 +369,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MapId");
-
-                    b.HasIndex("ObjectCode")
-                        .IsUnique();
 
                     b.ToTable("MapObjects", "app");
                 });
@@ -391,7 +386,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -400,12 +395,13 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
 
                     b.Property<string>("MapCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -421,8 +417,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MapCode");
 
                     b.HasIndex("SubjectId");
 
@@ -442,7 +436,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -452,7 +446,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -532,7 +526,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -545,7 +539,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -584,7 +578,8 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
 
                     b.Property<string>("LocationCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("MapId")
                         .HasColumnType("uuid");
@@ -592,7 +587,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -600,8 +595,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LocationCode");
 
                     b.HasIndex("MapId");
 
@@ -627,7 +620,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("StudentName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -649,7 +642,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("AnswerText")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("CompletionTimeAtUtc")
                         .HasColumnType("timestamp with time zone");
@@ -667,7 +660,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -707,12 +700,12 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -789,7 +782,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -808,7 +801,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("citext");
 
                     b.Property<string>("PresetJsonUrl")
                         .IsRequired()
@@ -848,8 +841,9 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("MapObjectId")
                         .HasColumnType("uuid");
@@ -857,8 +851,9 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("TaskLocationId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TaskNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("TaskNumber")
+                        .IsRequired()
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()

@@ -23,10 +23,12 @@ internal sealed class MasterSubjectConfiguration : BaseEntityConfiguration<Maste
         // Properties
         builder.Property(ms => ms.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(ms => ms.Description)
             .IsRequired()
+            .HasColumnType("text")
             .HasMaxLength(1000);
 
         builder.Property(ms => ms.ImageUrl)

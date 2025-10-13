@@ -14,7 +14,7 @@ public sealed class VRTask : BaseEntity
     public Guid TaskLocationId { get; set; }
     public Guid MapObjectId { get; set; }
     public Guid ActivityTypeId { get; set; }
-    public int TaskNumber { get; set; }
+    public string TaskNumber { get; set; }
     public string Description { get; set; }
 
     // navigation properties

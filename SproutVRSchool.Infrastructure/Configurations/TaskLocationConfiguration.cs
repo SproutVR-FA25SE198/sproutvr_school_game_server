@@ -20,14 +20,15 @@ internal sealed class TaskLocationConfiguration : BaseEntityConfiguration<TaskLo
 
         // Indexing
         builder.HasIndex(tl => tl.MapId);
-        builder.HasIndex(tl => tl.LocationCode);
 
         // Properties
         builder.Property(tl => tl.LocationCode)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(tl => tl.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(tl => tl.ImageUrl)

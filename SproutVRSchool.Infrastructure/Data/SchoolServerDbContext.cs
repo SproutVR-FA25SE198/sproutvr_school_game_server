@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
@@ -66,9 +68,16 @@ public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserA
     // ==== Methods
     // =============================
 
+    /// <summary>
+    /// On creating models
+    /// </summary>
+    /// <param name="builder"></param>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Define a custom case-insensitive collation using ICU
+        builder.HasPostgresExtension("citext");
 
         // Set the default schema for the Identity tables
         builder.HasDefaultSchema(AppCts.Db.AUTH_SCHEMA);

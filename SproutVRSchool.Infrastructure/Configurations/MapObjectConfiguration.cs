@@ -19,11 +19,11 @@ internal sealed class MapObjectConfiguration : BaseEntityConfiguration<MapObject
         builder.Property(mo => mo.MapId).IsRequired();
 
         // Indexing
-        builder.HasIndex(mo => mo.ObjectCode).IsUnique();
 
         // Properties
         builder.Property(mo => mo.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(mo => mo.ObjectCode)

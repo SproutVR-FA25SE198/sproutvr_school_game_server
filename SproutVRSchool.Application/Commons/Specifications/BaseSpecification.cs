@@ -2,7 +2,7 @@
 using SproutVRSchool.Application.Abstractions.Repositories;
 using System.Linq.Expressions;
 
-namespace SproutVRSchool.Application.Specifications;
+namespace SproutVRSchool.Application.Commons.Specifications;
 
 /// <summary>
 /// Implementation of ISpecification<T>

@@ -32,10 +32,12 @@ internal sealed class LessonConfiguration : BaseEntityConfiguration<Lesson>
         // Properties
         builder.Property(l => l.Name)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(100);
 
         builder.Property(l => l.Description)
             .IsRequired()
+            .HasColumnType("text")
             .HasMaxLength(1000);
 
         builder.Property(l => l.ResourceUrl)

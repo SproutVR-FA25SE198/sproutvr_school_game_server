@@ -32,8 +32,6 @@ public sealed class VRDevicesController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
-    // GET: api/v1/system-admin/vrdevices?serialNumber=123
-    // GET: api/v1/system-admin/vrdevices?status=0
     // GET: api/v1/system-admin/vrdevices/{id}/summaries
     // GET: api/v1/system-admin/vrdevices/{id}/task-progresses    
 

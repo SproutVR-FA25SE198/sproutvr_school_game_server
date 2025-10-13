@@ -28,6 +28,7 @@ internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguratio
         // Properties
         builder.Property(vrtp => vrtp.QuestionText)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(255);
 
         builder.Property(vrtp => vrtp.IsCorrect)
@@ -36,6 +37,7 @@ internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguratio
 
         builder.Property(vrtp => vrtp.AnswerText)
             .IsRequired()
+            .HasColumnType("citext")
             .HasMaxLength(255);
 
         builder.Property(vrtp => vrtp.CompletionTimeAtUtc)

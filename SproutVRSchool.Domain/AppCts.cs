@@ -45,5 +45,6 @@ public static class AppCts
         public static readonly string TaskLocationFilePath = Path.Combine(JsonFolderPath, "TaskLocation.json");
         public static readonly string ObjectActivityTypeFilePath = Path.Combine(JsonFolderPath, "ObjectActivityType.json");
         public static readonly string ObjectLocationFilePath = Path.Combine(JsonFolderPath, "ObjectLocation.json");
+        public static readonly string VRDeviceFilePath = Path.Combine(JsonFolderPath, "VRDevice.json");
     }
 }
