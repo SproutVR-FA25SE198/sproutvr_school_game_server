@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SproutVRSchool.Application.Abstractions.Data;
+﻿using MediatR;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.Specifications;
-using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 
-public sealed record SearchVRDevicesQueryHandler(IUnitOfWork uow) : IRequestHandler<SearchVRDevicesQuery, PaginatedResultDto<SearchVRDevicesResponseDto>>
+public sealed record SearchVRDevicesQueryHandler(
+    IUnitOfWork uow,
+    IDateTimeProvider dateTimeProvider
+    ) : IRequestHandler<SearchVRDevicesQuery, PaginatedResultDto<SearchVRDevicesResponseDto>>
 {
     public async Task<PaginatedResultDto<SearchVRDevicesResponseDto>> Handle(SearchVRDevicesQuery request, CancellationToken cancellationToken)
     {
@@ -27,7 +21,13 @@ public sealed record SearchVRDevicesQueryHandler(IUnitOfWork uow) : IRequestHand
             pageSize: request.SearchVRDevicesParams.PageSize,
             pageIndex: request.SearchVRDevicesParams.PageIndex,
             count: rawLists.Count,
-            data: [.. rawLists.Data.Select(device => SearchVRDevicesResponseDto.FromEntity(device))]
+            data: [.. rawLists.Data.Select(device => new SearchVRDevicesResponseDto(
+                Name: device.Name,
+                SerializeNumber: device.SerialNumber,
+                Status: new StatusDto((int)device.Status, device.Status.ToString()),
+                CreatedAtUtc: device.CreatedAtUtc,
+                CreatedAtVietnam: dateTimeProvider.ConvertToVietNamTime(device.CreatedAtUtc))
+            )]
         );
 
         return result;
