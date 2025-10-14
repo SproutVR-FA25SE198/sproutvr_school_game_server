@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Domain.Entities.MapObjects;
+﻿using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.Subjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 

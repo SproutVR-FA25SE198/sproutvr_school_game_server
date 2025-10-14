@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Infrastructure.FileHelpers;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
-using SproutVRSchool.Infrastructure.FileServices;
 using SproutVRSchool.Infrastructure.Repositories;
+using StackExchange.Redis;
+using SproutVRSchool.Application.Abstractions.FileHelpers;
+using SproutVRSchool.Infrastructure.Redis.VRLearningSession;
+using SproutVRSchool.Application.Abstractions.RoomSession;
 
 namespace SproutVRSchool.Infrastructure.Extensions;
 
@@ -29,6 +27,10 @@ public static partial class ServiceCollectionExtensions
         service.AddRepositories();
 
         service.AddProviders();
+
+        service.AddRedisStack(configuration);
+
+        service.AddVRLearningSession();
 
         return service;
     }
@@ -63,5 +65,24 @@ public static partial class ServiceCollectionExtensions
     private static void AddProviders(this IServiceCollection service)
     {
         service.AddScoped<IDateTimeProvider, DateTimeProvider>();
+    }
+
+    private static void AddVRLearningSession(this IServiceCollection service)
+    {
+        service.AddScoped<IRoomSession, VRLearningSessionImpl>();
+        service.AddSingleton<IRoomSessionValidator, VRLearningSessionValidator>();
+        service.AddSingleton<ICodeGenerator, VRLearningSessionCodeGenerator>();
+    }
+
+    /*
+        Using Redis Stream and Redis Modules
+     */
+    private static void AddRedisStack(
+        this IServiceCollection service,
+        IConfiguration configuration)
+    {
+        string redisStackConnection = configuration.GetConnectionString("RedisStack");
+        service.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(redisStackConnection!));
     }
 }

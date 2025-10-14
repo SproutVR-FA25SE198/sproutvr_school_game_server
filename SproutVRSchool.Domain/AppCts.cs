@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SproutVRSchool.Domain;
+﻿namespace SproutVRSchool.Domain;
 
 public static class AppCts
 {
@@ -29,6 +23,14 @@ public static class AppCts
         public const int DEFAULT_PAGE_SIZE = 10;
         public const int DEFAULT_TOTAL_PAGES = 1;
         public const int DEFAULT_COUNT = 0;
+    }
+
+    public static class Session
+    {
+        public const int MAX_VR_DEVICE = 30;
+        public const int CODE_DURATION_IN_MINUTES = 2;
+        public const string NAMESPACE_VR_LEARNING_SESSION = "learning_session";
+        public const string NAMESPACE_ROOM_CODE = "room_code";
     }
 
     public static class SeederFilePaths

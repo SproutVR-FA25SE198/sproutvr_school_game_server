@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SproutVRSchool.Domain.Entities.ActivityTypes;
+﻿using SproutVRSchool.Domain.Entities.ActivityTypes;
 using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 using SproutVRSchool.Domain.Entities.VRDeviceTaskProgresses;

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.VRDevices;
+﻿using SproutVRSchool.Application.Commons.Responses;
 
 namespace SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 
 public record SearchVRDevicesResponseDto(
+    Guid Id,
     string Name,
     string SerializeNumber,
     StatusDto Status,

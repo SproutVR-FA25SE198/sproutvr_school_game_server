@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Microsoft.EntityFrameworkCore;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Domain.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SproutVRSchool.Infrastructure.Repositories;
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities;
+﻿using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Application.Commons.Responses;
 

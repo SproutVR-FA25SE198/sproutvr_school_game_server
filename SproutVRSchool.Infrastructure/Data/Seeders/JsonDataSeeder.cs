@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Infrastructure.FileHelpers;
 using SproutVRSchool.Domain.Entities;
+using SproutVRSchool.Application.Abstractions.FileHelpers;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
@@ -14,7 +15,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
     // =====================================
 
     private readonly IFileReader _fileReader;
-    private readonly List<(string relativeFilePath, Type entityType)> _seedFileInfors = new();
+    private readonly List<(string relativeFilePath, Type entityType)> _seedFileInfors;
     private readonly TDbContext _dbContext;
 
     // =====================================
@@ -25,6 +26,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
     {
         _fileReader = fileReader;
         _dbContext = dbContext;
+        _seedFileInfors = new();
     }
 
     // =====================================
@@ -62,7 +64,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
             Type listType = typeof(List<>).MakeGenericType(entityType);
             var data = JsonConvert.DeserializeObject(json, listType, settings) as IEnumerable<object>;
 
-            return data ?? Enumerable.Empty<object>();
+            return data ?? [];
         }
         catch (Exception ex)
         {

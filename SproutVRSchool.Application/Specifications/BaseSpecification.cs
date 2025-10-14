@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 using SproutVRSchool.Application.Abstractions.Repositories;
-using System.Linq.Expressions;
 
 namespace SproutVRSchool.Application.Specifications;
 

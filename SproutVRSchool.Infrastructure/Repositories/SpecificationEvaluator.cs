@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Domain.Entities;
-using System.Linq;
 
 namespace SproutVRSchool.Infrastructure.Repositories;
 
