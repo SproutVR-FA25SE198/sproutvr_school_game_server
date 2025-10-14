@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Application.Commons.Specifications;
+﻿using SproutVRSchool.Application.Commons.Specifications;
 using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
@@ -57,5 +52,17 @@ public sealed class VRDevicesSpecification : BaseSpecification<VRDevice>
                 AddOrderBy(x => x.Name);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Find specific details of the device by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="macAddress"></param>
+    public VRDevicesSpecification(Guid id)
+     : base(x => x.Id == id)
+    {
+        AddInclude(d => d.VRDeviceSessionSummaries);
+        AddInclude(d => d.VRDeviceTaskProgresses);
     }
 }

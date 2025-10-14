@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Clock;

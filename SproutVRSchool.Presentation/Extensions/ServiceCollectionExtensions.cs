@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Application.Abstractions.FileServices;
-using SproutVRSchool.Infrastructure.Data;
-using SproutVRSchool.Infrastructure.Data.Seeders;
-using SproutVRSchool.Infrastructure.FileServices;
-using SproutVRSchool.Infrastructure.Repositories;
+﻿using Asp.Versioning;
 using SproutVRSchool.Presentation.ExceptionHandlers;
 
 namespace SproutVRSchool.Presentation.Extensions;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Application.Commons.Requests;
+﻿using SproutVRSchool.Application.Commons.Requests;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
@@ -15,3 +10,4 @@ public class SearchVRDevicesParams : PagingParams
     public VRDeviceStatus? VRDeviceStatus { get; set; }
     public string? SortBy { get; set; } = string.Empty;
 }
+

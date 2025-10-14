@@ -22,9 +22,10 @@ public sealed record SearchVRDevicesQueryHandler(
             pageIndex: request.SearchVRDevicesParams.PageIndex,
             count: rawLists.Count,
             data: [.. rawLists.Data.Select(device => new SearchVRDevicesResponseDto(
+                Id: device.Id,
                 Name: device.Name,
                 SerializeNumber: device.SerialNumber,
-                Status: new StatusDto((int)device.Status, device.Status.ToString()),
+                Status: new StatusDto(device.Status),
                 CreatedAtUtc: device.CreatedAtUtc,
                 CreatedAtVietnam: dateTimeProvider.ConvertToVietNamTime(device.CreatedAtUtc))
             )]

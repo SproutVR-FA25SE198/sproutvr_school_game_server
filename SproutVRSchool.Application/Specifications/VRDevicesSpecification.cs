@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
+﻿using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.Specifications;

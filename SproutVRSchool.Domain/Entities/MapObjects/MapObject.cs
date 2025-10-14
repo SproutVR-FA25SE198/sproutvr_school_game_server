@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SproutVRSchool.Domain.Entities.Maps;
+﻿using SproutVRSchool.Domain.Entities.Maps;
 using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
 using SproutVRSchool.Domain.Entities.ObjectLocations;
-using SproutVRSchool.Domain.Entities.TaskLocations;
 using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Domain.Entities.MapObjects;
