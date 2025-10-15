@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Domain.Models.VRLearningSession;
 
-public enum ModelLearningSessionStatus
+public enum ModelVRLearningSessionStatus
 {
     Pending = 1,
     Active = 2,

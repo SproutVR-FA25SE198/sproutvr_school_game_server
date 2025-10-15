@@ -11,8 +11,10 @@ using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.Repositories;
 using StackExchange.Redis;
 using SproutVRSchool.Application.Abstractions.FileHelpers;
-using SproutVRSchool.Infrastructure.Redis.VRLearningSession;
-using SproutVRSchool.Application.Abstractions.RoomSession;
+using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
+using SproutVRSchool.Application.Abstractions.Services.SessionValidator;
+using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
+using SproutVRSchool.Infrastructure.Services;
 
 namespace SproutVRSchool.Infrastructure.Extensions;
 
@@ -30,7 +32,7 @@ public static partial class ServiceCollectionExtensions
 
         service.AddRedisStack(configuration);
 
-        service.AddVRLearningSession();
+        service.AddBusinessServices();
 
         return service;
     }
@@ -67,11 +69,9 @@ public static partial class ServiceCollectionExtensions
         service.AddScoped<IDateTimeProvider, DateTimeProvider>();
     }
 
-    private static void AddVRLearningSession(this IServiceCollection service)
+    private static void AddBusinessServices(this IServiceCollection service)
     {
-        service.AddScoped<IRoomSession, VRLearningSessionImpl>();
-        service.AddSingleton<IRoomSessionValidator, VRLearningSessionValidator>();
-        service.AddSingleton<ICodeGenerator, VRLearningSessionCodeGenerator>();
+        service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
     }
 
     /*

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SproutVRSchool.Application.Abstractions.RoomSession;
+namespace SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
 
-public interface ICodeGenerator
+public interface ICodeGeneratorService
 {
     string GenerateCode(int length = 6);
 }

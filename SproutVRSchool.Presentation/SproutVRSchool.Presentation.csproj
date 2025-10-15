@@ -22,6 +22,7 @@
 	<ItemGroup>
 		<Folder Include="Controllers\Auth\" />
 		<Folder Include="Controllers\Teacher\" />
+		<Folder Include="Grpc\" />
 	</ItemGroup>
 
 </Project>

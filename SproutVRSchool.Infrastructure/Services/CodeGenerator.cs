@@ -5,12 +5,11 @@ using System.Net.WebSockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Google.Protobuf;
-using SproutVRSchool.Application.Abstractions.RoomSession;
+using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
 
-namespace SproutVRSchool.Infrastructure.Redis.VRLearningSession;
+namespace SproutVRSchool.Infrastructure.Services;
 
-public class VRLearningSessionCodeGenerator : ICodeGenerator
+public class CodeGenerator : ICodeGeneratorService
 {
     private readonly string _chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
 
