@@ -10,8 +10,8 @@ public class ModelVRLearningSession
     public string? RoomCode { get; set; }
     public ModelVRLearningSessionStatus Status { get; set; } = ModelVRLearningSessionStatus.Pending;
     public int? DurationInMinutes { get; set; }
-    public DateTime? StartTimeAtUtc { get; set; }
-    public DateTime? EndTimeAtUtc { get; set; }
+    public DateTimeOffset? StartTimeAtUtc { get; set; }
+    public DateTimeOffset? EndTimeAtUtc { get; set; }
     public string? PresentJsonContentUrl { get; set; }
     public Dictionary<string, ModelVRDevice> Devices { get; set; } = new();
 }

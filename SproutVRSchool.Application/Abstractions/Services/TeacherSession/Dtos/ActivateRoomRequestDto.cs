@@ -9,7 +9,7 @@ namespace SproutVRSchool.Application.Abstractions.Services.TeacherSession.Dtos;
 
 public record ActivateRoomRequestDto(
     string LearningSessionId,
-    DateTime StartTimeUtc,
+    DateTimeOffset StartTimeUtc,
     int DurationInMinutes,
     IEnumerable<string> AssignedDeviceSerials)
 {
@@ -17,7 +17,7 @@ public record ActivateRoomRequestDto(
     {
         return new ActivateRoomRequestDto(
             activateRoomRequest.VrLearningSessionId,
-            activateRoomRequest.StartTimeAtUtc.ToDateTime(),
+            activateRoomRequest.StartTimeAtUtc.ToDateTimeOffset(),
             (int)activateRoomRequest.DurationInMinutes.ToTimeSpan().TotalMinutes,
             activateRoomRequest.AssignedDeviceSerials);
     }
