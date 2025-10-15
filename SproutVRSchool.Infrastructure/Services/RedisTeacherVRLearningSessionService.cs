@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using NRedisStack.RedisStackCommands;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.Services.TeacherSession;
 using SproutVRSchool.Application.Abstractions.Services.TeacherSession.Dtos;
@@ -21,6 +22,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 {
     private readonly IDatabase _database;
     private readonly ICodeGeneratorService _codeGenerator;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JsonSerializerOptions _jsonOptions;
 
     // ===============================
@@ -28,9 +30,12 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
     public RedisTeacherVRLearningSessionService(
         ICodeGeneratorService codeGenerator,
-        IConnectionMultiplexer connectionMultiplexer)
+        IConnectionMultiplexer connectionMultiplexer,
+        IDateTimeProvider dateTimeProvider
+        )
     {
         _codeGenerator = codeGenerator;
+        _dateTimeProvider = dateTimeProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
     }
@@ -56,6 +61,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         await _database.JSON().SetAsync(sessionKey, "$", jsonPayLoad, When.NotExists);
         return new CreateRoomResponseDto(vrLearningSesison.VRLearningSessionId);
     }
+
     public async Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request)
     {
         string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{request.LearningSessionId}";
@@ -84,7 +90,6 @@ internal sealed class RedisTeacherVRLearningSessionService
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(request.StartTimeUtc));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", request.DurationInMinutes);
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.AssignedDeviceSerials", JsonSerializer.Serialize(request.AssignedDeviceSerials));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
 
         if (!await transaction.ExecuteAsync())
@@ -97,16 +102,29 @@ internal sealed class RedisTeacherVRLearningSessionService
         return new ActivateRoomResponseDto(roomCode);
     }
 
-    public async Task CancelRoomAsync(string vrLearningSessionId)
+    public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
     {
         string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSessionId}";
 
         if (!await _database.KeyExistsAsync(sessionKey))
         {
             // If this key not exit, just do nothing
-            return;
+            return new CancelRoomResponseDto(
+                Message: $"Session with ID '{vrLearningSessionId}' not found. Canceled Failed.");
         }
 
-        await _database.JSON().SetAsync(sessionKey, "$.Status", ModelVRLearningSessionStatus.Cancelled, serializerOptions: _jsonOptions);
+        ITransaction transaction = _database.CreateTransaction();
+        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
+        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
+
+        if (!await transaction.ExecuteAsync())
+        {
+            return new CancelRoomResponseDto(
+                Message: "Cancellation failed. Please try again");
+        }
+
+        return new CancelRoomResponseDto(
+            Message: "Cancelled VR Learning Session Successfull"
+            );
     }
 }

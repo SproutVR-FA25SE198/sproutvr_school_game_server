@@ -1,6 +1,7 @@
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Infrastructure.Extensions;
 using SproutVRSchool.Presentation.Extensions;
+using SproutVRSchool.Presentation.Grpc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -44,5 +45,8 @@ app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
 app.UseExceptionHandler();
 
 app.MapControllers();
+app.MapGrpcService<GrpcVRLearningSessionTeacherService>();
+
+app.MapGet("/", () => "gRPC Server is running.");
 
 await app.RunAsync();

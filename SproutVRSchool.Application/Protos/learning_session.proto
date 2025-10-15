@@ -2,7 +2,6 @@
 
 package LearningSession.v1;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
@@ -22,11 +21,11 @@ service LearningSessionManagement {
 
   // Teacher - Game Server: 
   // - Cancel the learning session
-  rpc CancelRoom(CancelRoomRequest) returns (google.protobuf.Empty);
+  rpc CancelRoom(CancelRoomRequest) returns (CancelRoomResponse);
 
   // VR Glasses - Game Server: 
   // - Join the learning session via room code
-  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse) {}
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
 
   // VR Glasses - Game Server
   // - receive stats from VR device, send signals or any message from server to VR glasses
@@ -40,19 +39,19 @@ service LearningSessionManagement {
 // ------------------------ CreateRoom --------------------
 message CreateRoomRequest {
   string teacher_id = 1;
-  string vr_lession_id = 2;
+  string vr_lesson_id = 2;
   string session_name = 3;
 }
 
 message CreateRoomResponse {
-  string learning_session_id = 1;
+  string vr_learning_session_id = 1;
 }
 
 // ------------------------ ActivateRoom -------------------
 message ActivateRoomRequest {
-  string learning_session_id = 1;
-  google.protobuf.Timestamp start_time = 2;
-  google.protobuf.Duration duration = 3;
+  string vr_learning_session_id = 1;
+  google.protobuf.Timestamp start_time_at_utc = 2;
+  google.protobuf.Duration duration_in_minutes = 3;
   repeated string assigned_device_serials = 4;  // list of device allowed to join
 }
 
@@ -77,18 +76,22 @@ message JoinRoomResponse {
   }
   JoinStatus status = 1;
   string message = 2;
-  string learning_session_id = 3;
+  string vr_learning_session_id = 3;
   string preset_json_content = 4;
 }
 
 // ------------------------ CancelRoom ------------------------
 message CancelRoomRequest {
-  string learning_session_id = 1;
+  string vr_learning_session_id = 1;
+}
+
+message CancelRoomResponse {
+  string message = 1;
 }
 
 // ------------------------ StreamSessionState ------------------------
 message ClientToServerMessage {
-  string learning_session_id = 1;
+  string vr_learning_session_id = 1;
   string vr_device_serial_number = 2;
   
   oneof payload {
@@ -97,10 +100,9 @@ message ClientToServerMessage {
 }
 
 message TaskUpdate {
-  string task_id = 1;
-  string question = 2;
+  string vr_task_id = 1;
+  bool is_completed = 2;
   bool is_correct = 3;
-  string answer_text = 4;
 }
 
 message ServerToClientMessage {
