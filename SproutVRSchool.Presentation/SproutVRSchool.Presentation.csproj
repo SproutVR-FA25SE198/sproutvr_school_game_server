@@ -22,7 +22,7 @@
 	<ItemGroup>
 		<Folder Include="Controllers\Auth\" />
 		<Folder Include="Controllers\Teacher\" />
-		<Folder Include="Grpc\" />
+		<Folder Include="Interceptors\" />
 	</ItemGroup>
 
 </Project>

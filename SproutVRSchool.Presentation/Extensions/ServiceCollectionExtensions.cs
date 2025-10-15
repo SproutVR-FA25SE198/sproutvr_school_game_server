@@ -13,7 +13,10 @@ internal static partial class ServiceCollectionExtensions
     {
 
         service.AddApiVersioning();
+
         service.AddExceptionHandlers();
+
+        service.AddGrpc();
 
         return service;
     }

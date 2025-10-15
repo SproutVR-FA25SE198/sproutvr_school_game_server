@@ -9,7 +9,7 @@ public interface IVRLearningSessionTeacherService
 
     Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request);
 
-    Task CancelRoomAsync(string vrLearningSessionId);
+    Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId);
 }
 
 

@@ -29,10 +29,9 @@ public static class AppCts
     {
         public const int MAX_VR_DEVICE = 30;
         public const int CODE_DURATION_IN_MINUTES = 2;
-        public const string NAMESPACE_VR_LEARNING_SESSION = "learning_session";
-        public const string NAMESPACE_ROOM_CODE = "room_code";
+        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_session";
+        public const string NAMESPACE_ROOM_CODE = "session_code";
     }
-
     public static class SeederFilePaths
     {
         // Get the folder at runtime
