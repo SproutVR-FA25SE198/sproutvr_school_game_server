@@ -3,18 +3,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Infrastructure.FileHelpers;
+using SproutVRSchool.Application.Abstractions.FileHelpers;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
+using SproutVRSchool.Application.Abstractions.Services.SessionValidator;
+using SproutVRSchool.Application.Abstractions.Services.TeacherSession;
+using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
+using SproutVRSchool.Infrastructure.FileHelpers;
 using SproutVRSchool.Infrastructure.Repositories;
-using StackExchange.Redis;
-using SproutVRSchool.Application.Abstractions.FileHelpers;
-using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
-using SproutVRSchool.Application.Abstractions.Services.SessionValidator;
-using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
 using SproutVRSchool.Infrastructure.Services;
+using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Extensions;
 
@@ -57,20 +58,18 @@ public static partial class ServiceCollectionExtensions
 
         service.AddTransient<IDataSeeder, JsonDataSeeder<SchoolServerDbContext>>();
     }
-
     private static void AddRepositories(this IServiceCollection service)
     {
         service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         service.AddScoped<IUnitOfWork, UnitOfWork<SchoolServerDbContext>>();
     }
-
     private static void AddProviders(this IServiceCollection service)
     {
         service.AddScoped<IDateTimeProvider, DateTimeProvider>();
     }
-
     private static void AddBusinessServices(this IServiceCollection service)
     {
+        service.AddScoped<IVRLearningSessionTeacherService, RedisTeacherVRLearningSessionService>();
         service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
     }
 

@@ -7,4 +7,4 @@ using System.Threading.Tasks;
 namespace SproutVRSchool.Application.Abstractions.Services.TeacherSession.Dtos;
 
 public record CreateRoomResponseDto(
-    string LearningSessionId);
+    string VRLearningSessionId);
