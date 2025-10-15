@@ -6,6 +6,7 @@ public class ModelVRDevice
 {
     public string DeviceName { get; set; }
     public string SerialNumber { get; set; }
+    public ModelVRDeviceStatus Status { get; set; } = ModelVRDeviceStatus.Disconnected;
     public DateTime JoinedAtUtc { get; set; }
     public ConcurrentDictionary<string, ModelTaskProgress> Tasks { get; set; } = new();
 }

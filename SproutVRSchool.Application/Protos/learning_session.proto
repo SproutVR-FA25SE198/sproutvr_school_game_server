@@ -1,0 +1,125 @@
+﻿syntax = "proto3";
+
+package LearningSession.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+// ================================================================
+// === Service Definition
+// ================================================================
+
+service LearningSessionManagement {
+
+  // Teacher - Game Server: 
+  // - Create new learing session but not started yet
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+
+  // Teacher - Game Server: 
+  // - Set duration, start time, assign devices, and change status to Active.
+  rpc ActivateRoom(ActivateRoomRequest) returns (ActivateRoomResponse);
+
+  // Teacher - Game Server: 
+  // - Cancel the learning session
+  rpc CancelRoom(CancelRoomRequest) returns (google.protobuf.Empty);
+
+  // VR Glasses - Game Server: 
+  // - Join the learning session via room code
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse) {}
+
+  // VR Glasses - Game Server
+  // - receive stats from VR device, send signals or any message from server to VR glasses
+  rpc StreamSessionState(stream ClientToServerMessage) returns (stream ServerToClientMessage);
+}
+
+//================================================================
+// Message Definitions
+//================================================================
+
+// ------------------------ CreateRoom --------------------
+message CreateRoomRequest {
+  string teacher_id = 1;
+  string vr_lession_id = 2;
+  string session_name = 3;
+}
+
+message CreateRoomResponse {
+  string learning_session_id = 1;
+}
+
+// ------------------------ ActivateRoom -------------------
+message ActivateRoomRequest {
+  string learning_session_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Duration duration = 3;
+  repeated string assigned_device_serials = 4;  // list of device allowed to join
+}
+
+message ActivateRoomResponse {
+  string room_code = 1;                         // The join code is generated and returned here.
+}
+
+// ------------------------ JoinRoom ------------------------
+message JoinRoomRequest {
+  string room_code = 1;
+  string vr_device_serial_number = 2;
+  string vr_device_name = 3;
+}
+
+message JoinRoomResponse {
+  enum JoinStatus {
+    JOIN_STATUS_UNSPECIFIED = 0; // default value for other errors for switch-case when client consumes it
+    SUCCESS = 1;
+    INVALID_ROOM_CODE = 2;       // room code doesn't exist
+    ROOM_NOT_ACTIVE = 3;         // room not yet active, still in pending, completed, or cancelled
+    DEVICE_NOT_AUTHORIZED = 4;   // device connect but not in the assigned list, so not authorized
+  }
+  JoinStatus status = 1;
+  string message = 2;
+  string learning_session_id = 3;
+  string preset_json_content = 4;
+}
+
+// ------------------------ CancelRoom ------------------------
+message CancelRoomRequest {
+  string learning_session_id = 1;
+}
+
+// ------------------------ StreamSessionState ------------------------
+message ClientToServerMessage {
+  string learning_session_id = 1;
+  string vr_device_serial_number = 2;
+  
+  oneof payload {
+    TaskUpdate task_update = 3;
+  }
+}
+
+message TaskUpdate {
+  string task_id = 1;
+  string question = 2;
+  bool is_correct = 3;
+  string answer_text = 4;
+}
+
+message ServerToClientMessage {
+  oneof payload {
+    EndSessionSignal end_signal = 1;     // If sending this, VR Glasses game is stop
+    NotificationSignal notification = 2; // If sending this, could be info or warning
+  }
+}
+
+message NotificationSignal {
+  enum Severity {
+    INFO = 0;               // Teacher send general message, e.g. You have to move your mug to the left,....
+    WARNING = 1;            // Teacher warning, e.g. You only have 5 minutes left,...
+  }
+  
+  string text = 1;
+  Severity severity = 2;    // chia severity chủ yếu hiện noti theo màu sắc or some
+}
+
+message EndSessionSignal {
+  string reason = 1;        // Ví dụ: "Hết giờ" hoặc "Giáo viên đã kết thúc buổi học"
+}

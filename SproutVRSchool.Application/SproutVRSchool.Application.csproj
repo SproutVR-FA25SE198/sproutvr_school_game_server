@@ -5,8 +5,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
 		<PackageReference Include="MediatR" Version="13.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 	</ItemGroup>
@@ -16,8 +16,9 @@
 		<Folder Include="Extensions\" />
 	</ItemGroup>
 
+
 	<ItemGroup>
-		<Protobuf Include="Commons\Protos\learning_session.proto" GrpcServices="Server" />
+		<Protobuf Include="Protos\learning_session.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 </Project>
