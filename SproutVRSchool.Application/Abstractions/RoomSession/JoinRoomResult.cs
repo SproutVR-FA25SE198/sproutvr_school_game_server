@@ -5,5 +5,5 @@ namespace SproutVRSchool.Application.Abstractions.RoomSession;
 public record JoinRoomResult(
     JoinStatus Status,
     string Message,
-    string RoomId = "",
+    string? RoomId = null,
     string? PresetJsonContent = null);

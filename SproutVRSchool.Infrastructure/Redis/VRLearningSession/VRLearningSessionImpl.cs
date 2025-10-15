@@ -7,6 +7,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
+using static LearningSession.V1.JoinRoomResponse.Types;
 
 namespace SproutVRSchool.Infrastructure.Redis.VRLearningSession;
 
@@ -64,13 +65,7 @@ public class VRLearningSessionImpl : IRoomSession
         // 1. Get the session id
         string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{roomId}";
 
-        // 2. check if room session exists or not
-        if (!await _validator.IsRoomSessionExistsAsync(roomId))
-        {
-            throw new Exception($"Session with ID '{roomId}' not found.");
-        }
-
-        // 3. update the status to avoid student rejoin the game
+        // 2. update the status to avoid student rejoin the game
         ITransaction transaction = _database.CreateTransaction();
         await transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelLearningSessionStatus.Completed, _jsonOptions));
         await transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(DateTime.UtcNow, _jsonOptions));
@@ -83,9 +78,56 @@ public class VRLearningSessionImpl : IRoomSession
         return roomId;
     }
 
-    public Task<JoinRoomResult> JoinRoomAsync(string roomCode, string deviceIdentifier, string deviceName)
+    /// <summary>
+    /// Allow a VR device to join a session using a room code
+    /// </summary>
+    /// <param name="roomCode"></param>
+    /// <param name="deviceIdentifier"></param>
+    /// <param name="deviceName"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<JoinRoomResult> JoinRoomAsync(string roomCode, string deviceIdentifier, string deviceName)
     {
-        throw new NotImplementedException();
+        // 1. check room code
+        ValidationResult codeValidation = await _validator.ValidateRoomCodeAsync(roomCode);
+        if (!codeValidation.IsValid)
+        {
+            return codeValidation.ErrorResponse;
+        }
+
+        // 2. check room's curent status
+        ValidationResult learningSessionValidation = await _validator.ValidateLearningSessionRoomAsync(codeValidation.RoomId!, deviceIdentifier);
+        if (learningSessionValidation.IsValid)
+        {
+            return learningSessionValidation.ErrorResponse;
+        }
+
+        // 3. if all passing, attach to the redis
+        string learningSessionId = learningSessionValidation.RoomId!;
+        string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{learningSessionId}";
+        RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey);
+        ModelLearningSession session = JsonSerializer.Deserialize<ModelLearningSession>(sessionJson.ToString(), _jsonOptions);
+
+        //! HANDLE REJOIN LATER
+        //! HANDLE ONLY ASSIGNED DEVICE CAN JOIN THE ROOM
+
+        //// 4. new device
+        //var newDevice = new ModelVRDevice
+        //{
+        //    DeviceName = deviceName,
+        //    SerialNumber = deviceIdentifier,
+        //    JoinedAtUtc = DateTime.UtcNow
+        //};
+
+        //// 5. Join successful
+        //await _database.JSON().SetAsync(sessionKey, $"$.Devices[{deviceIdentifier}]",
+        //    newDevice, serializerOptions: _jsonOptions);
+
+        return new JoinRoomResult(
+            JoinStatus.Success,
+            "Joined session successfully!",
+            learningSessionId,
+            session!.PresentJsonContentUrl);
     }
 
     /// <summary>
@@ -101,26 +143,20 @@ public class VRLearningSessionImpl : IRoomSession
         // 1. get the session key
         string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{roomId}";
 
-        // 2. check if room session exists or not
-        if (!await _validator.IsRoomSessionExistsAsync(roomId))
-        {
-            throw new Exception($"Session with ID '{roomId}' not found.");
-        }
-
-        // 3. create a transaction to update the created room
+        // 2. create a transaction to update the created room
         // - dont use await for parallel updation
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelLearningSessionStatus.Active, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(startTimeUtc, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", durationInMinutes);
 
-        // 4. set back those tiem values
+        // 3. set back those tiem values
         if (!await transaction.ExecuteAsync())
         {
             throw new Exception($"Failed to schedule session '{roomId}'.");
         }
 
-        // 5. get back the room code and roomId for clients
+        // 4. get back the room code and roomId for clients
         RedisResult roomCodeResult = await _database.JSON().GetAsync(sessionKey, path: "$.RoomCode");
         string roomCode = roomCodeResult.Length > 0 ? roomCodeResult.ToString() : string.Empty;
 

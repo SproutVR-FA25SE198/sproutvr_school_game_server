@@ -8,7 +8,6 @@ namespace SproutVRSchool.Application.Abstractions.RoomSession;
 
 public interface IRoomSessionValidator
 {
-    Task<bool> IsRoomCodeExistsAsync(string roomCode);
-    Task<bool> IsRoomSessionExistsAsync(string roomId);
-    Task<bool> IsRoomSessionActiveAsync(string roomId);
+    Task<ValidationResult> ValidateRoomCodeAsync(string roomCode);
+    Task<ValidationResult> ValidateLearningSessionRoomAsync(string roomId, string deviceIdentifier);
 }
