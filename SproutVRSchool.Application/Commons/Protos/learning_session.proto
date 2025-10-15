@@ -1,0 +1,75 @@
+﻿syntax = "proto3";
+
+package LearningSession.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+// ================================================================
+// === Service Definition
+// ================================================================
+
+service LearningSessionManagement {
+
+  // Teacher - Game Server: Create Room + Scheduling Room
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc ScheduleRoom(ScheduleRoomRequest) returns (CreateRoomResponse);
+
+  // VR Glasses - Game Server
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse) {}
+
+  // Teacher - Game Server
+  rpc EndSession(EndSessionRequest) returns (google.protobuf.Empty);
+}
+
+//================================================================
+// Message Definitions
+//================================================================
+
+message CreateRoomRequest {
+  string teacher_id = 1;
+  string vr_lession_id = 2;
+  string session_name = 3;
+  int32 max_vr_devices = 5;
+}
+
+message CreateRoomResponse {
+  string learning_session_id = 1;
+  string room_code = 2;
+}
+
+message ScheduleRoomRequest {
+  string learning_session_id = 1;
+  google.protobuf.Timestamp start_time = 2; 
+  google.protobuf.Duration duration = 3;   
+}
+
+message ScheduleRoomResponse {
+  string message = 1;
+}
+
+message JoinRoomRequest {
+  string room_code = 1;
+  string vr_device_serial_number = 2;
+  string vr_device_name = 3;
+}
+
+message JoinRoomResponse {
+	enum JoinStatus {
+	  JOIN_STATUS_UNSPECIFIED = 0;
+	  SUCCESS = 1;
+	  WRONG_CODE = 2;
+	  ROOM_NOT_FOUND = 3;
+	  SERVER_ERROR = 4;
+	}
+
+  JoinStatus status = 1;
+  string message = 2;
+  string learning_session_id = 3;
+  string preset_json_content = 4;
+}
+
+message EndSessionRequest {
+  string learning_session_id = 1;
+}
