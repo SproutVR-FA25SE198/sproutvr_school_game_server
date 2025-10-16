@@ -15,7 +15,6 @@ public sealed class VRLesson : BaseEntity
     public string ImageUrl { get; set; }
     public VRLessonStatus Status { get; set; }
 
-
     // navigation properties
     public Lesson Lesson { get; set; }
     public Map Map { get; set; }

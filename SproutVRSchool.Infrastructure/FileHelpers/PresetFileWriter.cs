@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SproutVRSchool.Application.Abstractions.FileHelpers;
+using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Infrastructure.FileHelpers;
 
@@ -20,5 +21,15 @@ public sealed class PresetFileWriter : IFileWriter
         await fileContent.CopyToAsync(fileStream);
 
         return fullFilePath;
+    }
+
+    public static string GetFullTeacherPresetFilePath(Guid teacherId, string fileName)
+    {
+        string teacherFolder = Path.Combine(
+            AppContext.BaseDirectory,
+            AppCts.PresetFilePaths.PresetFolderPath,
+            teacherId.ToString());
+
+        return Path.Combine(teacherFolder, fileName);
     }
 }

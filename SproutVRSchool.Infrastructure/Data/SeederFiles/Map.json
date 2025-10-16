@@ -1,68 +1,24 @@
 ﻿[
   {
-    "Id": "a0000001-0000-0000-0000-000000000001",
-    "SubjectId": "10000001-0000-0000-0000-000000000001",
-    "Name": "Hình học không gian - Khối tròn xoay",
-    "MapCode": "MAP-01",
-    "Description": "Bản đồ học tập về các khối tròn xoay: hình trụ, hình nón, hình cầu và các tính chất của chúng",
-    "ImageUrl": "https://example.com/images/map-rotational-solids.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "LessonId": "11111111-e5f6-7890-1234-567890abcdef",
+    "MapId": "a0000001-0000-0000-0000-000000000003",
+    "Name": "Solar System Exploration",
+    "Description": "A guided tour of the planets in our solar system.",
+    "MaxDuration": "00:45:00",
+    "PresetJsonUrl": "http://your-content-server/presets/solar-system.json",
+    "ImageUrl": "http://your-content-server/images/solar-system.png",
+    "Status": "Active"
   },
   {
-    "Id": "a0000001-0000-0000-0000-000000000002",
-    "SubjectId": "10000001-0000-0000-0000-000000000002",
-    "Name": "Lượng giác lớp 11",
-    "MapCode": "MAP-02",
-    "Description": "Bản đồ học tập về lượng giác và các hàm số lượng giác",
-    "ImageUrl": "https://example.com/images/map-trigonometry-11.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
-  },
-  {
-    "Id": "a0000001-0000-0000-0000-000000000003",
-    "SubjectId": "20000001-0000-0000-0000-000000000001",
-    "Name": "Cơ học cơ bản",
-    "MapCode": "MAP-03",
-    "Description": "Bản đồ học tập về các khái niệm cơ học: lực, chuyển động, năng lượng",
-    "ImageUrl": "https://example.com/images/map-mechanics-10.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
-  },
-  {
-    "Id": "a0000001-0000-0000-0000-000000000004",
-    "SubjectId": "20000001-0000-0000-0000-000000000002",
-    "Name": "Điện học và từ học",
-    "MapCode": "MAP-04",
-    "Description": "Bản đồ học tập về điện trường, từ trường và các hiện tượng điện từ",
-    "ImageUrl": "https://example.com/images/map-electromagnetism-11.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
-  },
-  {
-    "Id": "a0000001-0000-0000-0000-000000000005",
-    "SubjectId": "30000001-0000-0000-0000-000000000001",
-    "Name": "Cấu trúc nguyên tử",
-    "MapCode": "MAP-05",
-    "Description": "Bản đồ học tập về cấu trúc nguyên tử và bảng tuần hoàn các nguyên tố",
-    "ImageUrl": "https://example.com/images/map-atomic-structure-10.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
-  },
-  {
-    "Id": "a0000001-0000-0000-0000-000000000006",
-    "SubjectId": "40000001-0000-0000-0000-000000000001",
-    "Name": "Tế bào và sinh học phân tử",
-    "MapCode": "MAP-06",
-    "Description": "Bản đồ học tập về cấu trúc tế bào và các quá trình sinh học phân tử",
-    "ImageUrl": "https://example.com/images/map-cell-biology-10.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+    "Id": "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+    "LessonId": "33333333-f6a7-8901-2345-67890abcdef1",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Anatomy of a Frog",
+    "Description": "A virtual dissection and study of frog anatomy.",
+    "MaxDuration": "00:30:00",
+    "PresetJsonUrl": "http://your-content-server/presets/frog-anatomy.json",
+    "ImageUrl": "http://your-content-server/images/frog-anatomy.png",
+    "Status": "Active"
   }
 ]
