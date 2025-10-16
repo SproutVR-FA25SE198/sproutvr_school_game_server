@@ -1,0 +1,75 @@
+{
+  "mapCode": "map_test_1",
+  "duration": 300.00,
+  "isSequential": true,
+  "vrTasks": [
+    {
+      "locationCode":"map_test_1_loc_1",
+      "vrTaskId": "adb1f931-574a-4eab-affe-a1e20aa5bf33",
+      "taskNumber": 2,
+      "taskDescription": "(Cầm) Ống dung dịch CuSO4",
+      "mapObject": {
+        "objectCode": "tube_cuso4",
+        "activityType": {
+          "activityCode": "grab",
+        }
+      }
+    },
+    {
+      "locationCode": "map_test_1_loc_2",
+      "vrTaskId": "660753a9-3a17-4a7c-a363-8e286c1d382c",
+      "taskNumber": 3,
+      "taskDescription": "(Câu hỏi) Ống chứa đinh sắt gỉ",
+      "mapObject": {
+        "objectCode": "tube_rusty",
+        "activityType": {
+          "activityCode": "quiz",
+          "config": {
+            "question": "Phương pháp chống ăn mòn kim loại dựa vào thí nghiệm đinh sắt quấn dây kẽm là?",
+            "answers": [
+              { "text": "Phương pháp phủ bề mặt", "isCorrect": false },
+              { "text": "Phương pháp điện hóa", "isCorrect": true },
+              { "text": "Phương pháp trùng ngưng", "isCorrect": false },
+              { "text": "Phương pháp thủy nhiệt", "isCorrect": false }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "locationCode": "map_test_1_loc_3",
+      "vrTaskId": "7f0064b1-8766-4789-95a5-05301f778b20",
+      "taskNumber": 4,
+      "taskDescription": "(Thông tin) Ống chứa dung dịch CuSO4 và đinh sắt",
+      "mapObject": {
+        "objectCode": "tube_cuso4_nail",
+        "activityType": {
+          "activityCode": "info",
+          "config": {
+            "information": "Khi cho đinh sắt vào dung dịch CuSO4 màu xanh lam thì dung dịch sẽ nhạt màu dần, trên đinh sắt xuất hiện chất rắn màu nâu đỏ bám vào. Hiện tượng này xảy ra do Fe có tính hoạt động hóa học mạnh hơn Cu, đẩy Cu ra khỏi dung dịch muối và tạo dung dịch muối mới là FeSO4."
+          }
+        }
+      }
+    },
+    {
+      "locationCode": "map_test_1_loc_4",
+      "vrTaskId": "37487095-c9af-4d08-af03-0aff1504faea",
+      "taskNumber": 1,
+      "taskDescription": "(Chọn) Cốc dung dịch H2SO4",
+      "mapObject": {
+        "objectCode": "beaker_h2so4",
+        "activityType": {
+          "activityCode": "interact"
+        }
+      }
+    },
+  ]
+}
+
+
+
+
+
+
+
+

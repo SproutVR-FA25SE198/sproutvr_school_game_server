@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Clock;
@@ -25,7 +26,10 @@ public static partial class ServiceCollectionExtensions
         this IServiceCollection service,
         IConfiguration configuration)
     {
+        service.AddFileHelpers();
+
         service.AddPersistence(configuration);
+
 
         service.AddRepositories();
 
@@ -51,8 +55,6 @@ public static partial class ServiceCollectionExtensions
         });
 
         service.AddScoped<SchoolServerDbContextSeeder>();
-
-        service.AddTransient<IFileReader, JsonFileReader>();
 
         service.AddScoped<ISchoolServerDbContext>(provider => provider.GetRequiredService<SchoolServerDbContext>());
 
@@ -83,5 +85,14 @@ public static partial class ServiceCollectionExtensions
         string redisStackConnection = configuration.GetConnectionString("RedisStack");
         service.AddSingleton<IConnectionMultiplexer>(
             ConnectionMultiplexer.Connect(redisStackConnection!));
+    }
+
+    /*
+        Using all file helpers
+     */
+    private static void AddFileHelpers(this IServiceCollection service)
+    {
+        service.AddTransient<IFileReader, JsonFileReader>();
+        service.AddTransient<IFileWriter, PresetFileWriter>();
     }
 }

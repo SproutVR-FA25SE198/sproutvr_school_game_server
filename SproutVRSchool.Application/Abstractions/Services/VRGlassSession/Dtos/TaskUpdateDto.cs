@@ -8,7 +8,5 @@ namespace SproutVRSchool.Application.Abstractions.Services.VRGlassSession.Dtos;
 
 public record TaskUpdateDto(
     string TaskId,
-    string Question,
-    bool IsCorrect,
-    string AnswerText
-    );
+    bool IsCompleted = false,
+    bool? IsCorrect = null);
