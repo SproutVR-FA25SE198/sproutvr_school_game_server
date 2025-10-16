@@ -12,6 +12,6 @@ public class ModelVRLearningSession
     public int? DurationInMinutes { get; set; }
     public DateTimeOffset? StartTimeAtUtc { get; set; }
     public DateTimeOffset? EndTimeAtUtc { get; set; }
-    public string? PresentJsonUrl { get; set; }
+    public string? PresetJsonRelativeFilePath { get; set; }
     public Dictionary<string, ModelVRDevice> Devices { get; set; } = new();
 }

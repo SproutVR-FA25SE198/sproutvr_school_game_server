@@ -6,7 +6,7 @@
     "Name": "Bài giảng về Hàm số Lượng giác và Phương trình Lượng giác",
     "Description": "Bài giảng chi tiết về các hàm số sin, cos, tan và cách giải các phương trình lượng giác cơ bản.",
     "ResourceUrl": "https://example.com/resources/lessons/trigonometry-basics.pdf",
-    "Status": "Published"
+    "Status": "Active"
   },
   {
     "Id": "c2222222-2222-2222-2222-222222222222",
@@ -15,7 +15,7 @@
     "Name": "Bài giảng về Định luật Newton",
     "Description": "Giới thiệu ba định luật Newton về chuyển động và các ví dụ ứng dụng trong thực tế.",
     "ResourceUrl": "https://example.com/resources/lessons/newtons-laws.pdf",
-    "Status": "Published"
+    "Status": "Active"
   },
   {
     "Id": "c3333333-3333-3333-3333-333333333333",
@@ -24,7 +24,7 @@
     "Name": "Bài giảng về Bảng Tuần Hoàn",
     "Description": "Hướng dẫn cách đọc và hiểu cấu trúc của Bảng Tuần Hoàn các nguyên tố hóa học.",
     "ResourceUrl": "https://example.com/resources/lessons/periodic-table.pdf",
-    "Status": "Published"
+    "Status": "Active"
   },
   {
     "Id": "c4444444-4444-4444-4444-444444444444",
@@ -33,6 +33,6 @@
     "Name": "Bài giảng về Cấu trúc Tế bào",
     "Description": "Khám phá các thành phần của tế bào động vật và thực vật và chức năng của chúng.",
     "ResourceUrl": "https://example.com/resources/lessons/cell-structure.pdf",
-    "Status": "Published"
+    "Status": "Inactive"
   }
 ]

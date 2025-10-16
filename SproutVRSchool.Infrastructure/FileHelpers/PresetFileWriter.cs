@@ -5,31 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using SproutVRSchool.Application.Abstractions.FileHelpers;
 using SproutVRSchool.Domain;
+using SproutVRSchool.Domain.Entities.Identities;
 
 namespace SproutVRSchool.Infrastructure.FileHelpers;
 
 public sealed class PresetFileWriter : IFileWriter
 {
-    public async Task<string> SaveFileUnderFolder(string folderPath, string fileName, Stream fileContent)
+    private readonly string _basePath = AppContext.BaseDirectory;
+
+    public async Task<string> SaveFileUnderFolder(Guid teacherId, string fileName, Stream fileContent)
     {
-        Directory.CreateDirectory(folderPath);
-
-        string fullFilePath = Path.Combine(folderPath, fileName);
-
-        // open 1 file stream to copy the content of the file to the destionation file
-        using var fileStream = new FileStream(fullFilePath, FileMode.Create);
-        await fileContent.CopyToAsync(fileStream);
-
-        return fullFilePath;
-    }
-
-    public static string GetFullTeacherPresetFilePath(Guid teacherId, string fileName)
-    {
-        string teacherFolder = Path.Combine(
-            AppContext.BaseDirectory,
+        string absoluteFolderPath = Path.Combine(
+            _basePath,
             AppCts.PresetFilePaths.PresetFolderPath,
             teacherId.ToString());
 
-        return Path.Combine(teacherFolder, fileName);
+        string absoluteFilePath = Path.Combine(absoluteFolderPath, fileName);
+
+        // open 1 file stream to copy the content of the file to the destionation file
+        Directory.CreateDirectory(absoluteFolderPath);
+        using var fileStream = new FileStream(absoluteFilePath, FileMode.Create);
+        await fileContent.CopyToAsync(fileStream);
+
+        return Path.Combine(AppCts.PresetFilePaths.PresetFolderPath, teacherId.ToString(), fileName);
     }
 }

@@ -9,10 +9,10 @@ namespace SproutVRSchool.Application.Abstractions.FileHelpers;
 public interface IFileWriter
 {
     /// <summary>
-    /// Return the full path of the saved file
+    /// Save file under the absolute path and return the relative path
     /// </summary>
     /// <param name="folderPath"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    Task<string> SaveFileUnderFolder(string folderPath, string fileName, Stream fileContent);
+    Task<string> SaveFileUnderFolder(Guid teacherId, string fileName, Stream fileContent);
 }

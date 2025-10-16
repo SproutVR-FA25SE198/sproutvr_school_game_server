@@ -10,6 +10,7 @@ using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.Services.SessionValidator;
 using SproutVRSchool.Application.Abstractions.Services.TeacherSession;
 using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
+using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
@@ -29,7 +30,6 @@ public static partial class ServiceCollectionExtensions
         service.AddFileHelpers();
 
         service.AddPersistence(configuration);
-
 
         service.AddRepositories();
 
@@ -53,6 +53,16 @@ public static partial class ServiceCollectionExtensions
         {
             o.UseNpgsql(configuration.GetConnectionString("Postgres"));
         });
+
+        service.AddIdentity<UserAccount, UserAccountRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+        }).AddEntityFrameworkStores<SchoolServerDbContext>();
+
+        service.AddScoped<IdentityDbContextSeeder>();
 
         service.AddScoped<SchoolServerDbContextSeeder>();
 

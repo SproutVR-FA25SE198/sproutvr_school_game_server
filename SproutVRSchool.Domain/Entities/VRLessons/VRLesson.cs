@@ -11,7 +11,7 @@ public sealed class VRLesson : BaseEntity
     public string Name { get; set; }
     public string Description { get; set; }
     public TimeSpan MaxDuration { get; set; }
-    public string PresetJsonUrl { get; set; }
+    public string PresetJsonRelativeFilePath { get; set; }
     public string ImageUrl { get; set; }
     public VRLessonStatus Status { get; set; }
 

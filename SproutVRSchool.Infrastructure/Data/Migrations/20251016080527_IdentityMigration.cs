@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -422,7 +423,7 @@ public partial class IdentityMigration : Migration
                 Name = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 MaxDuration = table.Column<TimeSpan>(type: "interval", nullable: false),
-                PresetJsonUrl = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                PresetJsonRelativeFilePath = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                 ImageUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
@@ -619,9 +620,8 @@ public partial class IdentityMigration : Migration
                 VRDeviceId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRTaskId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRLearningSessionId = table.Column<Guid>(type: "uuid", nullable: false),
-                QuestionText = table.Column<string>(type: "citext", maxLength: 255, nullable: false),
+                IsCompleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                 IsCorrect = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                AnswerText = table.Column<string>(type: "citext", maxLength: 255, nullable: false),
                 CompletionTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")

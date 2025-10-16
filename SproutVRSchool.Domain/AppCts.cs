@@ -6,6 +6,9 @@ public static class AppCts
     {
         public const string AUTH_SCHEMA = "auth";
         public const string APP_SCHEMA = "app";
+
+        public const string ROLE_TEACHER = "Teacher";
+        public const string ROLE_SCHOOL_ADMIN = "School Admin";
     }
 
     public static class TimeOffSet

@@ -5,18 +5,18 @@ namespace SproutVRSchool.Infrastructure.FileHelpers;
 
 public class JsonFileReader : IFileReader
 {
-    public async Task<string> ReadFileAsync(string filePath)
+    public async Task<string> ReadAbsoluteFilePathAsync(string absoluteFilePath)
     {
         try
         {
             // Check if file exists before proceeding
-            bool isExist = File.Exists(filePath);
+            bool isExist = File.Exists(absoluteFilePath);
             if (!isExist)
             {
-                throw new FileNotFoundException($"File not found. {filePath}", filePath);
+                throw new FileNotFoundException($"File not found. {absoluteFilePath}", absoluteFilePath);
             }
 
-            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var fileStream = new FileStream(absoluteFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var readerStream = new StreamReader(fileStream, Encoding.UTF8);
 
             return await readerStream.ReadToEndAsync();
@@ -29,11 +29,22 @@ public class JsonFileReader : IFileReader
         catch (UnauthorizedAccessException ex)
         {
             // Handle permission-related issues
-            throw new Exception($"Access to the file at {filePath} is denied.", ex);
+            throw new Exception($"Access to the file at {absoluteFilePath} is denied.", ex);
         }
         catch (Exception ex)
         {
             throw new Exception("An error occurred while reading the file.", ex);
         }
+    }
+
+    public async Task<string> StringtifyAbsoluteFilePathAsync(string absoluteFilePath)
+    {
+        if (!File.Exists(absoluteFilePath))
+        {
+            throw new FileNotFoundException($"File not found at path: {absoluteFilePath}");
+        }
+
+        // maintain all special characters in the json file
+        return await File.ReadAllTextAsync(absoluteFilePath, Encoding.UTF8);
     }
 }
