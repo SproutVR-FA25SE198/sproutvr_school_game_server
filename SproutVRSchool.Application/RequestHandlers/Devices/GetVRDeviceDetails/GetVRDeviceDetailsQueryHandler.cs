@@ -25,7 +25,7 @@ public sealed class GetVRDeviceDetailsQueryHandler(IUnitOfWork uow)
             .Select(p => new GetVRDeviceDetailsTasksResponseDto(
                 p.Id,
                 p.VRTaskId,
-                p.QuestionText,
+                p.IsCompleted,
                 p.IsCorrect,
                 p.CompletionTimeAtUtc
             )).ToList();

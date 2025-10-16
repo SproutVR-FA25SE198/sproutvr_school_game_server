@@ -37,7 +37,7 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
         builder.Property(vrl => vrl.MaxDuration)
             .IsRequired();
 
-        builder.Property(vrl => vrl.PresetJsonUrl)
+        builder.Property(vrl => vrl.PresetJsonRelativeFilePath)
             .IsRequired()
             .HasMaxLength(1000);
 

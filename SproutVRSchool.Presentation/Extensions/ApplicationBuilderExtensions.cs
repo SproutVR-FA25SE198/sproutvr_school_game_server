@@ -41,6 +41,9 @@ internal static class ApplicationBuilderExtensions
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
         SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
+        IdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IdentityDbContextSeeder>();
+
+        await identitySeeder.SeedDevelopmentAsync();
         await seeder.SeedDevelopmentAsync();
     }
 
@@ -53,6 +56,9 @@ internal static class ApplicationBuilderExtensions
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
         SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
+        IdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IdentityDbContextSeeder>();
+
+        await identitySeeder.SeedProductionAsync();
         await seeder.SeedProductionAsync();
     }
 }

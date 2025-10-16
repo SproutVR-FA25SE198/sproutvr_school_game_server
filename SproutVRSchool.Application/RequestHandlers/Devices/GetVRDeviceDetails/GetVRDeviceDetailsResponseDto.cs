@@ -13,7 +13,7 @@ public record GetVRDeviceDetailsResponseDto(
 public record GetVRDeviceDetailsTasksResponseDto(
     Guid TaskProgressId,
     Guid TaskId,
-    string QuestionText,
+    bool IsCompleted,
     bool IsCorrect,
     DateTimeOffset CompletionTimeUtc);
 

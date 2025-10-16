@@ -636,11 +636,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AnswerText")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("citext");
-
                     b.Property<DateTimeOffset>("CompletionTimeAtUtc")
                         .HasColumnType("timestamp with time zone");
 
@@ -649,15 +644,15 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<bool>("IsCorrect")
+                    b.Property<bool>("IsCompleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("citext");
+                    b.Property<bool>("IsCorrect")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
@@ -800,7 +795,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("citext");
 
-                    b.Property<string>("PresetJsonUrl")
+                    b.Property<string>("PresetJsonRelativeFilePath")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");

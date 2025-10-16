@@ -6,6 +6,9 @@ public static class AppCts
     {
         public const string AUTH_SCHEMA = "auth";
         public const string APP_SCHEMA = "app";
+
+        public const string ROLE_TEACHER = "Teacher";
+        public const string ROLE_SCHOOL_ADMIN = "School Admin";
     }
 
     public static class TimeOffSet
@@ -32,6 +35,12 @@ public static class AppCts
         public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_session";
         public const string NAMESPACE_ROOM_CODE = "session_code";
     }
+
+    public static class PresetFilePaths
+    {
+        public const string PresetFolderPath = "Data/Presets";
+    }
+
     public static class SeederFilePaths
     {
         // Get the folder at runtime
@@ -47,5 +56,7 @@ public static class AppCts
         public static readonly string ObjectActivityTypeFilePath = Path.Combine(JsonFolderPath, "ObjectActivityType.json");
         public static readonly string ObjectLocationFilePath = Path.Combine(JsonFolderPath, "ObjectLocation.json");
         public static readonly string VRDeviceFilePath = Path.Combine(JsonFolderPath, "VRDevice.json");
+        public static readonly string LessonFilePath = Path.Combine(JsonFolderPath, "Lesson.json");
+        public static readonly string VRLessonFilePath = Path.Combine(JsonFolderPath, "VRLesson.json");
     }
 }

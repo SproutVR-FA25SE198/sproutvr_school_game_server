@@ -52,7 +52,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
     {
         try
         {
-            string json = await _fileReader.ReadFileAsync(absoluteFilePath);
+            string json = await _fileReader.ReadAbsoluteFilePathAsync(absoluteFilePath);
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Include,

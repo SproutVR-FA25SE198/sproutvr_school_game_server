@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Abstractions.Clock;
@@ -9,6 +10,7 @@ using SproutVRSchool.Application.Abstractions.Services.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.Services.SessionValidator;
 using SproutVRSchool.Application.Abstractions.Services.TeacherSession;
 using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
+using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
@@ -25,6 +27,8 @@ public static partial class ServiceCollectionExtensions
         this IServiceCollection service,
         IConfiguration configuration)
     {
+        service.AddFileHelpers();
+
         service.AddPersistence(configuration);
 
         service.AddRepositories();
@@ -50,9 +54,17 @@ public static partial class ServiceCollectionExtensions
             o.UseNpgsql(configuration.GetConnectionString("Postgres"));
         });
 
-        service.AddScoped<SchoolServerDbContextSeeder>();
+        service.AddIdentity<UserAccount, UserAccountRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+        }).AddEntityFrameworkStores<SchoolServerDbContext>();
 
-        service.AddTransient<IFileReader, JsonFileReader>();
+        service.AddScoped<IdentityDbContextSeeder>();
+
+        service.AddScoped<SchoolServerDbContextSeeder>();
 
         service.AddScoped<ISchoolServerDbContext>(provider => provider.GetRequiredService<SchoolServerDbContext>());
 
@@ -83,5 +95,14 @@ public static partial class ServiceCollectionExtensions
         string redisStackConnection = configuration.GetConnectionString("RedisStack");
         service.AddSingleton<IConnectionMultiplexer>(
             ConnectionMultiplexer.Connect(redisStackConnection!));
+    }
+
+    /*
+        Using all file helpers
+     */
+    private static void AddFileHelpers(this IServiceCollection service)
+    {
+        service.AddTransient<IFileReader, JsonFileReader>();
+        service.AddTransient<IFileWriter, PresetFileWriter>();
     }
 }
