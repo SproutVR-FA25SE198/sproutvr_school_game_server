@@ -1,9 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
+﻿using Grpc.Core;
 using LearningSession.V1;
-using SproutVRSchool.Application.Abstractions.Services.TeacherSession;
-using SproutVRSchool.Application.Abstractions.Services.TeacherSession.Dtos;
-using SproutVRSchool.Application.Abstractions.Services.VRGlassSession;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 
 namespace SproutVRSchool.Presentation.Grpc;
 

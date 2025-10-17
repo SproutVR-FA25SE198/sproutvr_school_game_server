@@ -10,7 +10,7 @@ public sealed class Lesson : BaseEntity
     public Guid TeacherId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public string ResourceUrl { get; set; }
+    public string ResourceRelativeFilePath { get; set; }
     public LessonStatus Status { get; set; }
 
     // navigation property

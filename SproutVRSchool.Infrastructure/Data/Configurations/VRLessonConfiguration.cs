@@ -38,10 +38,10 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
             .IsRequired();
 
         builder.Property(vrl => vrl.PresetJsonRelativeFilePath)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(1000);
 
-        builder.Property(vrl => vrl.ImageUrl)
+        builder.Property(vrl => vrl.ImageRelativeFilePath)
             .IsRequired()
             .HasMaxLength(300);
 

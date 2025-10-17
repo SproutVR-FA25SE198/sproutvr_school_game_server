@@ -35,7 +35,7 @@ internal sealed class LessonConfiguration : BaseEntityConfiguration<Lesson>
             .HasColumnType("text")
             .HasMaxLength(1000);
 
-        builder.Property(l => l.ResourceUrl)
+        builder.Property(l => l.ResourceRelativeFilePath)
             .IsRequired()
             .HasMaxLength(300);
 

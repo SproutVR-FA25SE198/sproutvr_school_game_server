@@ -6,6 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controllers\Teacher\v1\FilesController.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
 		<ProjectReference Include="..\SproutVRSchool.Infrastructure\SproutVRSchool.Infrastructure.csproj" />
 	</ItemGroup>

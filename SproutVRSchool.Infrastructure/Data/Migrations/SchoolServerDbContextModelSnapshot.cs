@@ -298,7 +298,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("citext");
 
-                    b.Property<string>("ResourceUrl")
+                    b.Property<string>("ResourceRelativeFilePath")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");

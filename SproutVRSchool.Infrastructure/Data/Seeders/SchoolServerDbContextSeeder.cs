@@ -30,7 +30,7 @@ public class SchoolServerDbContextSeeder
     {
         _dataSeeder = dataSeeder;
     }
-    
+
     // ===========================
     // === Methods
     // ===========================

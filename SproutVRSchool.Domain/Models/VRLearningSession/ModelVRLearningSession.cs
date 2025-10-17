@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace SproutVRSchool.Domain.Models.VRLearningSession;
+﻿namespace SproutVRSchool.Domain.Models.VRLearningSession;
 
 public class ModelVRLearningSession
 {
