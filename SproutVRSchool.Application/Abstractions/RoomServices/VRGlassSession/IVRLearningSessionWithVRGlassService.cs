@@ -5,7 +5,7 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 public interface IVRLearningSessionWithVRGlassService
 {
     Task<JoinRoomResponseDto> JoinRoomAsync(JoinRoomRequestDto joinRoomRequestDto);
-    Task PublishVrDeviceEventAsync(PublishEventRequestDto deviceEvent);
+    Task HandleTaskUpdateAsync(TaskUpdateDto request);
 }
 
 

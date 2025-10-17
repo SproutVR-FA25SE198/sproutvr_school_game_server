@@ -16,10 +16,5 @@ public class VRLessonController(IMediator mediator) : BaseApiController
     // ========================
 
     // POST: api/v1/teacher/vrlessons
-    public async Task<IActionResult> CreateVRLesson(
-        [FromBody] Create
-        CancellationToken cancellationToken)
-    {
-        // Method intentionally left empty.
-    }
+
 }

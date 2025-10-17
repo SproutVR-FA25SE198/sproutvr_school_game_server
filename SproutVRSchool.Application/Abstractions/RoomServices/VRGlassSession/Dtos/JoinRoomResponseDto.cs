@@ -5,5 +5,5 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dt
 public record JoinRoomResponseDto(
     JoinStatus Status,
     string Message,
-    string? LearningSessionId = null,
+    string? VrLearningSessionId = null,
     string? PresetJsonContent = null);

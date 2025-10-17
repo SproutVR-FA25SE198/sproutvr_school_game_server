@@ -7,6 +7,7 @@ using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
+using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
@@ -95,6 +96,8 @@ public static partial class ServiceCollectionExtensions
     private static void AddBusinessServices(this IServiceCollection service)
     {
         service.AddScoped<IVRLearningSessionTeacherService, RedisTeacherVRLearningSessionService>();
+        service.AddScoped<IVRLearningSessionWithVRGlassService, RedisVRLearningSessionWithVRGlassService>();
+
         service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
     }
 

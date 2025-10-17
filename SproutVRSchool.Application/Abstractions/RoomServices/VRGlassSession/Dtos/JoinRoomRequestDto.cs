@@ -2,5 +2,5 @@
 
 public record JoinRoomRequestDto(
     string RoomCode,
-    string DeviceSerialNumber,
-    string DeviceName);
+    string VrDeviceSerialNumber,
+    string VrDeviceName);
