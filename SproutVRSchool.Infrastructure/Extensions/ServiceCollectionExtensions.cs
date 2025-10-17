@@ -90,7 +90,7 @@ public static partial class ServiceCollectionExtensions
     /// <param name="service"></param>
     private static void AddProviders(this IServiceCollection service)
     {
-        service.AddScoped<IDateTimeProvider, DateTimeProvider>();
+        service.AddSingleton<IDateTimeProvider, DateTimeProvider>();
     }
 
     /// <summary>
