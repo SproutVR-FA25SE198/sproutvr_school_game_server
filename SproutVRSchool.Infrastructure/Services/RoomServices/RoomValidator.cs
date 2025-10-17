@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
+using NRedisStack.RedisStackCommands;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
-using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
-internal class RoomValidator : IVRLearningSessionValidator
+internal sealed class RoomValidator : IVRLearningSessionValidator
 {
     // ===============================
     // === Fields
@@ -40,7 +33,7 @@ internal class RoomValidator : IVRLearningSessionValidator
 
     public async Task<ValidationResult> ValidateJoinAttemptAsync(string roomCode, string deviceSerialNumber)
     {
-        string sessionId = await _database.StringGetAsync($"{AppCts.Session.NAMESPACE_ROOM_CODE}:{roomCode}");
+        string sessionId = await _database.StringGetAsync($"{AppCts.Redis.NAMESPACE_ROOM_CODE}:{roomCode}");
 
         // 1. If type code is invalid or learning session is not exist under the room code
         if (string.IsNullOrEmpty(sessionId))
@@ -48,16 +41,16 @@ internal class RoomValidator : IVRLearningSessionValidator
             return ValidationResult.InvalidRoomCode;
         }
 
-        string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{sessionId}";
-        string sessionJson = await _database.JSON().GetAsync(sessionKey, "$");
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{sessionId}";
+        RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey, "$");
 
         // 2. Room not found, or session expired
-        if (sessionJson == null)
+        if (sessionJson.IsNull)
         {
-            return ValidationResult.SessionExpiredOrRoomNotFound;
+            return ValidationResult.SessionExpiredOrNotFound;
         }
 
-        ModelVRLearningSession vrLearningSession = JsonSerializer.Deserialize<ModelVRLearningSession>(sessionJson!, _jsonOptions)!;
+        ModelVRLearningSession vrLearningSession = JsonSerializer.Deserialize<ModelVRLearningSession>(sessionJson.ToString()!, _jsonOptions)!;
 
         // 3. VR glasses cannot join the room at Pending, Completed, Cancelled
         if (vrLearningSession.Status != ModelVRLearningSessionStatus.Active)
@@ -74,6 +67,7 @@ internal class RoomValidator : IVRLearningSessionValidator
         // 5. Ok if passing all of those validation, return success with metadata
         return ValidationResult.Success(
             vrLearningSessionId: vrLearningSession.VRLearningSessionId,
+            presetJsonContent: string.Empty, // To be filled later
             modelVRLearningSession: vrLearningSession
         );
     }

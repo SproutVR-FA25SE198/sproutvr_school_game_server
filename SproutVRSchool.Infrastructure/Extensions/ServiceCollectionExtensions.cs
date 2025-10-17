@@ -10,6 +10,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Domain.Entities.Identities;
+using SproutVRSchool.Infrastructure.Backgrounds;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
@@ -37,6 +38,8 @@ public static partial class ServiceCollectionExtensions
         service.AddRedisStack(configuration);
 
         service.AddBusinessServices();
+
+        service.AddBackgrounds();
 
         return service;
     }
@@ -97,7 +100,7 @@ public static partial class ServiceCollectionExtensions
     private static void AddBusinessServices(this IServiceCollection service)
     {
         service.AddScoped<IVRLearningSessionTeacherService, RedisTeacherVRLearningSessionService>();
-        service.AddScoped<IVRLearningSessionWithVRGlassService, RedisVRLearningSessionWithVRGlassService>();
+        service.AddScoped<IVRLearningSessionWithVRGlassService, RedisVRGlassVRLearningSessionService>();
         service.AddScoped<IVRLearningSessionValidator, RoomValidator>();
         service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
     }
@@ -124,5 +127,10 @@ public static partial class ServiceCollectionExtensions
         service.AddTransient<IFileReader, JsonFileReader>();
         service.AddTransient<ILocalStorageService, LocalStorageService>();
         service.AddTransient<IPathService, LocalStorageService>();
+    }
+
+    private static void AddBackgrounds(this IServiceCollection service)
+    {
+        service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
     }
 }

@@ -5,7 +5,7 @@
     "TeacherId": "0199f4b1-8487-4352-8a2a-320a00e40e58",
     "Name": "Bài giảng về Hàm số Lượng giác và Phương trình Lượng giác",
     "Description": "Bài giảng chi tiết về các hàm số sin, cos, tan và cách giải các phương trình lượng giác cơ bản.",
-    "ResourceUrl": "https://example.com/resources/lessons/trigonometry-basics.pdf",
+    "ResourceRelativeFilePath": "https://example.com/resources/lessons/trigonometry-basics.pdf",
     "Status": "Active"
   },
   {
@@ -14,7 +14,7 @@
     "TeacherId": "0199f4b1-8487-4352-8a2a-320a00e40e58",
     "Name": "Bài giảng về Định luật Newton",
     "Description": "Giới thiệu ba định luật Newton về chuyển động và các ví dụ ứng dụng trong thực tế.",
-    "ResourceUrl": "https://example.com/resources/lessons/newtons-laws.pdf",
+    "ResourceRelativeFilePath": "https://example.com/resources/lessons/newtons-laws.pdf",
     "Status": "Active"
   },
   {
@@ -23,7 +23,7 @@
     "TeacherId": "0199f4b1-8487-4352-8a2a-320a00e40e58",
     "Name": "Bài giảng về Bảng Tuần Hoàn",
     "Description": "Hướng dẫn cách đọc và hiểu cấu trúc của Bảng Tuần Hoàn các nguyên tố hóa học.",
-    "ResourceUrl": "https://example.com/resources/lessons/periodic-table.pdf",
+    "ResourceRelativeFilePath": "https://example.com/resources/lessons/periodic-table.pdf",
     "Status": "Active"
   },
   {
@@ -32,7 +32,7 @@
     "TeacherId": "0199f4b1-8487-4352-8a2a-320a00e40e58",
     "Name": "Bài giảng về Cấu trúc Tế bào",
     "Description": "Khám phá các thành phần của tế bào động vật và thực vật và chức năng của chúng.",
-    "ResourceUrl": "https://example.com/resources/lessons/cell-structure.pdf",
+    "ResourceRelativeFilePath": "https://example.com/resources/lessons/cell-structure.pdf",
     "Status": "Inactive"
   }
 ]

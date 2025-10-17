@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251016080527_IdentityMigration")]
+    [Migration("20251017104449_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
@@ -779,7 +779,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImageRelativeFilePath")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
@@ -799,7 +799,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("citext");
 
                     b.Property<string>("PresetJsonRelativeFilePath")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 

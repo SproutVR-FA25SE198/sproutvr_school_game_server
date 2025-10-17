@@ -73,6 +73,7 @@ message JoinRoomResponse {
     INVALID_ROOM_CODE = 2;      // room code doesn't exist
     ROOM_NOT_ACTIVE = 3;        // room not yet active, still in pending, completed, or cancelled
     DEVICE_NOT_AUTHORIZED = 4;  // device connect but not in the assigned list, so not authorized
+    REJOIN = 5;                 // device reconnect the game when it have already played                 
   }
   JoinStatus status = 1;
   string message = 2;

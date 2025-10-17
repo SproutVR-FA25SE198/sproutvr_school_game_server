@@ -28,12 +28,14 @@ public static class AppCts
         public const int DEFAULT_COUNT = 0;
     }
 
-    public static class Session
+    public static class Redis
     {
         public const int MAX_VR_DEVICE = 30;
         public const int CODE_DURATION_IN_MINUTES = 2;
-        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_session";
-        public const string NAMESPACE_ROOM_CODE = "session_code";
+        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_sessions";
+        public const string NAMESPACE_ROOM_CODE = "room_codes";
+        public const string NAMESPACE_ACTIVE_LEARNING_SESSIONS = "active_vr_learning_sessions";
+        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION = "stream:vr_learning_session";
     }
 
     public static class FilePaths

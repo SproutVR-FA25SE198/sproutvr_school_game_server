@@ -1,6 +1,6 @@
 ﻿namespace SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 
-public record TaskUpdateDto(
+public record TaskUpdateRequestDto(
     string VrLearningSessionId,
     string VrDeviceSerialNumber,
     string VrTaskId,

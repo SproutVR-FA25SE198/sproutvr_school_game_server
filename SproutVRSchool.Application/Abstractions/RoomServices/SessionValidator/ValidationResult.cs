@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
+﻿using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using static LearningSession.V1.JoinRoomResponse.Types;
 
@@ -11,7 +10,7 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 public record ValidationResult(
     bool IsValid,
     JoinRoomResponseDto? JoinRoomResponseDto = null,
-    ModelVRLearningSession? VrLearningSession = null  // after validation, return the learning session info to avoid fetching twice
+    ModelVRLearningSession? ModelVRLearningSession = null  // after validation, return the learning session info to avoid fetching twice
 )
 {
     // VR glasses cannot join the room due to wrong room code
@@ -44,8 +43,8 @@ public record ValidationResult(
             )
         );
 
-    // Room not found, 
-    public static ValidationResult SessionExpiredOrRoomNotFound =>
+    // Room not found
+    public static ValidationResult SessionExpiredOrNotFound =>
         new ValidationResult(
             IsValid: false,
             JoinRoomResponseDto: new JoinRoomResponseDto(
@@ -54,21 +53,41 @@ public record ValidationResult(
             )
         );
 
-    // VR glasses can join the room, but the json content is empty (later stringify)
     public static ValidationResult Success(
-        string vrLearningSessionId,
-        ModelVRLearningSession modelVRLearningSession) =>
-        new ValidationResult(
-            IsValid: true,
-            JoinRoomResponseDto: new JoinRoomResponseDto(
-                JoinStatus.Success,
-                "Successfully joined the learning session.",
-                vrLearningSessionId,
-                PresetJsonContent: string.Empty
-            ),
-            modelVRLearningSession
-        );
+      string vrLearningSessionId,
+      string presetJsonContent,
+      ModelVRLearningSession? modelVRLearningSession) =>
+      new ValidationResult(
+          IsValid: true,
+          JoinRoomResponseDto: new JoinRoomResponseDto(
+              JoinStatus.Success,
+              "Successfully joined the learning session.",
+              vrLearningSessionId: vrLearningSessionId,
+              presetJsonContent: presetJsonContent
+          ),
+          modelVRLearningSession
+      );
+
+
+#pragma warning disable S125 // Sections of code should not be commented out
+    //// VR glasses can join the room, but the json content is empty (later stringify)
+    //public static ValidationResult Success(
+    //    string vrLearningSessionId,
+    //    ModelVRLearningSession modelVRLearningSession) =>
+    //    new ValidationResult(
+    //        IsValid: true,
+    //        JoinRoomResponseDto: new JoinRoomResponseDto(
+    //            JoinStatus.Success,
+    //            "Successfully joined the learning session.",
+    //            vrLearningSessionId,
+    //            PresetJsonContent: string.Empty
+    //        ),
+    //        modelVRLearningSession
+    //    );
+
+#pragma warning restore S125 // Sections of code should not be commented out
 }
+
 
 
 

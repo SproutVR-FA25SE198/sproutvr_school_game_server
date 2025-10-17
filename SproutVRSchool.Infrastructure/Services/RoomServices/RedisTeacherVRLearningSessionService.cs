@@ -23,6 +23,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
     // === Constructors
     // ===============================
+
     public RedisTeacherVRLearningSessionService(
         ICodeGeneratorService codeGenerator,
         IConnectionMultiplexer connectionMultiplexer,
@@ -39,6 +40,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
     // === Methods
     // ===============================
+
     public async Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request)
     {
         var vrLearningSesison = new ModelVRLearningSession
@@ -50,7 +52,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         };
 
         // prefix for grouping keys
-        string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSesison.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSesison.VRLearningSessionId}";
         string jsonPayLoad = JsonSerializer.Serialize(vrLearningSesison, _jsonOptions);
 
         // set into the redis db
@@ -60,9 +62,9 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request)
     {
-        string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{request.LearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{request.LearningSessionId}";
         string roomCode = _codeGenerator.GenerateCode();
-        string roomCodeKey = $"{AppCts.Session.NAMESPACE_ROOM_CODE}:{roomCode}";
+        string roomCodeKey = $"{AppCts.Redis.NAMESPACE_ROOM_CODE}:{roomCode}";
 
         // Generate code for the room
         var initialDevices = request.AssignedDeviceSerials.ToDictionary(
@@ -78,8 +80,11 @@ internal sealed class RedisTeacherVRLearningSessionService
         _ = transaction.StringSetAsync(
             roomCodeKey,
             request.LearningSessionId,
-            TimeSpan.FromMinutes(AppCts.Session.CODE_DURATION_IN_MINUTES),
+            TimeSpan.FromMinutes(AppCts.Redis.CODE_DURATION_IN_MINUTES),
             When.NotExists);
+
+        // Set into the active lists, but must be in the tranasction
+        _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_ACTIVE_LEARNING_SESSIONS, request.LearningSessionId);
 
         // Set params to the room to Activate the room
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
@@ -88,8 +93,12 @@ internal sealed class RedisTeacherVRLearningSessionService
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", request.DurationInMinutes);
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
 
+        // UNDONE: Set the PresetJsonRelativeFilePath extract from the database
+        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.PresetJsonRelativeFilePath", JsonSerializer.Serialize("/presets/money", _jsonOptions));
+
         if (!await transaction.ExecuteAsync())
         {
+            // UNDONE: Improve the error handling and retry mechanism
             // This can fail if the room code wasn't unique or the session key doesn't exist.
             // A retry loop could be added here for more robustness.
             throw new Exception("Failed to activate session. The generated room code might have conflicted or the session ID is invalid.");
@@ -100,27 +109,29 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
     {
-        string sessionKey = $"{AppCts.Session.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSessionId}";
 
         if (!await _database.KeyExistsAsync(sessionKey))
         {
             // If this key not exit, just do nothing
             return new CancelRoomResponseDto(
-                Message: $"Session with ID '{vrLearningSessionId}' not found. Canceled Failed.");
+                Message: $"Redis with ID '{vrLearningSessionId}' not found. Canceled Failed.");
         }
 
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
+        _ = transaction.SetRemoveAsync(AppCts.Redis.NAMESPACE_ACTIVE_LEARNING_SESSIONS, vrLearningSessionId);
 
         if (!await transaction.ExecuteAsync())
         {
+            // UNDONE: Improve the error handling and retry mechanism
             return new CancelRoomResponseDto(
                 Message: "Cancellation failed. Please try again");
         }
 
         return new CancelRoomResponseDto(
-            Message: "Cancelled VR Learning Session Successfull"
+            Message: "Cancelled VR Learning Redis Successfull"
             );
     }
 }
