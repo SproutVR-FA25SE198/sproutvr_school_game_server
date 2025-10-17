@@ -42,7 +42,7 @@ internal sealed class RoomValidator : IVRLearningSessionValidator
         }
 
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{sessionId}";
-        RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey, "$");
+        RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey);
 
         // 2. Room not found, or session expired
         if (sessionJson.IsNull)

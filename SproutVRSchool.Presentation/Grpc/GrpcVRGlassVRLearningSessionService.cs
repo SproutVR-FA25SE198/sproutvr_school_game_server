@@ -5,7 +5,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 
 namespace SproutVRSchool.Presentation.Grpc;
 
-public sealed class GrpcVRLearningSessionVRGlassService : LearningSessionManagement.LearningSessionManagementBase
+public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManagement.VRGlassSessionManagementBase
 {
     // ===============================
     // === Fields
@@ -17,7 +17,7 @@ public sealed class GrpcVRLearningSessionVRGlassService : LearningSessionManagem
     // === Constructors
     // ==============================
 
-    public GrpcVRLearningSessionVRGlassService(IVRLearningSessionWithVRGlassService vrLearningSessionWithVRGlassService)
+    public GrpcVRGlassVRLearningSessionService(IVRLearningSessionWithVRGlassService vrLearningSessionWithVRGlassService)
     {
         _vrLearningSessionWithVRGlassService = vrLearningSessionWithVRGlassService;
     }

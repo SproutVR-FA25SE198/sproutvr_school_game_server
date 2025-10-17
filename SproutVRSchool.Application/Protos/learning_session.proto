@@ -9,8 +9,7 @@ import "google/protobuf/duration.proto";
 // === Service Definition
 // ================================================================
 
-service LearningSessionManagement {
-
+service TeacherSessionManagement {
   // Teacher - Game Server: 
   // - Create new learing session but not started yet
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
@@ -22,7 +21,9 @@ service LearningSessionManagement {
   // Teacher - Game Server: 
   // - Cancel the learning session
   rpc CancelRoom(CancelRoomRequest) returns (CancelRoomResponse);
+}
 
+service VRGlassSessionManagement {
   // VR Glasses - Game Server: 
   // - Join the learning session via room code
   rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
