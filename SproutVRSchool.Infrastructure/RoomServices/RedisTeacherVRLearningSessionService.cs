@@ -10,7 +10,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Services.RoomServices;
+namespace SproutVRSchool.Infrastructure.RoomServices;
 
 internal sealed class RedisTeacherVRLearningSessionService
     : IVRLearningSessionTeacherService

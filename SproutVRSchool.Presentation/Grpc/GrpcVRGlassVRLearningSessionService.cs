@@ -2,6 +2,7 @@
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
+using SproutVRSchool.Infrastructure.RoomServices;
 
 namespace SproutVRSchool.Presentation.Grpc;
 
@@ -40,24 +41,24 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     public override async Task StreamSessionState(
         IAsyncStreamReader<ClientToServerMessage> requestStream, IServerStreamWriter<ServerToClientMessage> responseStream, ServerCallContext context)
     {
-        _logger.LogInformation("VR device stream connected.");
+#pragma warning disable S125 // Sections of code should not be commented out
+        //// wait for the connection successfull
+        //if (!await requestStream.MoveNext(context.CancellationToken))
+        //{
+        //    return;
+        //}
 
-        if (!await requestStream.MoveNext(context.CancellationToken))
-        {
-            return;
-        }
+        //ClientToServerMessage initialMessage = requestStream.Current;
+        //string sessionId = initialMessage.VrLearningSessionId;
+        //_logger.LogInformation("VR device {DeviceSerialNumber} connected.", requestStream.Current.VrDeviceSerialNumber);
 
-        ClientToServerMessage initialMessage = requestStream.Current;
-        string sessionId = initialMessage.VrLearningSessionId;
-
-        //  Listening Background Task and Sending Background Task
+        // Listening Background Task and Sending Background Task
         await ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
 
-#pragma warning disable S125 // Sections of code should not be commented out
         //Task sendingTask = SendServerMessagesAsync(responseStream, context.CancellationToken);
         //await Task.WhenAll(listeningTask, sendingTask);
 #pragma warning restore S125 // Sections of code should not be commented out
-        _logger.LogInformation("VR device stream disconnected for Session ID: {SessionId}", sessionId);
+        //_logger.LogInformation("VR device stream disconnected for Session ID: {SessionId}", sessionId);
     }
 
     // =================================
@@ -75,35 +76,50 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
     {
+
         await foreach (ClientToServerMessage? message in requestStream.ReadAllAsync(cancellationToken))
-#pragma warning disable S125 // Sections of code should not be commented out
         {
-            switch (message.PayloadCase)
+            try
             {
-                case ClientToServerMessage.PayloadOneofCase.TaskUpdate:
-                    {
-                        _logger.LogInformation("Received TaskUpdate from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
-                        var dto = PublishTaskUpdateRequestDto.MapFromGrpcRequest(
-                            message.TaskUpdate,
-                            message.VrLearningSessionId,
-                            message.VrDeviceSerialNumber);
+                switch (message.PayloadCase)
+                {
+                    case ClientToServerMessage.PayloadOneofCase.TaskUpdate:
+                        {
+                            _logger.LogInformation("Received TaskUpdate from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
+                            var dto = PublishTaskUpdateRequestDto.MapFromGrpcRequest(
+                                message.TaskUpdate,
+                                message.VrLearningSessionId,
+                                message.VrDeviceSerialNumber);
 
-                        // await to make sure Task Update in order
-                        await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
+                            // await to make sure Task Update in order
+                            await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
 
-                        break;
-                    }
-                case ClientToServerMessage.PayloadOneofCase.None:
-                    {
-                        _logger.LogWarning("Received message with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
-                        break;
-                    }
-                default:
-                    break;
+                            // when await finish, just fire-and-forget the method and moving on to the next message
+                            _ = responseStream.WriteAsync(
+                                ServerToClientMessageFactory.CreateSuccessTaskUpdateConfirmation(message.TaskUpdate.VrTaskId),
+                                cancellationToken);
+
+                            break;
+                        }
+                    case ClientToServerMessage.PayloadOneofCase.None:
+                        {
+                            _logger.LogWarning("Received message with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
+                            _ = responseStream.WriteAsync(
+                                ServerToClientMessageFactory.CreateUpdateFailedTaskUpdateConfirmation(),
+                                cancellationToken);
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing message from client stream.");
+                _ = responseStream.WriteAsync(
+                    ServerToClientMessageFactory.CreateServerErrorTaskUpdateConfirmation(),
+                    cancellationToken);
             }
         }
     }
-#pragma warning restore S125 // Sections of code should not be commented out
 
 #pragma warning disable S125 // Sections of code should not be commented out
     ///// <summary>

@@ -14,9 +14,9 @@ using SproutVRSchool.Infrastructure.Backgrounds;
 using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
+using SproutVRSchool.Infrastructure.FileServices;
 using SproutVRSchool.Infrastructure.Repositories;
-using SproutVRSchool.Infrastructure.Services.FileServices;
-using SproutVRSchool.Infrastructure.Services.RoomServices;
+using SproutVRSchool.Infrastructure.RoomServices;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Extensions;

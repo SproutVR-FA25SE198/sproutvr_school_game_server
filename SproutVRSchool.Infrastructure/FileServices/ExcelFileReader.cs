@@ -1,6 +1,6 @@
 ﻿using SproutVRSchool.Application.Abstractions.FileServices;
 
-namespace SproutVRSchool.Infrastructure.Services.FileServices;
+namespace SproutVRSchool.Infrastructure.FileServices;
 
 public class ExcelFileReader : IFileReader
 {

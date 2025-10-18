@@ -1,7 +1,7 @@
 ﻿using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 
-namespace SproutVRSchool.Infrastructure.Services.FileServices;
+namespace SproutVRSchool.Infrastructure.FileServices;
 
 public sealed class LocalStorageService : ILocalStorageService, IPathService
 {
