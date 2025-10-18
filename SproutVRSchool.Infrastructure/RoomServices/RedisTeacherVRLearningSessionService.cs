@@ -66,11 +66,28 @@ internal sealed class RedisTeacherVRLearningSessionService
         string roomCode = _codeGenerator.GenerateCode();
         string roomCodeKey = $"{AppCts.Redis.NAMESPACE_ROOM_CODE}:{roomCode}";
 
+        // UNDONE:
+        // Get the list tasks related to the VRLesson from repositories
+        // Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
+        var fakeTasksForLesson = new List<ModelTaskProgress>
+        {
+            new ModelTaskProgress { VRTaskId = "task-uuid-01", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted},
+            new ModelTaskProgress { VRTaskId = "task-uuid-02", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted},
+            new ModelTaskProgress { VRTaskId = "task-uuid-03", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted}
+        };
+
         // Generate code for the room
         var initialDevices = request.AssignedDeviceSerials.ToDictionary(
             serialNumber => serialNumber, serialNumber => new ModelVRDevice
             {
-                SerialNumber = serialNumber
+                SerialNumber = serialNumber,
+                Status = ModelVRDeviceStatus.Disconnected,
+                Tasks = new System.Collections.Concurrent.ConcurrentDictionary<string, ModelTaskProgress>(
+                    fakeTasksForLesson.ToDictionary(
+                        task => task.VRTaskId,
+                        task =>task 
+                    )
+                )
             });
 
         ITransaction transaction = _database.CreateTransaction();

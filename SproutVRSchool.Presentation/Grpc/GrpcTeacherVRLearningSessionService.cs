@@ -39,7 +39,7 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
 
         return ActivateRoomResponseDto.MapToGrpcResponse(resultDto);
     }
-
+    
     /// <summary>
     /// Cancels a VR learning session room
     /// </summary>

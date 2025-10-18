@@ -93,9 +93,9 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
         var eventPayload = new NameValueEntry[]
         {
-            new NameValueEntry("VrDeviceSerialNumber", publishTaskUpdateRequestDto.VrDeviceSerialNumber),
-            new NameValueEntry("VrLearningSessionId", publishTaskUpdateRequestDto.VrLearningSessionId.ToString()),
-            new NameValueEntry("VrTaskId", publishTaskUpdateRequestDto.VrTaskId.ToString()),
+            new NameValueEntry("VRDeviceSerialNumber", publishTaskUpdateRequestDto.VrDeviceSerialNumber),
+            new NameValueEntry("VRLearningSessionId", publishTaskUpdateRequestDto.VrLearningSessionId.ToString()),
+            new NameValueEntry("VRTaskId", publishTaskUpdateRequestDto.VrTaskId.ToString()),
             new NameValueEntry("IsCompleted", publishTaskUpdateRequestDto.IsCompleted),
             new NameValueEntry("IsCorrect", publishTaskUpdateRequestDto.IsCorrect),
             new NameValueEntry("EventType", "TaskUpdate")

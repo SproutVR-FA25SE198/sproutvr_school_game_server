@@ -129,6 +129,10 @@ public static partial class ServiceCollectionExtensions
         service.AddTransient<IPathService, LocalStorageService>();
     }
 
+    /// <summary>
+    /// Add group of backgrounds to handle computational parts
+    /// </summary>
+    /// <param name="service"></param>
     private static void AddBackgrounds(this IServiceCollection service)
     {
         service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
