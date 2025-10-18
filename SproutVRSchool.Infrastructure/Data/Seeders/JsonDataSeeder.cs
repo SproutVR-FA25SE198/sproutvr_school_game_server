@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Infrastructure.FileHelpers;
+using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain.Entities;
-using SproutVRSchool.Application.Abstractions.FileHelpers;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace SproutVRSchool.Domain.Models.VRLearningSession;
+﻿namespace SproutVRSchool.Domain.Models.VRLearningSession;
 
 public enum ModelVRLearningSessionStatus
 {

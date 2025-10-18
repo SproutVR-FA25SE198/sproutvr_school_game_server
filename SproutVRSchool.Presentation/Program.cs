@@ -45,7 +45,8 @@ app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
 app.UseExceptionHandler();
 
 app.MapControllers();
-app.MapGrpcService<GrpcVRLearningSessionTeacherService>();
+app.MapGrpcService<GrpcTeacherVRLearningSessionService>();
+app.MapGrpcService<GrpcVRGlassVRLearningSessionService>();
 
 app.MapGet("/", () => "gRPC Server is running.");
 

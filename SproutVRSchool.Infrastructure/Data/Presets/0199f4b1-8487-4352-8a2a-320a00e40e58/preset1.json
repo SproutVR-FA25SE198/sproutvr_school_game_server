@@ -4,7 +4,7 @@
   "isSequential": true,
   "vrTasks": [
     {
-      "locationCode":"map_test_1_loc_1",
+      "locationCode": "map_test_1_loc_1",
       "vrTaskId": "adb1f931-574a-4eab-affe-a1e20aa5bf33",
       "taskNumber": 2,
       "taskDescription": "(Cầm) Ống dung dịch CuSO4",
@@ -27,10 +27,22 @@
           "config": {
             "question": "Phương pháp chống ăn mòn kim loại dựa vào thí nghiệm đinh sắt quấn dây kẽm là?",
             "answers": [
-              { "text": "Phương pháp phủ bề mặt", "isCorrect": false },
-              { "text": "Phương pháp điện hóa", "isCorrect": true },
-              { "text": "Phương pháp trùng ngưng", "isCorrect": false },
-              { "text": "Phương pháp thủy nhiệt", "isCorrect": false }
+              {
+                "text": "Phương pháp phủ bề mặt",
+                "isCorrect": false
+              },
+              {
+                "text": "Phương pháp điện hóa",
+                "isCorrect": true
+              },
+              {
+                "text": "Phương pháp trùng ngưng",
+                "isCorrect": false
+              },
+              {
+                "text": "Phương pháp thủy nhiệt",
+                "isCorrect": false
+              }
             ]
           }
         }
@@ -65,11 +77,3 @@
     },
   ]
 }
-
-
-
-
-
-
-
-

@@ -28,17 +28,34 @@ public static class AppCts
         public const int DEFAULT_COUNT = 0;
     }
 
-    public static class Session
+    public static class Redis
     {
         public const int MAX_VR_DEVICE = 30;
         public const int CODE_DURATION_IN_MINUTES = 2;
-        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_session";
-        public const string NAMESPACE_ROOM_CODE = "session_code";
+        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_sessions";
+        public const string NAMESPACE_ROOM_CODE = "room_codes";
+        public const string NAMESPACE_ACTIVE_LEARNING_SESSIONS = "active_vr_learning_sessions";
+        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION = "stream:vr_learning_sessions";
+        public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
     }
 
-    public static class PresetFilePaths
+    public static class FilePaths
     {
-        public const string PresetFolderPath = "Data/Presets";
+        // offical path to store files
+        // macOS: /Library/Application Support
+        // Windows: C:\ProgramData
+        // Linux: /var/lib
+        private static readonly string CommonAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        public static readonly string StorageRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
+
+        // "C:\ProgramData\SproutVRSchool\Content\Avatars"
+        public static readonly string AvatarsFolderPath = Path.Combine(StorageRootPath, "Avatars");
+        public static readonly string DefaultAvatarFilePath = Path.Combine(AvatarsFolderPath, "default_avatar.png");
+
+        public const string FOLDER_NAME_RESOURCES = "Resources";
+        public const string FOLDER_NAME_PRESETS = "Presets";
+        public const string FOLDER_NAME_IMAGES = "Images";
+        public const string PREFIX_PUBLIC_CONTENT_PATH = "/content";
     }
 
     public static class SeederFilePaths

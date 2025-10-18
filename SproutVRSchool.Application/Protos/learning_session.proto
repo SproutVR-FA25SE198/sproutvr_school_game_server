@@ -6,35 +6,22 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
 // ================================================================
-// === Service Definition
+// === TeacherSessionManagement
 // ================================================================
 
-service LearningSessionManagement {
-
+service TeacherSessionManagement {
   // Teacher - Game Server: 
   // - Create new learing session but not started yet
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
 
   // Teacher - Game Server: 
-  // - Set duration, start time, assign devices, and change status to Active.
+  // - Set duration, start time, assign devices, and change status to Active
   rpc ActivateRoom(ActivateRoomRequest) returns (ActivateRoomResponse);
 
   // Teacher - Game Server: 
   // - Cancel the learning session
   rpc CancelRoom(CancelRoomRequest) returns (CancelRoomResponse);
-
-  // VR Glasses - Game Server: 
-  // - Join the learning session via room code
-  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
-
-  // VR Glasses - Game Server
-  // - receive stats from VR device, send signals or any message from server to VR glasses
-  rpc StreamSessionState(stream ClientToServerMessage) returns (stream ServerToClientMessage);
 }
-
-//================================================================
-// Message Definitions
-//================================================================
 
 // ------------------------ CreateRoom --------------------
 message CreateRoomRequest {
@@ -68,11 +55,12 @@ message JoinRoomRequest {
 
 message JoinRoomResponse {
   enum JoinStatus {
-    JOIN_STATUS_UNSPECIFIED = 0; // default value for other errors for switch-case when client consumes it
+    JOIN_STATUS_UNSPECIFIED = 0;    // default value for switch-case when client consumes it
     SUCCESS = 1;
-    INVALID_ROOM_CODE = 2;       // room code doesn't exist
-    ROOM_NOT_ACTIVE = 3;         // room not yet active, still in pending, completed, or cancelled
-    DEVICE_NOT_AUTHORIZED = 4;   // device connect but not in the assigned list, so not authorized
+    INVALID_ROOM_CODE = 2;      // room code doesn't exist
+    ROOM_NOT_ACTIVE = 3;        // room not yet active, still in pending, completed, or cancelled
+    DEVICE_NOT_AUTHORIZED = 4;  // device connect but not in the assigned list, so not authorized
+    REJOIN = 5;                 // device reconnect the game when it have already played                 
   }
   JoinStatus status = 1;
   string message = 2;
@@ -87,6 +75,20 @@ message CancelRoomRequest {
 
 message CancelRoomResponse {
   string message = 1;
+}
+
+// ================================================================
+// === VRGlassSessionManagement
+// ================================================================
+
+service VRGlassSessionManagement {
+  // VR Glasses - Game Server: 
+  // - Join the learning session via room code
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+
+  // VR Glasses - Game Server
+  // - receive stats from VR device, send signals or any message from server to VR glasses
+  rpc StreamSessionState(stream ClientToServerMessage) returns (stream ServerToClientMessage);
 }
 
 // ------------------------ StreamSessionState ------------------------
@@ -107,21 +109,40 @@ message TaskUpdate {
 
 message ServerToClientMessage {
   oneof payload {
-    EndSessionSignal end_signal = 1;     // If sending this, VR Glasses game is stop
-    NotificationSignal notification = 2; // If sending this, could be info or warning
+    UpdateTaskSignal task_signal = 1;    // If sending this, task data is updated in the server
+    EndSessionSignal end_signal = 2;     // If sending this, VR Glasses game is stop
+    NotificationSignal notification = 3; // If sending this, could be info or warning
   }
+}
+
+message UpdateTaskSignal {
+  enum TaskStatus {
+    TASK_STATUS_UNSPECIFIED = 0; // Unexpected server error
+    SUCCESS = 1;                 // Task updated successfully
+    UPDATE_FAILED = 2;           // Logical/Contraint error in the server
+  }
+  
+  string message = 1;
+  TaskStatus status = 2;
 }
 
 message NotificationSignal {
   enum Severity {
-    INFO = 0;               // Teacher send general message, e.g. You have to move your mug to the left,....
-    WARNING = 1;            // Teacher warning, e.g. You only have 5 minutes left,...
+    INFO = 0;
+    WARNING = 1;
   }
   
   string text = 1;
-  Severity severity = 2;    // chia severity chủ yếu hiện noti theo màu sắc or some
+  Severity severity = 2;
 }
 
 message EndSessionSignal {
   string reason = 1;        // Ví dụ: "Hết giờ" hoặc "Giáo viên đã kết thúc buổi học"
 }
+
+
+
+
+
+
+
