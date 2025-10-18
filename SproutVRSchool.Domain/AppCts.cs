@@ -35,7 +35,7 @@ public static class AppCts
         public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_sessions";
         public const string NAMESPACE_ROOM_CODE = "room_codes";
         public const string NAMESPACE_ACTIVE_LEARNING_SESSIONS = "active_vr_learning_sessions";
-        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION = "stream:vr_learning_session";
+        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION = "stream:vr_learning_sessions";
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
     }
 

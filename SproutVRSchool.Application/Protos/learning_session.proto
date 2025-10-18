@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
 // ================================================================
-// === Service Definition
+// === TeacherSessionManagement
 // ================================================================
 
 service TeacherSessionManagement {
@@ -22,20 +22,6 @@ service TeacherSessionManagement {
   // - Cancel the learning session
   rpc CancelRoom(CancelRoomRequest) returns (CancelRoomResponse);
 }
-
-service VRGlassSessionManagement {
-  // VR Glasses - Game Server: 
-  // - Join the learning session via room code
-  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
-
-  // VR Glasses - Game Server
-  // - receive stats from VR device, send signals or any message from server to VR glasses
-  rpc StreamSessionState(stream ClientToServerMessage) returns (stream ServerToClientMessage);
-}
-
-//================================================================
-// Message Definitions
-//================================================================
 
 // ------------------------ CreateRoom --------------------
 message CreateRoomRequest {
@@ -89,6 +75,20 @@ message CancelRoomRequest {
 
 message CancelRoomResponse {
   string message = 1;
+}
+
+// ================================================================
+// === VRGlassSessionManagement
+// ================================================================
+
+service VRGlassSessionManagement {
+  // VR Glasses - Game Server: 
+  // - Join the learning session via room code
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+
+  // VR Glasses - Game Server
+  // - receive stats from VR device, send signals or any message from server to VR glasses
+  rpc StreamSessionState(stream ClientToServerMessage) returns (stream ServerToClientMessage);
 }
 
 // ------------------------ StreamSessionState ------------------------

@@ -40,7 +40,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
     // ===============================
     // === Methods
     // ===============================
-
     public async Task<JoinRoomResponseDto> JoinRoomAsync(JoinRoomRequestDto joinRoomRequestDto)
 
     {
@@ -102,6 +101,9 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
             new NameValueEntry("EventType", "TaskUpdate")
         };
 
+        // fire immediately, dont need to wait StreamAddAsync to finish
+        // more performance for streaming cuz of the fire-and-forget nature
+        // but also maintain the correct order of the function due to await the PublishTaskUpdateToStreamAsync
         return _database.StreamAddAsync(streamKey, eventPayload);
     }
 }

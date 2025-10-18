@@ -51,10 +51,12 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         string sessionId = initialMessage.VrLearningSessionId;
 
         //  Listening Background Task and Sending Background Task
-        Task listeningTask = ListenForClientMessagesAsync(requestStream, context.CancellationToken);
-        Task sendingTask = SendServerMessagesAsync(responseStream, context.CancellationToken);
+        await ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
 
-        await Task.WhenAll(listeningTask, sendingTask);
+#pragma warning disable S125 // Sections of code should not be commented out
+        //Task sendingTask = SendServerMessagesAsync(responseStream, context.CancellationToken);
+        //await Task.WhenAll(listeningTask, sendingTask);
+#pragma warning restore S125 // Sections of code should not be commented out
         _logger.LogInformation("VR device stream disconnected for Session ID: {SessionId}", sessionId);
     }
 
@@ -70,47 +72,65 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     /// <returns></returns>
     private async Task ListenForClientMessagesAsync(
         IAsyncStreamReader<ClientToServerMessage> requestStream,
-        CancellationToken cancellationToken)
-    {
-        await foreach (ClientToServerMessage? message in requestStream.ReadAllAsync(cancellationToken))
-        {
-            if (message.PayloadCase == ClientToServerMessage.PayloadOneofCase.TaskUpdate)
-            {
-                TaskUpdate taskUpdate = message.TaskUpdate;
-                var dto = new PublishTaskUpdateRequestDto(
-                    message.VrLearningSessionId,
-                    message.VrDeviceSerialNumber,
-                    taskUpdate.VrTaskId,
-                    taskUpdate.IsCompleted,
-                    taskUpdate.IsCorrect);
-                await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
-            }
-        }
-    }
-
-    /// <summary>
-    /// This task is dedicated to SENDING messages TO the client.
-    /// </summary>
-    /// <param name="responseStream"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    private async Task SendServerMessagesAsync(
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
     {
-        // This is where you would subscribe to Redis Pub/Sub or poll a Redis Stream.
-        while (!cancellationToken.IsCancellationRequested)
+        await foreach (ClientToServerMessage? message in requestStream.ReadAllAsync(cancellationToken))
+#pragma warning disable S125 // Sections of code should not be commented out
         {
-            var notification = new ServerToClientMessage
+            switch (message.PayloadCase)
             {
-                Notification = new NotificationSignal
-                {
-                    Text = $"Làm bài đi thằng nhóc! at {DateTime.UtcNow:T}",
-                    Severity = NotificationSignal.Types.Severity.Info
-                }
-            };
+                case ClientToServerMessage.PayloadOneofCase.TaskUpdate:
+                    {
+                        _logger.LogInformation("Received TaskUpdate from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
+                        var dto = PublishTaskUpdateRequestDto.MapFromGrpcRequest(
+                            message.TaskUpdate,
+                            message.VrLearningSessionId,
+                            message.VrDeviceSerialNumber);
 
-            await responseStream.WriteAsync(notification, cancellationToken);
+                        // await to make sure Task Update in order
+                        await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
+
+                        break;
+                    }
+                case ClientToServerMessage.PayloadOneofCase.None:
+                    {
+                        _logger.LogWarning("Received message with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
     }
+#pragma warning restore S125 // Sections of code should not be commented out
+
+#pragma warning disable S125 // Sections of code should not be commented out
+    ///// <summary>
+    ///// This task is dedicated to SENDING messages TO the client.
+    ///// </summary>
+    ///// <param name="responseStream"></param>
+    ///// <param name="cancellationToken"></param>
+    ///// <returns></returns>
+    //private async Task SendServerMessagesAsync(
+    //    IServerStreamWriter<ServerToClientMessage> responseStream,
+    //    CancellationToken cancellationToken)
+
+    //{
+    //    // This is where you would subscribe to Redis Pub/Sub or poll a Redis Stream.
+    //    while (!cancellationToken.IsCancellationRequested)
+    //    {
+    //        var notification = new ServerToClientMessage
+    //        {
+    //            Notification = new NotificationSignal
+    //            {
+    //                Text = $"Làm bài đi thằng nhóc! at {DateTime.UtcNow:T}",
+    //                Severity = NotificationSignal.Types.Severity.Info
+    //            }
+    //        };
+
+    //        await responseStream.WriteAsync(notification, cancellationToken);
+    //    }
+    //}
 }
+#pragma warning restore S125 // Sections of code should not be commented out
