@@ -18,15 +18,12 @@ public class CreateVRLessonCommandHandler(
 {
     public async Task<Guid> Handle(CreateVRLessonCommand request, CancellationToken cancellationToken)
     {
-        // Store the image into the firebase
-
         var newVRLesson = VRLesson.Create(
             request.LessonId,
             request.MapId,
             request.Name,
             request.Description,
-            request.MaxDuration,
-            request.ImageUrl);
+            request.MaxDuration);
 
         uow.Repository<VRLesson>().Add(newVRLesson);
         await uow.Repository<VRLesson>().SaveAllAsync();

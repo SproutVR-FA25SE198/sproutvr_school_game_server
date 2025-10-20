@@ -101,13 +101,11 @@ public static class ServerToClientMessageFactory
     /// </summary>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public static ServerToClientMessage CreateEndSessionSignal(TimeOnly timeOnly)
+    public static ServerToClientMessage CreateEndSessionSignal(DateTimeOffset dateTimeOffset)
     {
-        string formattedTime = timeOnly.ToString("hh:mm", System.Globalization.CultureInfo.InvariantCulture);
-
         var endSignal = new EndSessionSignal
         {
-            Reason = $"The session has ended at {formattedTime}. Please remove your VR devices and return to your seats.",
+            Reason = $"The session has ended at {dateTimeOffset}. Please remove your VR devices and return to your seats.",
         };
 
         return new ServerToClientMessage { EndSignal = endSignal };

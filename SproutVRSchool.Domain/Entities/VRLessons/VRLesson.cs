@@ -12,7 +12,6 @@ public sealed class VRLesson : BaseEntity
     public string Description { get; set; }
     public TimeSpan MaxDuration { get; set; }
     public string? PresetJsonRelativeFilePath { get; set; }
-    public string ImageRelativeFilePath { get; set; }
     public VRLessonStatus Status { get; set; }
 
     // navigation properties
@@ -29,8 +28,7 @@ public sealed class VRLesson : BaseEntity
         Guid mapId,
         string name,
         string description,
-        TimeSpan maxDuration,
-        string imageRelativeFilePath)
+        TimeSpan maxDuration)
     {
         return new VRLesson
         {
@@ -40,7 +38,6 @@ public sealed class VRLesson : BaseEntity
             Name = name,
             Description = description,
             MaxDuration = maxDuration,
-            ImageRelativeFilePath = imageRelativeFilePath,
             PresetJsonRelativeFilePath = string.Empty,
             Status = VRLessonStatus.Active,
             CreatedAtUtc = DateTime.UtcNow,

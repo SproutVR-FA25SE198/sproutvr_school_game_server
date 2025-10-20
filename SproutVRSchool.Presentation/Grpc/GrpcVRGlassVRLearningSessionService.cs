@@ -1,8 +1,12 @@
-﻿using Grpc.Core;
+﻿using System.Threading.Channels;
+using Grpc.Core;
 using LearningSession.V1;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
+using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.RoomServices;
+using StackExchange.Redis;
 
 namespace SproutVRSchool.Presentation.Grpc;
 
@@ -13,7 +17,9 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     // ===============================
 
     private readonly IVRLearningSessionWithVRGlassService _vrLearningSessionWithVRGlassService;
+    private readonly IDatabase _database;
     private readonly ILogger<GrpcVRGlassVRLearningSessionService> _logger;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     // ==============================
     // === Constructors
@@ -21,10 +27,14 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
     public GrpcVRGlassVRLearningSessionService(
         ILogger<GrpcVRGlassVRLearningSessionService> logger,
+        IConnectionMultiplexer connectionMultiplexer,
+        IDateTimeProvider dateTimeProvider,
         IVRLearningSessionWithVRGlassService vrLearningSessionWithVRGlassService)
     {
         _vrLearningSessionWithVRGlassService = vrLearningSessionWithVRGlassService;
         _logger = logger;
+        _dateTimeProvider = dateTimeProvider;
+        _database = connectionMultiplexer.GetDatabase();
     }
 
     // ==============================
@@ -53,12 +63,13 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         //_logger.LogInformation("VR device {DeviceSerialNumber} connected.", requestStream.Current.VrDeviceSerialNumber);
 
         // Listening Background Task and Sending Background Task
-        await ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
+        Task listeningTask = ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
+        Task sendingTask = SendServerMessagesAsync(requestStream, responseStream, context.CancellationToken);
 
         //Task sendingTask = SendServerMessagesAsync(responseStream, context.CancellationToken);
-        //await Task.WhenAll(listeningTask, sendingTask);
+        await Task.WhenAll(listeningTask, sendingTask);
+        _logger.LogInformation("VR device stream disconnected for Session ID");
 #pragma warning restore S125 // Sections of code should not be commented out
-        //_logger.LogInformation("VR device stream disconnected for Session ID: {SessionId}", sessionId);
     }
 
     // =================================
@@ -101,6 +112,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
                             break;
                         }
+
                     case ClientToServerMessage.PayloadOneofCase.None:
                         {
                             _logger.LogWarning("Received message with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
@@ -120,33 +132,68 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             }
         }
     }
+#pragma warning disable S1172 // Unused method parameters should be removed
+    private async Task SendServerMessagesAsync(
+        IAsyncStreamReader<ClientToServerMessage> requestStream,
+        IServerStreamWriter<ServerToClientMessage> responseStream,
+        CancellationToken cancellationToken)
 
-#pragma warning disable S125 // Sections of code should not be commented out
-    ///// <summary>
-    ///// This task is dedicated to SENDING messages TO the client.
-    ///// </summary>
-    ///// <param name="responseStream"></param>
-    ///// <param name="cancellationToken"></param>
-    ///// <returns></returns>
-    //private async Task SendServerMessagesAsync(
-    //    IServerStreamWriter<ServerToClientMessage> responseStream,
-    //    CancellationToken cancellationToken)
+    {
+        ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
+        var channel = Channel.CreateUnbounded<RedisValue>();
 
-    //{
-    //    // This is where you would subscribe to Redis Pub/Sub or poll a Redis Stream.
-    //    while (!cancellationToken.IsCancellationRequested)
-    //    {
-    //        var notification = new ServerToClientMessage
-    //        {
-    //            Notification = new NotificationSignal
-    //            {
-    //                Text = $"Làm bài đi thằng nhóc! at {DateTime.UtcNow:T}",
-    //                Severity = NotificationSignal.Types.Severity.Info
-    //            }
-    //        };
+        await subscriber.SubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), (redisChannel, message) =>
+        {
+            // When a message arrives from Redis, quickly write it to the in-memory queue.
+            channel.Writer.TryWrite(message!);
+        });
 
-    //        await responseStream.WriteAsync(notification, cancellationToken);
-    //    }
-    //}
+        // Get the message from in-memory channel
+        await foreach (string message in channel.Reader.ReadAllAsync(cancellationToken))
+        {
+            _logger.LogInformation("recived message: {Text}", message);
+
+            // If message null, do nothing
+            if (string.IsNullOrEmpty(message))
+            {
+                continue;
+            }
+
+            // if not having vrLearningSessionId:eventType:text, continue
+            string[] parts = message.ToString().Split(":", 3);
+            if (parts.Length < 2)
+            {
+                continue;
+            }
+
+            // UNDONE: Testing purpose
+            string eventType = parts[1]!.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
+            string text = parts[2];
+
+            switch (eventType)
+            {
+                case "ENDSIGNAL":
+                    {
+                        await responseStream.WriteAsync(
+                            ServerToClientMessageFactory.CreateEndSessionSignal(_dateTimeProvider.VietNamDateTimeNow),
+                            cancellationToken);
+                        break;
+                    }
+                case "INFO":
+                    {
+                        await responseStream.WriteAsync(
+                            ServerToClientMessageFactory.CreateInfoNotification(text),
+                            cancellationToken);
+                        break;
+                    }
+                case "WARNING":
+                    {
+                        await responseStream.WriteAsync(
+                            ServerToClientMessageFactory.CreateWarningNotification(text),
+                            cancellationToken);
+                        break;
+                    }
+            }
+        }
+    }
 }
-#pragma warning restore S125 // Sections of code should not be commented out

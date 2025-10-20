@@ -4,6 +4,7 @@ package LearningSession.v1;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
 
 // ================================================================
 // === TeacherSessionManagement
@@ -21,6 +22,10 @@ service TeacherSessionManagement {
   // Teacher - Game Server: 
   // - Cancel the learning session
   rpc CancelRoom(CancelRoomRequest) returns (CancelRoomResponse);
+
+  // Teacher - Game Server:
+  // - Send commands to the server
+  rpc SendNotification(SendNotificationRequest) returns (google.protobuf.Empty);
 }
 
 // ------------------------ CreateRoom --------------------
@@ -60,7 +65,6 @@ message JoinRoomResponse {
     INVALID_ROOM_CODE = 2;      // room code doesn't exist
     ROOM_NOT_ACTIVE = 3;        // room not yet active, still in pending, completed, or cancelled
     DEVICE_NOT_AUTHORIZED = 4;  // device connect but not in the assigned list, so not authorized
-    REJOIN = 5;                 // device reconnect the game when it have already played                 
   }
   JoinStatus status = 1;
   string message = 2;
@@ -75,6 +79,12 @@ message CancelRoomRequest {
 
 message CancelRoomResponse {
   string message = 1;
+}
+
+// ------------------------ SendNotification -------------------
+message SendNotificationRequest {
+  string vr_learning_session_id = 1;
+  NotificationSignal notification = 2;
 }
 
 // ================================================================

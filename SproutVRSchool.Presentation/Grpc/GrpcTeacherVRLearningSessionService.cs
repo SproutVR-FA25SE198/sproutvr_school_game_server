@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
@@ -39,7 +40,7 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
 
         return ActivateRoomResponseDto.MapToGrpcResponse(resultDto);
     }
-    
+
     /// <summary>
     /// Cancels a VR learning session room
     /// </summary>
@@ -67,5 +68,18 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
         CreateRoomResponseDto resultDto = await _vrLearningSessionTeacherService.CreateRoomAsync(requestDto);
 
         return CreateRoomResponseDto.MapToGrpcResponse(resultDto);
+    }
+
+    /// <summary>
+    /// A function to send notification to all participants in the VR learning session
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public override async Task<Empty> SendNotification(SendNotificationRequest request, ServerCallContext context)
+    {
+        var requestDto = SendNotificationRequestDto.MapFromGrpcRequest(request);
+        await _vrLearningSessionTeacherService.SendNotificationAsync(requestDto);
+        return new Empty();
     }
 }

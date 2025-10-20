@@ -41,10 +41,6 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
             .IsRequired(false)
             .HasMaxLength(1000);
 
-        builder.Property(vrl => vrl.ImageRelativeFilePath)
-            .IsRequired()
-            .HasMaxLength(300);
-
         builder.Property(vrl => vrl.Status)
             .IsRequired()
             .HasMaxLength(50)
