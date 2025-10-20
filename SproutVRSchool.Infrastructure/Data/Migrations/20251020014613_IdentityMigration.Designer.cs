@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251017104449_IdentityMigration")]
+    [Migration("20251020014613_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -778,11 +778,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
-
-                    b.Property<string>("ImageRelativeFilePath")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
 
                     b.Property<Guid>("LessonId")
                         .HasColumnType("uuid");

@@ -776,11 +776,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageRelativeFilePath")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
                     b.Property<Guid>("LessonId")
                         .HasColumnType("uuid");
 

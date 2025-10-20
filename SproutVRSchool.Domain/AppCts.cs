@@ -32,12 +32,14 @@ public static class AppCts
     {
         public const int MAX_VR_DEVICE = 30;
         public const int CODE_DURATION_IN_MINUTES = 2;
-        public const string NAMESPACE_VR_LEARNING_SESSION = "vr_learning_sessions";
-        public const string NAMESPACE_ROOM_CODE = "room_codes";
-        public const string NAMESPACE_ACTIVE_LEARNING_SESSIONS = "active_vr_learning_sessions";
-        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION = "stream:vr_learning_sessions";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS = "vr_learning_sessions";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE = "vr_learning_sessions_active";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS = "vr_learning_sessions_notify_events";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE = "vr_learning_sessions_room_codes";
+        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS = "stream:vr_learning_sessions";
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
     }
+
 
     public static class FilePaths
     {

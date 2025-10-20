@@ -33,7 +33,7 @@ internal sealed class RoomValidator : IVRLearningSessionValidator
 
     public async Task<ValidationResult> ValidateJoinAttemptAsync(string roomCode, string deviceSerialNumber)
     {
-        string sessionId = await _database.StringGetAsync($"{AppCts.Redis.NAMESPACE_ROOM_CODE}:{roomCode}");
+        string sessionId = await _database.StringGetAsync($"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE}:{roomCode}");
 
         // 1. If type code is invalid or learning session is not exist under the room code
         if (string.IsNullOrEmpty(sessionId))
@@ -41,7 +41,7 @@ internal sealed class RoomValidator : IVRLearningSessionValidator
             return ValidationResult.InvalidRoomCode;
         }
 
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{sessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{sessionId}";
         RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey);
 
         // 2. Room not found, or session expired

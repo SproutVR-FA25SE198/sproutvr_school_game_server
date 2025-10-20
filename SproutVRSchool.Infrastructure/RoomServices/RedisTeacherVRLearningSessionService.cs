@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using NRedisStack.RedisStackCommands;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
@@ -19,6 +21,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     private readonly ICodeGeneratorService _codeGenerator;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly ILogger<RedisTeacherVRLearningSessionService> _logger;
 
     // ===============================
     // === Constructors
@@ -28,13 +31,15 @@ internal sealed class RedisTeacherVRLearningSessionService
         ICodeGeneratorService codeGenerator,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
-        IUnitOfWork unitOfWork
+        IUnitOfWork unitOfWork,
+        ILogger<RedisTeacherVRLearningSessionService> logger
         )
     {
         _codeGenerator = codeGenerator;
         _dateTimeProvider = dateTimeProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
+        _logger = logger;
     }
 
     // ===============================
@@ -52,7 +57,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         };
 
         // prefix for grouping keys
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSesison.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSesison.VRLearningSessionId}";
         string jsonPayLoad = JsonSerializer.Serialize(vrLearningSesison, _jsonOptions);
 
         // set into the redis db
@@ -62,9 +67,9 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request)
     {
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{request.LearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{request.LearningSessionId}";
         string roomCode = _codeGenerator.GenerateCode();
-        string roomCodeKey = $"{AppCts.Redis.NAMESPACE_ROOM_CODE}:{roomCode}";
+        string roomCodeKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE}:{roomCode}";
 
         // UNDONE:
         // Get the list tasks related to the VRLesson from repositories
@@ -85,7 +90,7 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Tasks = new System.Collections.Concurrent.ConcurrentDictionary<string, ModelTaskProgress>(
                     fakeTasksForLesson.ToDictionary(
                         task => task.VRTaskId,
-                        task =>task 
+                        task => task
                     )
                 )
             });
@@ -101,7 +106,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             When.NotExists);
 
         // Set into the active lists, but must be in the tranasction
-        _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_ACTIVE_LEARNING_SESSIONS, request.LearningSessionId);
+        _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, request.LearningSessionId);
 
         // Set params to the room to Activate the room
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
@@ -126,7 +131,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
     {
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
 
         if (!await _database.KeyExistsAsync(sessionKey))
         {
@@ -138,7 +143,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
-        _ = transaction.SetRemoveAsync(AppCts.Redis.NAMESPACE_ACTIVE_LEARNING_SESSIONS, vrLearningSessionId);
+        _ = transaction.SetRemoveAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, vrLearningSessionId);
 
         if (!await transaction.ExecuteAsync())
         {
@@ -147,8 +152,29 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Message: "Cancellation failed. Please try again");
         }
 
+        // Boardcasting the ENDSIGNAL message to all devices subscribed to the channel
+        ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
+        string message = $"{vrLearningSessionId}:ENDSIGNAL:The teacher has cancelled the session.";
+        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), message);
+
         return new CancelRoomResponseDto(
             Message: "Cancelled VR Learning Redis Successfull"
-            );
+        );
+    }
+
+    /// <summary>
+    /// Send INFO or WARNING notification to all devices in the room using PUB/SUB
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task SendNotificationAsync(SendNotificationRequestDto request)
+    {
+        // Boardcasting the NOTIFY message to all devices subscribed to the channel
+        ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
+        string message = $"{request.VRLearningSessionId}:{request.Severity}:{request.Text}";
+
+        _logger.LogInformation("sending the message: {Message}", message);
+
+        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), message);
     }
 }

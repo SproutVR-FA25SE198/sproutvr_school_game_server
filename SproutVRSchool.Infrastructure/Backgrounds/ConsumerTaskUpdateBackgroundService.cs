@@ -60,7 +60,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             try
             {
                 // 1. Get the list of all active vr_learning_session_id from the group of streams
-                string?[] activeSessionIds = (await db.SetMembersAsync(AppCts.Redis.NAMESPACE_ACTIVE_LEARNING_SESSIONS)).ToStringArray();
+                string?[] activeSessionIds = (await db.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE)).ToStringArray();
 
                 // 2. Assign each Worker Thread to handle individual VrLearningSession's Stream, avoid blocking main thread
                 foreach (string sessionId in activeSessionIds)
@@ -108,7 +108,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         try
         {
             IDatabase db = _redis.GetDatabase();
-            string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION}:{sessionId}";
+            string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS}:{sessionId}";
             string groupName = "session-processors";
             string consumerName = $"processor-{Guid.NewGuid()}";
 
@@ -178,7 +178,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
 
     private async Task<bool> HandleTaskUpdateEventAsync(IDatabase db, string sessionId, Dictionary<string, string> messageDict)
     {
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{sessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{sessionId}";
         string taskPath = $"$.Devices['{messageDict["VRDeviceSerialNumber"]}'].Tasks['{messageDict["VRTaskId"]}']";
 
         // true/false in the JSON Document for readiablilty

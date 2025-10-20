@@ -57,7 +57,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
         // Reuse the vr learning session object from the validator, if all passing
         ModelVRLearningSession vrLearningSession = validation.ModelVRLearningSession!;
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSION}:{vrLearningSession.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSession.VRLearningSessionId}";
 
 #pragma warning disable S125 // Validation check rejoin. Will do later
         //UNDONE 3. Check rejoin
@@ -89,7 +89,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
     public Task PublishTaskUpdateToStreamAsync(PublishTaskUpdateRequestDto publishTaskUpdateRequestDto)
     {
-        string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSION}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
+        string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
 
         var eventPayload = new NameValueEntry[]
         {

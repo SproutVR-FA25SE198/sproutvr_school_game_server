@@ -424,7 +424,6 @@ public partial class IdentityMigration : Migration
                 Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 MaxDuration = table.Column<TimeSpan>(type: "interval", nullable: false),
                 PresetJsonRelativeFilePath = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                ImageRelativeFilePath = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
