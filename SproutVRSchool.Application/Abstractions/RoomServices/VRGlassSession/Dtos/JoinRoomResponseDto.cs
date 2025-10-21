@@ -39,8 +39,8 @@ public record JoinRoomResponseDto
         {
             Status = joinRoomResponseDto.Status,
             Message = joinRoomResponseDto.Message,
-            VrLearningSessionId = joinRoomResponseDto.VrLearningSessionId ?? null,
-            PresetJsonContent = joinRoomResponseDto.PresetJsonContent ?? null
+            VrLearningSessionId = joinRoomResponseDto.VrLearningSessionId ?? string.Empty,
+            PresetJsonContent = joinRoomResponseDto.PresetJsonContent ?? string.Empty,
         };
 }
 

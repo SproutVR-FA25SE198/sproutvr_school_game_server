@@ -115,6 +115,7 @@ public static partial class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         string redisStackConnection = configuration.GetConnectionString("RedisStack");
+
         service.AddSingleton<IConnectionMultiplexer>(
             ConnectionMultiplexer.Connect(redisStackConnection!));
     }

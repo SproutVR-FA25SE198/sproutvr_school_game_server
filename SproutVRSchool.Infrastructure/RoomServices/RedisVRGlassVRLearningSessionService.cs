@@ -59,15 +59,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
         ModelVRLearningSession vrLearningSession = validation.ModelVRLearningSession!;
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSession.VRLearningSessionId}";
 
-#pragma warning disable S125 // Validation check rejoin. Will do later
-        //UNDONE 3. Check rejoin
-        //if (vrLearningSession.Devices.TryGetValue(joinRoomRequestDto.VrDeviceSerialNumber, out var existingVrDevice)
-        //{
-
-        //}
-#pragma warning restore S125 //
-
-        // 4. Update parallely the device info after passing all validation and connecting to the server
+        // 3. Update parallely the device info after passing all validation and connecting to the server
         ITransaction transaction = _database.CreateTransaction();
         string deviceRedisPath = $"$.Devices['{joinRoomRequestDto.VrDeviceSerialNumber}']";
 
@@ -82,7 +74,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
         //UNDONE: 5. Stringtify the PresetJsonUrl and added
         // - validation at here is success
-        validation.JoinRoomResponseDto!.PresetJsonContent = string.Empty;
 
         return validation.JoinRoomResponseDto!;
     }

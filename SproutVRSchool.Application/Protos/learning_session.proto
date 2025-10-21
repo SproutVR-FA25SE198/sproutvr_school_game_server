@@ -5,6 +5,7 @@ package LearningSession.v1;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 // ================================================================
 // === TeacherSessionManagement
@@ -62,9 +63,10 @@ message JoinRoomResponse {
   enum JoinStatus {
     JOIN_STATUS_UNSPECIFIED = 0;    // default value for switch-case when client consumes it
     SUCCESS = 1;
-    INVALID_ROOM_CODE = 2;      // room code doesn't exist
-    ROOM_NOT_ACTIVE = 3;        // room not yet active, still in pending, completed, or cancelled
-    DEVICE_NOT_AUTHORIZED = 4;  // device connect but not in the assigned list, so not authorized
+    INVALID_ROOM_CODE = 2;          // room code doesn't exist
+    ROOM_NOT_ACTIVE = 3;            // room not yet active, still in pending, completed, or cancelled
+    DEVICE_NOT_AUTHORIZED = 4;      // device connect but not in the assigned list, so not authorized
+    ALREADY_JOINED = 5;             // device already joined before, stop rejoining
   }
   JoinStatus status = 1;
   string message = 2;

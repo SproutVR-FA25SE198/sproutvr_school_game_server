@@ -53,6 +53,16 @@ public record ValidationResult(
             )
         );
 
+    // VR glasses cannot rejoin the room
+    public static ValidationResult AlreayJoined =>
+       new ValidationResult(
+           IsValid: false,
+           JoinRoomResponseDto: new JoinRoomResponseDto(
+               JoinStatus.AlreadyJoined,
+               "The device cannot rejoin the learning session."
+           )
+       );
+
     public static ValidationResult Success(
       string vrLearningSessionId,
       string presetJsonContent,
@@ -67,6 +77,8 @@ public record ValidationResult(
           ),
           modelVRLearningSession
       );
+
+
 
 
 #pragma warning disable S125 // Sections of code should not be commented out
