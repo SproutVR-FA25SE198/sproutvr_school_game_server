@@ -16,7 +16,7 @@ internal static partial class ServiceCollectionExtensions
 
         service.AddExceptionHandlers();
 
-        service.AddGrpc();
+        service.AddGrpcConfigs();
 
         return service;
     }
@@ -56,6 +56,20 @@ internal static partial class ServiceCollectionExtensions
 
         // suport for versioning in swagger
         service.AddEndpointsApiExplorer();
+    }
+
+    /*
+        GrpcConfiguration 
+     */
+    private static void AddGrpcConfigs(
+        this IServiceCollection service)
+    {
+        service.AddGrpc(options =>
+        {
+            options.EnableDetailedErrors = true;
+        });
+
+        service.AddGrpcReflection();
     }
 
     /*

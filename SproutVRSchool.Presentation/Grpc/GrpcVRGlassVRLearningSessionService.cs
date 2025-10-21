@@ -51,25 +51,12 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     public override async Task StreamSessionState(
         IAsyncStreamReader<ClientToServerMessage> requestStream, IServerStreamWriter<ServerToClientMessage> responseStream, ServerCallContext context)
     {
-#pragma warning disable S125 // Sections of code should not be commented out
-        //// wait for the connection successfull
-        //if (!await requestStream.MoveNext(context.CancellationToken))
-        //{
-        //    return;
-        //}
-
-        //ClientToServerMessage initialMessage = requestStream.Current;
-        //string sessionId = initialMessage.VrLearningSessionId;
-        //_logger.LogInformation("VR device {DeviceSerialNumber} connected.", requestStream.Current.VrDeviceSerialNumber);
-
         // Listening Background Task and Sending Background Task
         Task listeningTask = ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
         Task sendingTask = SendServerMessagesAsync(requestStream, responseStream, context.CancellationToken);
 
-        //Task sendingTask = SendServerMessagesAsync(responseStream, context.CancellationToken);
         await Task.WhenAll(listeningTask, sendingTask);
-        _logger.LogInformation("VR device stream disconnected for Session ID");
-#pragma warning restore S125 // Sections of code should not be commented out
+        _logger.LogInformation("VR device stream disconnected for VR Learning Session ID: {SessionId}", requestStream.Current.VrLearningSessionId);
     }
 
     // =================================
