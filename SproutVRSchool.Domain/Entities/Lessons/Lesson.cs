@@ -17,4 +17,25 @@ public sealed class Lesson : BaseEntity
     public Subject Subject { get; set; }
     public Teacher Teacher { get; set; }
     public ICollection<VRLesson> VRLessons { get; set; } = [];
+
+    public static Lesson Create(
+        Guid subjectId,
+        Guid teacherId,
+        string name,
+        string description,
+        string? resourceRelativeFilePath)
+    {
+        return new Lesson
+        {
+            Id = Guid.NewGuid(),
+            SubjectId = subjectId,
+            TeacherId = teacherId,
+            Name = name,
+            Description = description,
+            ResourceRelativeFilePath = resourceRelativeFilePath ?? string.Empty,
+            Status = LessonStatus.Active,
+            CreatedAtUtc = DateTime.UtcNow,
+            UpdatedAtUtc = DateTime.UtcNow
+        };
+    }
 }

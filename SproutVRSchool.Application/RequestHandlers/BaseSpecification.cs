@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query;
 using SproutVRSchool.Application.Abstractions.Repositories;
 
-namespace SproutVRSchool.Application.Specifications;
+namespace SproutVRSchool.Application.RequestHandlers;
 
 /// <summary>
 /// Implementation of ISpecification<T>

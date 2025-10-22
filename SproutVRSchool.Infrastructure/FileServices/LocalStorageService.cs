@@ -1,4 +1,5 @@
-﻿using SproutVRSchool.Application.Abstractions.FileServices;
+﻿using Microsoft.AspNetCore.Http;
+using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Infrastructure.FileServices;
@@ -43,9 +44,12 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     // === Save Files & Resources
     // =============================
 
-    public async Task<string> SaveLessonResourceAsync(Guid teacherId, Guid lessonId, string fileName, Stream fileContent)
+    public async Task<string> SaveLessonResourceAsync(Guid teacherId, Guid lessonId, IFormFile file)
     {
         string lessonResourcesPath = GetLessonResourcesAbsoluteFolderPath(teacherId, lessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
 
         // write content into the  
         await WriteFileAsync(lessonResourcesPath, fileName, fileContent);
@@ -60,9 +64,12 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         return ConvertToPublicPath(relativeUrlPath);
     }
 
-    public async Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent)
+    public async Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
     {
         string vrLessonImagesPath = GetVRLessonImagesAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
 
         // write content into the  
         await WriteFileAsync(vrLessonImagesPath, fileName, fileContent);
@@ -78,9 +85,12 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         return ConvertToPublicPath(relativeUrlPath);
     }
 
-    public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent)
+    public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
     {
         string vrLessonPresentPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
 
         // write content into the  
         await WriteFileAsync(vrLessonPresentPath, fileName, fileContent);
