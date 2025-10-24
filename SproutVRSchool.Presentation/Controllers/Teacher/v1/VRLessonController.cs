@@ -11,7 +11,7 @@ public class VRLessonController : BaseApiController
 {
 
     // ========================
-    // === POSTs
+    // === POST
     // ========================
 
     // POST: api/v1/teacher/vrlessons

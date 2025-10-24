@@ -86,6 +86,7 @@ internal static partial class ServiceCollectionExtensions
             };
         });
 
+        service.AddExceptionHandler<FileNotSupportedExceptionHandler>();
         service.AddExceptionHandler<ValidationExceptionHandler>();
         service.AddExceptionHandler<NotFoundExceptionHandler>();
         service.AddExceptionHandler<GeneralExceptionHandler>();

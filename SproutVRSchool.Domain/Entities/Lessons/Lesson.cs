@@ -6,19 +6,38 @@ namespace SproutVRSchool.Domain.Entities.Lessons;
 
 public sealed class Lesson : BaseEntity
 {
-    public Guid SubjectId { get; set; }
-    public Guid TeacherId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string ResourceRelativeFilePath { get; set; }
-    public LessonStatus Status { get; set; }
+    // ===========================
+    // === Fields
+    // ===========================
+
+    public Guid SubjectId { get; private set; }
+    public Guid TeacherId { get; private set; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public string ResourceRelativeFilePath { get; private set; }
+    public LessonStatus Status { get; private set; }
 
     // navigation property
-    public Subject Subject { get; set; }
-    public Teacher Teacher { get; set; }
-    public ICollection<VRLesson> VRLessons { get; set; } = [];
+    public Subject Subject { get; init; }
+    public Teacher Teacher { get; init; }
+    public ICollection<VRLesson> VRLessons { get; init; } = [];
 
+    // ===========================
+    // === Methods
+    // ===========================
+
+    /// <summary>
+    /// Create a new VR Lesson
+    /// </summary>
+    /// <param name="Id"></param>
+    /// <param name="subjectId"></param>
+    /// <param name="teacherId"></param>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    /// <param name="resourceRelativeFilePath"></param>
+    /// <returns></returns>
     public static Lesson Create(
+        Guid Id,
         Guid subjectId,
         Guid teacherId,
         string name,
@@ -27,15 +46,41 @@ public sealed class Lesson : BaseEntity
     {
         return new Lesson
         {
-            Id = Guid.NewGuid(),
+            Id = Id,
             SubjectId = subjectId,
             TeacherId = teacherId,
             Name = name,
             Description = description,
             ResourceRelativeFilePath = resourceRelativeFilePath ?? string.Empty,
             Status = LessonStatus.Active,
-            CreatedAtUtc = DateTime.UtcNow,
-            UpdatedAtUtc = DateTime.UtcNow
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
         };
+    }
+
+    /// <summary>
+    /// Updating fields
+    /// </summary>
+    /// <param name="newName"></param>
+    /// <param name="newDescription"></param>
+    /// <param name="newSubjectId"></param>
+    /// <param name="newStatus"></param>
+    public void Update(
+        string? newName,
+        string? newDescription,
+        Guid? newSubjectId,
+        string? resourceRelativeFilePath,
+        LessonStatus? newStatus)
+    {
+        Name = string.IsNullOrWhiteSpace(newName) ? Name : newName;
+        Description = string.IsNullOrWhiteSpace(newDescription) ? Description : newDescription;
+        SubjectId = !newSubjectId.HasValue || newSubjectId.Value == Guid.Empty
+            ? SubjectId
+            : newSubjectId.Value;
+        Status = !newStatus.HasValue ? Status : newStatus.Value;
+        ResourceRelativeFilePath = string.IsNullOrWhiteSpace(resourceRelativeFilePath)
+            ? ResourceRelativeFilePath
+            : resourceRelativeFilePath;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
     }
 }

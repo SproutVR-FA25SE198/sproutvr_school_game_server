@@ -20,7 +20,7 @@ public record CreateLessonCommand : IRequest<Guid>
     public string Description { get; init; }
 
     // Resource file can be null 
-    public IFormFile ResourceFile { get; init; }
+    public IFormFile? ResourceFile { get; init; }
 }
 
 public class CreateLessonCommandHandler(
@@ -34,17 +34,19 @@ public class CreateLessonCommandHandler(
         var createdLessonId = Guid.NewGuid();
 
         // If uploading resource file, then saving locally
-        if (request.ResourceFile != null)
+        // Upload file is optional
+        if (request.ResourceFile != null && request.ResourceFile.Length != 0)
         {
             // Save the resource file to local storage
             resourceRelativeFilePath = await fileStorageService.SaveLessonResourceAsync(
                 request.TeacherId,
                 createdLessonId,
                 request.ResourceFile
-                );
+            );
         }
 
         var createdLesson = Lesson.Create(
+            createdLessonId,
             subjectId: request.SubjectId,
             teacherId: request.TeacherId,
             name: request.Name,

@@ -5,7 +5,6 @@ namespace SproutVRSchool.Presentation.ExceptionHandlers;
 
 internal sealed class GeneralExceptionHandler(
     ILogger<GeneralExceptionHandler> _logger
-
     ) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
