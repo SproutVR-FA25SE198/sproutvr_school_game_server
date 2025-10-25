@@ -74,6 +74,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
         //UNDONE: 5. Stringtify the PresetJsonUrl and added
         // - validation at here is success
+        
 
         return validation.JoinRoomResponseDto!;
     }
