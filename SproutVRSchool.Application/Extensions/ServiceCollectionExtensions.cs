@@ -22,7 +22,7 @@ public static partial class ServiceCollectionExtensions
         // Mediator
         service.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+            cfg.RegisterServicesFromAssemblies(typeof(ServiceCollectionExtensions).Assembly);
 
             // Add Pipeline Behaviors
             cfg.AddOpenBehaviors([
@@ -33,6 +33,6 @@ public static partial class ServiceCollectionExtensions
         });
 
         // Validatiors of Fluent Validation
-        service.AddValidatorsFromAssembly(typeof(ServiceCollectionServiceExtensions).Assembly);
+        service.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
     }
 }

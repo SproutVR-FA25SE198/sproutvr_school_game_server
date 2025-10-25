@@ -7,7 +7,7 @@ using SproutVRSchool.Application.RequestHandlers.Devices.GetVRDeviceDetails;
 using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 using SproutVRSchool.Domain;
 
-namespace SproutVRSchool.Presentation.Controllers.SystemAdmin.v1;
+namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
 
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/school-admin/vrdevices")]

@@ -10,12 +10,12 @@ public sealed class Lesson : BaseEntity
     // === Fields
     // ===========================
 
-    public Guid SubjectId { get; private set; }
-    public Guid TeacherId { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public string ResourceRelativeFilePath { get; private set; }
-    public LessonStatus Status { get; private set; }
+    public Guid SubjectId { get; set; }
+    public Guid TeacherId { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string ResourceRelativeFilePath { get; set; }
+    public LessonStatus Status { get; set; }
 
     // navigation property
     public Subject Subject { get; init; }
@@ -69,18 +69,23 @@ public sealed class Lesson : BaseEntity
         string? newName,
         string? newDescription,
         Guid? newSubjectId,
-        string? resourceRelativeFilePath,
+        string? newResourceRelativeFilePath,
         LessonStatus? newStatus)
     {
         Name = string.IsNullOrWhiteSpace(newName) ? Name : newName;
+
         Description = string.IsNullOrWhiteSpace(newDescription) ? Description : newDescription;
+
         SubjectId = !newSubjectId.HasValue || newSubjectId.Value == Guid.Empty
             ? SubjectId
             : newSubjectId.Value;
+
         Status = !newStatus.HasValue ? Status : newStatus.Value;
-        ResourceRelativeFilePath = string.IsNullOrWhiteSpace(resourceRelativeFilePath)
+
+        ResourceRelativeFilePath = string.IsNullOrWhiteSpace(newResourceRelativeFilePath)
             ? ResourceRelativeFilePath
-            : resourceRelativeFilePath;
+            : newResourceRelativeFilePath;
+
         UpdatedAtUtc = DateTimeOffset.UtcNow;
     }
 }

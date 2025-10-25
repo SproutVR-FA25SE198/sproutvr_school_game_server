@@ -12,6 +12,8 @@ internal static partial class ServiceCollectionExtensions
         this IServiceCollection service)
     {
 
+        service.AddControllersConfigs();
+
         service.AddApiVersioning();
 
         service.AddExceptionHandlers();
@@ -24,6 +26,19 @@ internal static partial class ServiceCollectionExtensions
     // =========================================
     // === Services
     // =========================================
+
+    /*
+        Add configuration for controllers to use the fluent validations instead of default model state 
+
+     */
+    private static void AddControllersConfigs(this IServiceCollection service)
+    {
+        service.AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+    }
 
     /*
         Api Versioning

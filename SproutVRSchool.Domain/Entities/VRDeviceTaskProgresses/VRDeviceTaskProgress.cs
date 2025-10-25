@@ -9,6 +9,7 @@ public sealed class VRDeviceTaskProgress : BaseEntity
     public Guid VRDeviceId { get; set; }
     public Guid VRTaskId { get; set; }
     public Guid VRLearningSessionId { get; set; }
+    public string StudentName { get; set; }
     public bool IsCompleted { get; set; }
     public bool IsCorrect { get; set; }
     public DateTimeOffset CompletionTimeAtUtc { get; set; }

@@ -25,6 +25,11 @@ internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguratio
         builder.HasIndex(vrtp => vrtp.VRLearningSessionId);
 
         // Properties
+        builder.Property(vdss => vdss.StudentName)
+            .IsRequired()
+            .HasColumnType("citext")
+            .HasMaxLength(100);
+
         builder.Property(vrtp => vrtp.IsCompleted)
             .IsRequired()
             .HasDefaultValue(false);

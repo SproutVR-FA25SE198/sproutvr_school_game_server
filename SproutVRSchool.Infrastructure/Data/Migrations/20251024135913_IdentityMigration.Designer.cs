@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251020014613_IdentityMigration")]
+    [Migration("20251024135913_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -302,7 +302,6 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("citext");
 
                     b.Property<string>("ResourceRelativeFilePath")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
@@ -656,6 +655,11 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("citext");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()

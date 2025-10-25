@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.Lessons.CreateLesson;
+using SproutVRSchool.Application.RequestHandlers.Lessons.UpdateLesson;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
@@ -47,10 +48,16 @@ public class LessonController(IMediator mediator) : BaseApiController
     // ========================
 
     // PUT: api/v1/teacher/lessons/{id}
-    public async Task<IActionResult> UpdateLesson(Guid id,
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateLesson(
+        [FromRoute] Guid id,
         [FromForm] UpdateLessonCommand updateLessonCommand)
     {
+        updateLessonCommand.LessonId = id;
+        await mediator.Send(updateLessonCommand);
 
+        // 204: No Content
+        return NoContent();
     }
 
     // ========================

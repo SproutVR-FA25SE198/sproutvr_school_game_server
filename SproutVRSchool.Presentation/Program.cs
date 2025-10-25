@@ -6,12 +6,6 @@ using SproutVRSchool.Presentation.Grpc;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // ======================================
-// === Built-in services
-// ======================================
-
-builder.Services.AddControllers();
-
-// ======================================
 // === User-defined services
 // ======================================
 

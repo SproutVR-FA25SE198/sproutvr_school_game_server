@@ -25,26 +25,26 @@ public record CreateLessonCommand : IRequest<Guid>
 
 public class CreateLessonCommandHandler(
     IUnitOfWork uow,
-    ILocalStorageService fileStorageService
+    ILocalStorageService localStorageService
     ) : IRequestHandler<CreateLessonCommand, Guid>
 {
     public async Task<Guid> Handle(CreateLessonCommand request, CancellationToken cancellationToken)
     {
+        // 1. Uploading resource file is optional
         string resourceRelativeFilePath = string.Empty;
         var createdLessonId = Guid.NewGuid();
 
-        // If uploading resource file, then saving locally
-        // Upload file is optional
+        // 2. Only save file if presence
         if (request.ResourceFile != null && request.ResourceFile.Length != 0)
         {
-            // Save the resource file to local storage
-            resourceRelativeFilePath = await fileStorageService.SaveLessonResourceAsync(
+            resourceRelativeFilePath = await localStorageService.SaveLessonResourceAsync(
                 request.TeacherId,
                 createdLessonId,
                 request.ResourceFile
             );
         }
 
+        // 3. Create the lesson
         var createdLesson = Lesson.Create(
             createdLessonId,
             subjectId: request.SubjectId,
@@ -54,6 +54,7 @@ public class CreateLessonCommandHandler(
             resourceRelativeFilePath: resourceRelativeFilePath
         );
 
+        // 4. Save to db
         uow.Repository<Lesson>().Add(createdLesson);
         await uow.SaveChangesAsync(cancellationToken);
 

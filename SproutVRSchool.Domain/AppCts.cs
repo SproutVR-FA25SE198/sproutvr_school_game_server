@@ -40,7 +40,6 @@ public static class AppCts
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
     }
 
-
     public static class FilePaths
     {
         // offical path to store files

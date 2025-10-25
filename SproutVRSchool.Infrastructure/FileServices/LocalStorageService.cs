@@ -123,7 +123,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         string absoluteFilePath = Path.Combine(absoluteFolderPath, fileName);
 
         using var fileStream = new FileStream(absoluteFilePath, FileMode.Create, FileAccess.Write);
-        await fileStream.CopyToAsync(fileContent);
+        await fileContent.CopyToAsync(fileStream);
     }
 
     /// <summary>
