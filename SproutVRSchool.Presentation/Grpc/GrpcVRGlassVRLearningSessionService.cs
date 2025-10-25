@@ -74,7 +74,6 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
     {
-
         await foreach (ClientToServerMessage? message in requestStream.ReadAllAsync(cancellationToken))
         {
             try
@@ -135,52 +134,59 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             channel.Writer.TryWrite(message!);
         });
 
-        // Get the message from in-memory channel
-        await foreach (string message in channel.Reader.ReadAllAsync(cancellationToken))
+        try
         {
-            _logger.LogInformation("recived message: {Text}", message);
-
-            // If message null, do nothing
-            if (string.IsNullOrEmpty(message))
+            // Get the message from in-memory channel
+            await foreach (string message in channel.Reader.ReadAllAsync(cancellationToken))
             {
-                continue;
-            }
+                _logger.LogInformation("recived message: {Text}", message);
 
-            // if not having vrLearningSessionId:eventType:text, continue
-            string[] parts = message.ToString().Split(":", 3);
-            if (parts.Length < 2)
-            {
-                continue;
-            }
+                // If message null, do nothing
+                if (string.IsNullOrEmpty(message))
+                {
+                    continue;
+                }
 
-            // UNDONE: Testing purpose
-            string eventType = parts[1]!.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
-            string text = parts[2];
+                // if not having vrLearningSessionId:eventType:text, continue
+                string[] parts = message.ToString().Split(":", 3);
+                if (parts.Length < 2)
+                {
+                    continue;
+                }
 
-            switch (eventType)
-            {
-                case "ENDSIGNAL":
-                    {
-                        await responseStream.WriteAsync(
-                            ServerToClientMessageFactory.CreateEndSessionSignal(_dateTimeProvider.VietNamDateTimeNow),
-                            cancellationToken);
-                        break;
-                    }
-                case "INFO":
-                    {
-                        await responseStream.WriteAsync(
-                            ServerToClientMessageFactory.CreateInfoNotification(text),
-                            cancellationToken);
-                        break;
-                    }
-                case "WARNING":
-                    {
-                        await responseStream.WriteAsync(
-                            ServerToClientMessageFactory.CreateWarningNotification(text),
-                            cancellationToken);
-                        break;
-                    }
+                // UNDONE: Testing purpose
+                string eventType = parts[1]!.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
+                string text = parts[2];
+
+                switch (eventType)
+                {
+                    case "ENDSIGNAL":
+                        {
+                            await responseStream.WriteAsync(
+                                ServerToClientMessageFactory.CreateEndSessionSignal(_dateTimeProvider.VietNamDateTimeNow),
+                                cancellationToken);
+                            break;
+                        }
+                    case "INFO":
+                        {
+                            await responseStream.WriteAsync(
+                                ServerToClientMessageFactory.CreateInfoNotification(text),
+                                cancellationToken);
+                            break;
+                        }
+                    case "WARNING":
+                        {
+                            await responseStream.WriteAsync(
+                                ServerToClientMessageFactory.CreateWarningNotification(text),
+                                cancellationToken);
+                            break;
+                        }
+                }
             }
+        }
+        catch (OperationCanceledException ex)
+        {
+            _logger.LogInformation(ex, "VR device stream disconnected for VR Learning Session ID");
         }
     }
 }

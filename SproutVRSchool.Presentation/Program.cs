@@ -6,12 +6,6 @@ using SproutVRSchool.Presentation.Grpc;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // ======================================
-// === Built-in services
-// ======================================
-
-builder.Services.AddControllers();
-
-// ======================================
 // === User-defined services
 // ======================================
 
@@ -40,12 +34,20 @@ else if (env.IsProduction())
     await app.ApplySeedingProduction();
 }
 
+// Debugging gRPC
 app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
     string.Join("\n", endpointSources.SelectMany(source => source.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
 
+// Exception handlers
 app.UseExceptionHandler();
 
+app.ApplyStaticMiddleware();
+app.UseRouting();
+
+// Controller
 app.MapControllers();
+
+// Grpc Services
 app.MapGrpcService<GrpcTeacherVRLearningSessionService>();
 app.MapGrpcService<GrpcVRGlassVRLearningSessionService>();
 

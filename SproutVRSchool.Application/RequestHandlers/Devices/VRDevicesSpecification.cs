@@ -1,5 +1,4 @@
-﻿using SproutVRSchool.Application.Commons.Specifications;
-using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
+﻿using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.RequestHandlers.Devices;

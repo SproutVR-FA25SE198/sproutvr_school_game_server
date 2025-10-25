@@ -6,7 +6,7 @@ using SproutVRSchool.Application.Exceptions;
 namespace SproutVRSchool.Application.Behaviors;
 
 internal sealed class ValidationBehavior<TRequest, TResponse>
-    (IEnumerable<IValidator<IRequest>> _validators)
+    (IEnumerable<IValidator<TRequest>> _validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {

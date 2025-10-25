@@ -5,7 +5,6 @@ namespace SproutVRSchool.Presentation.ExceptionHandlers;
 
 internal sealed class GeneralExceptionHandler(
     ILogger<GeneralExceptionHandler> _logger
-
     ) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
@@ -22,6 +21,7 @@ internal sealed class GeneralExceptionHandler(
             Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
         };
 
+        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         // exception is handled

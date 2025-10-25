@@ -1,4 +1,6 @@
-﻿namespace SproutVRSchool.Application.Abstractions.FileServices;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace SproutVRSchool.Application.Abstractions.FileServices;
 
 public interface ILocalStorageService
 {
@@ -10,7 +12,7 @@ public interface ILocalStorageService
     /// <param name="fileName"></param>
     /// <param name="fileContent"></param>
     /// <returns></returns>
-    Task<string> SaveLessonResourceAsync(Guid teacherId, Guid lessonId, string fileName, Stream fileContent);
+    Task<string> SaveLessonResourceAsync(Guid teacherId, Guid lessonId, IFormFile file);
 
     /// <summary>
     /// Save a VRLesson's preset file.
@@ -21,7 +23,7 @@ public interface ILocalStorageService
     /// <param name="fileName"></param>
     /// <param name="fileContent"></param>
     /// <returns></returns>
-    Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent);
+    Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file);
 
     /// <summary>
     /// Save a VRLesson's image file.
@@ -32,6 +34,11 @@ public interface ILocalStorageService
     /// <param name="fileName"></param>
     /// <param name="fileContent"></param>
     /// <returns></returns>
-    Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent);
+    Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file);
 
+    /// <summary>
+    /// Delete a file in the local storage, by giving the public url file path
+    /// </summary>
+    /// <param name="publicRelativeFilePath"></param>
+    Task DeleteFileInLocalStorageAsync(string publicRelativeFilePath);
 }

@@ -7,17 +7,17 @@ using SproutVRSchool.Application.RequestHandlers.Devices.GetVRDeviceDetails;
 using SproutVRSchool.Application.RequestHandlers.Devices.SearchVRDevices;
 using SproutVRSchool.Domain;
 
-namespace SproutVRSchool.Presentation.Controllers.SystemAdmin.v1;
+namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
 
 [ApiVersion(AppCts.Api.V1)]
-[Route("api/v{version:apiVersion}/system-admin/vrdevices")]
+[Route("api/v{version:apiVersion}/school-admin/vrdevices")]
 public sealed class VRDevicesController(IMediator mediator) : BaseApiController
 {
     // =======================
     // === GETs
     // =======================
 
-    // GET: api/v1/system-admin/vrdevices
+    // GET: api/v1/school-admin/vrdevices
     //          ?searchName=abc&status=0
     //          &pageIndex=1&pageSize=10
     //          &sortBy=status
@@ -34,12 +34,12 @@ public sealed class VRDevicesController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
-    // GET: api/v1/system-admin/vrdevices/{id}details
+    // GET: api/v1/school-admin/vrdevices/{id}/summaries
     [HttpGet("{id}/summaries")]
     public async Task<IActionResult> GetDeviceDetails(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetVRDeviceDetailsQuery(id);
-        object result = await mediator.Send(query, cancellationToken);
+        GetVRDeviceDetailsResponseDto result = await mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }

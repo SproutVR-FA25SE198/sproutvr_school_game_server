@@ -5,17 +5,18 @@
  
 Local storage path's structure
 
-{teacher_id}
+Content/
+    {teacher_id}
 
-/{lesson_id}
+    /{lesson_id}
 
-/Resources/bai1.pdf
+    /Resources/bai1.pdf
 
-   /{vrLesson_id}
+       /{vrLesson_id}
 
-          /Images/image1.jpg
+              /Images/image1.jpg
 
-          /Presets/preset.jpb
+              /Presets/preset.jpb
  
  */
 public interface IPathService

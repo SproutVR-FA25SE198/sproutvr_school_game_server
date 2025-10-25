@@ -36,7 +36,7 @@ internal sealed class LessonConfiguration : BaseEntityConfiguration<Lesson>
             .HasMaxLength(1000);
 
         builder.Property(l => l.ResourceRelativeFilePath)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(300);
 
         builder.Property(l => l.Status)

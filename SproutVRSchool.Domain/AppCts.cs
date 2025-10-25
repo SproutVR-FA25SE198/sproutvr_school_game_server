@@ -40,7 +40,6 @@ public static class AppCts
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
     }
 
-
     public static class FilePaths
     {
         // offical path to store files
@@ -48,10 +47,10 @@ public static class AppCts
         // Windows: C:\ProgramData
         // Linux: /var/lib
         private static readonly string CommonAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-        public static readonly string StorageRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
+        public static readonly string LocalContentRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
 
         // "C:\ProgramData\SproutVRSchool\Content\Avatars"
-        public static readonly string AvatarsFolderPath = Path.Combine(StorageRootPath, "Avatars");
+        public static readonly string AvatarsFolderPath = Path.Combine(LocalContentRootPath, "Avatars");
         public static readonly string DefaultAvatarFilePath = Path.Combine(AvatarsFolderPath, "default_avatar.png");
 
         public const string FOLDER_NAME_RESOURCES = "Resources";

@@ -26,6 +26,7 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\Auth\" />
+		<Folder Include="Middlewares\" />
 	</ItemGroup>
 
 </Project>
