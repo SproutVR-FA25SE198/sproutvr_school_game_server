@@ -1,8 +1,13 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FluentValidation;
 
-namespace SproutVRSchool.Application.RequestHandlers.Lessons.CreateLesson;
+namespace SproutVRSchool.Application.RequestHandlers.Lessons.UpdateLesson;
 
-public sealed class CreateLessonCommandValidator : AbstractValidator<CreateLessonCommand>
+public sealed class UpdateLessonCommandValidator : AbstractValidator<UpdateLessonCommand>
 {
     // ============================
     // === Fields
@@ -16,23 +21,20 @@ public sealed class CreateLessonCommandValidator : AbstractValidator<CreateLesso
     // ============================
     // === Constructors
     // ============================
-
-    public CreateLessonCommandValidator()
+    public UpdateLessonCommandValidator()
     {
-        RuleFor(x => x.SubjectId)
-            .NotEmpty()
-            .WithMessage("Subject ID is required.");
-
-        RuleFor(x => x.TeacherId)
-            .NotEmpty().WithMessage("Teacher ID is required.");
+        RuleFor(x => x.LessonId)
+            .NotEmpty().WithMessage("Lesson ID is required.");
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Lesson Name is required.")
-            .MaximumLength(100).WithMessage("Lesson Name must not exceed 100 characters.");
+            .NotEmpty().WithMessage("Name cannot be set to an empty value.")
+            .MaximumLength(100).WithMessage("Name must not exceed 100 characters.")
+            .When(x => x.Name != null); // Apply these rules ONLY if Name is not null.
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
+            .NotEmpty().WithMessage("Description cannot be set to an empty value.")
+            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.")
+            .When(x => x.Description != null); // Apply these rules ONLY if Description is not null.
 
         When(x => x.ResourceFile != null, () =>
         {

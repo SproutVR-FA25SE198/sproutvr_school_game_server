@@ -36,4 +36,9 @@ public interface ILocalStorageService
     /// <returns></returns>
     Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file);
 
+    /// <summary>
+    /// Delete a file in the local storage, by giving the public url file path
+    /// </summary>
+    /// <param name="publicRelativeFilePath"></param>
+    Task DeleteFileInLocalStorageAsync(string publicRelativeFilePath);
 }

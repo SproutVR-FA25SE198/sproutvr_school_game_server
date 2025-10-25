@@ -63,24 +63,15 @@ public sealed class Lesson : BaseEntity
     /// </summary>
     /// <param name="newName"></param>
     /// <param name="newDescription"></param>
-    /// <param name="newSubjectId"></param>
-    /// <param name="newStatus"></param>
+    /// <param name="newResourceRelativeFilePath"></param>
     public void Update(
         string? newName,
         string? newDescription,
-        Guid? newSubjectId,
-        string? newResourceRelativeFilePath,
-        LessonStatus? newStatus)
+        string? newResourceRelativeFilePath)
     {
         Name = string.IsNullOrWhiteSpace(newName) ? Name : newName;
 
         Description = string.IsNullOrWhiteSpace(newDescription) ? Description : newDescription;
-
-        SubjectId = !newSubjectId.HasValue || newSubjectId.Value == Guid.Empty
-            ? SubjectId
-            : newSubjectId.Value;
-
-        Status = !newStatus.HasValue ? Status : newStatus.Value;
 
         ResourceRelativeFilePath = string.IsNullOrWhiteSpace(newResourceRelativeFilePath)
             ? ResourceRelativeFilePath

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 
@@ -12,7 +13,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
     public string GetTeacherAbsoluteFolderPath(Guid teacherId)
     {
-        return Path.Combine(AppCts.FilePaths.StorageRootPath, teacherId.ToString());
+        return Path.Combine(AppCts.FilePaths.LocalContentRootPath, teacherId.ToString());
     }
 
     public string GetLessonAbsoluteFolderPath(Guid teacherId, Guid lessonId)
@@ -106,6 +107,22 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         return ConvertToPublicPath(relativeUrlPath);
     }
 
+    public Task DeleteFileInLocalStorageAsync(string publicRelativeFilePath)
+    {
+        if (string.IsNullOrEmpty(publicRelativeFilePath))
+        {
+            return Task.CompletedTask;
+        }
+
+        string absoluteFilePath = ConvertToAbsoluteLocalFilePath(publicRelativeFilePath);
+        if (File.Exists(absoluteFilePath))
+        {
+            File.Delete(absoluteFilePath);
+        }
+
+        return Task.CompletedTask;
+    }
+
     // =============================
     // === Helpers
     // =============================
@@ -136,5 +153,25 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     private static string ConvertToPublicPath(string windowPath)
     {
         return $"{AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH}/{windowPath.Replace('\\', '/')}";
+    }
+
+    /// <summary>
+    /// Convert a public URL path to Absolute Local FilePath for retrieving the file
+    /// e.g. /content/{teacher_id}/{lesson_id}/Resources/file.pdf
+    /// e.g. Into: C:\ProgramData\SproutVRSchool\Content\{teacher_id}\{lesson_id}\Resources\file.pdf
+    /// </summary>
+    /// <param name="publicRelativeFilePath"></param>
+    /// <returns></returns>
+    private static string ConvertToAbsoluteLocalFilePath(string publicRelativeFilePath)
+    {
+        // /content/... --> ...
+        string relativeFilePath = publicRelativeFilePath.Replace(AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH + "/", "");
+
+        // .../.../ --> ...\\...\\, depends on the OS
+        relativeFilePath = relativeFilePath.Replace('/', Path.DirectorySeparatorChar);
+
+        string absoluteFilePath = Path.Combine(AppCts.FilePaths.LocalContentRootPath, relativeFilePath);
+
+        return absoluteFilePath;
     }
 }

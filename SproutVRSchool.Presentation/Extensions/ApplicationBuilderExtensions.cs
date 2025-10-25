@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 
@@ -60,5 +62,24 @@ internal static class ApplicationBuilderExtensions
 
         await identitySeeder.SeedProductionAsync();
         await seeder.SeedProductionAsync();
+    }
+
+    /// <summary>
+    /// Apply the Static File middleware
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
+    public static void ApplyStaticMiddleware(this IApplicationBuilder app)
+    {
+        // "C:\ProgramData\SproutVRSchool\Content"
+        string contenRootPath = AppCts.FilePaths.LocalContentRootPath;
+
+        Directory.CreateDirectory(contenRootPath);
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(contenRootPath),
+            RequestPath = AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH // e.g. /content
+        });
     }
 }

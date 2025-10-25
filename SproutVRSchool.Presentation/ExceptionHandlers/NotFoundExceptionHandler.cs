@@ -25,6 +25,7 @@ internal sealed class NotFoundExceptionHandler(
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4"
         };
 
+        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         // Exception is handled

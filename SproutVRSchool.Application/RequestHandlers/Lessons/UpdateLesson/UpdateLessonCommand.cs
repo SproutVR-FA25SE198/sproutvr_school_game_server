@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
@@ -10,11 +11,13 @@ namespace SproutVRSchool.Application.RequestHandlers.Lessons.UpdateLesson;
 public record UpdateLessonCommand : IRequest<Unit>
 {
     public Guid LessonId { get; set; }
-    public Guid? SubjectId { get; init; }
+
+    [DisplayFormat(ConvertEmptyStringToNull = false)]
     public string? Name { get; init; }
+
+    [DisplayFormat(ConvertEmptyStringToNull = false)]
     public string? Description { get; init; }
     public IFormFile? ResourceFile { get; init; }
-    public LessonStatus? Status { get; init; }
 }
 
 public class UpdateLessonCommandHandler(
@@ -33,10 +36,18 @@ public class UpdateLessonCommandHandler(
             throw new NotFoundException($"Lesson with ID {request.LessonId} not found.");
         }
 
-        // 3. If uploading new file, then retrieve the relative file patht
+        // 3. If uploading new file, then retrieve the relative file path
         string newResourceRelativeFilePath = string.Empty;
         if (request.ResourceFile != null && request.ResourceFile.Length != 0)
         {
+            // 4. Check if the existing lesson has resource or not, if not then set
+            //    If yes then delete it, and set
+
+            if (!string.IsNullOrEmpty(existingLesson.ResourceRelativeFilePath))
+            {
+                await localStorageService.DeleteFileInLocalStorageAsync(existingLesson.ResourceRelativeFilePath);
+            }
+
             newResourceRelativeFilePath = await localStorageService.SaveLessonResourceAsync(
                 existingLesson.TeacherId,
                 request.LessonId,
@@ -44,12 +55,10 @@ public class UpdateLessonCommandHandler(
             );
         }
 
-        // 4. Update the entity's properties with the new values
+        // 5. Update the entity's properties with the new values
         existingLesson.Update(
             newName: request.Name,
             newDescription: request.Description,
-            newSubjectId: request.SubjectId,
-            newStatus: request.Status,
             newResourceRelativeFilePath: newResourceRelativeFilePath
         );
 
