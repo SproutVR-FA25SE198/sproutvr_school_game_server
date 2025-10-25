@@ -15,14 +15,8 @@ public class LessonController(IMediator mediator) : BaseApiController
     // === GETs
     // ========================
 
-    // GET: api/v1/teacher/lessons
     // GET: api/v1/teacher/lessons/{id}
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetLessonById(Guid id)
-    {
 
-        return Ok(new { Id = id });
-    }
 
     // ========================
     // === POSTs
@@ -30,18 +24,6 @@ public class LessonController(IMediator mediator) : BaseApiController
 
     // POST: api/v1/teacher/lessons
     // application-type: multipart/form-data
-    [HttpPost]
-    public async Task<IActionResult> CreateLesson(
-        [FromForm] CreateLessonCommand createLessonCommand)
-    {
-        Guid lessonId = await mediator.Send(createLessonCommand);
-
-        // 201: Created
-        return CreatedAtAction(
-            nameof(GetLessonById),
-            new { id = lessonId },
-            new { Id = lessonId });
-    }
 
     // ========================
     // === PUTs

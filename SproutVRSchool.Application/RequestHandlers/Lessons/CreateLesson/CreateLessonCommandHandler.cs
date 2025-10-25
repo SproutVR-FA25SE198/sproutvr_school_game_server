@@ -5,7 +5,7 @@ using SproutVRSchool.Domain.Entities.Lessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.Lessons.CreateLesson;
 
-public class CreateLessonCommandHandler(
+public sealed class CreateLessonCommandHandler(
     IUnitOfWork uow,
     ILocalStorageService localStorageService
     ) : IRequestHandler<CreateLessonCommand, Guid>
