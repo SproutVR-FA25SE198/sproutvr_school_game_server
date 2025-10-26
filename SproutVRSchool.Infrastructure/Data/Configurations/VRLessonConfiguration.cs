@@ -64,5 +64,11 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
                .HasForeignKey(vrl => vrl.VRLessonId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(vrl => vrl.VRTasks)
+               .WithOne(vrt => vrt.VRLesson)
+               .HasForeignKey(vrl => vrl.VRLessonId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
     }
 }

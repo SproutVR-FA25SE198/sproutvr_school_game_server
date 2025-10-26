@@ -18,15 +18,16 @@ internal sealed class VRTaskConfiguration : BaseEntityConfiguration<VRTask>
         builder.Property(vrt => vrt.TaskLocationId).IsRequired();
         builder.Property(vrt => vrt.MapObjectId).IsRequired();
         builder.Property(vrt => vrt.ActivityTypeId).IsRequired();
+        builder.Property(vrt => vrt.VRLessonId).IsRequired();
 
         // Indexing
         builder.HasIndex(vrt => vrt.TaskLocationId);
         builder.HasIndex(vrt => vrt.MapObjectId);
         builder.HasIndex(vrt => vrt.ActivityTypeId);
+        builder.HasIndex(vrt => vrt.VRLessonId);
 
         // Properties
         builder.Property(vrt => vrt.TaskNumber)
-            .HasColumnType("citext")
             .IsRequired();
 
         builder.Property(vrt => vrt.Description)
@@ -49,6 +50,12 @@ internal sealed class VRTaskConfiguration : BaseEntityConfiguration<VRTask>
         builder.HasOne(vrt => vrt.ActivityType)
                .WithMany(at => at.VRTasks)
                .HasForeignKey(vrt => vrt.ActivityTypeId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(vrt => vrt.VRLesson)
+               .WithMany(at => at.VRTasks)
+               .HasForeignKey(vrt => vrt.VRLessonId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 

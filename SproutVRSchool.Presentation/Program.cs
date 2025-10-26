@@ -41,6 +41,7 @@ app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
 // Exception handlers
 app.UseExceptionHandler();
 
+// Static Files & Routing
 app.ApplyStaticMiddleware();
 app.UseRouting();
 

@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<ItemGroup>
-		<Protobuf Include="Protos\session.proto" />
-	</ItemGroup>
-
-</Project>
