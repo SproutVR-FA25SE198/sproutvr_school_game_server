@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using SproutVRSchool.Application.RequestHandlers.Devices.GetVRDeviceDetails;
 
 namespace SproutVRSchool.Application.RequestHandlers.Lessons.GetLessonById;
 
-public record GetLessonByIdCommandResponseDto(
-    );
-
-public sealed record GetLessonByIdCommand(
-    Guid Id) : IRequest<GetLessonByIdCommandResponseDto>
+public record GetLessonByIdQuery(Guid Id)
+    : IRequest<GetLessonByIdResponseDto>
 {
 }

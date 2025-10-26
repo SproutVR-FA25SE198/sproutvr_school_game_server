@@ -13,7 +13,6 @@
 
 	<ItemGroup>
 		<Folder Include="Commons\Requests\" />
-		<Folder Include="RequestHandlers\Lessons\GetLessonById\" />
 	</ItemGroup>
 
 

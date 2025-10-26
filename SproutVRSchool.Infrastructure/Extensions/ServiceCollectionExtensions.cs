@@ -27,7 +27,7 @@ public static partial class ServiceCollectionExtensions
         this IServiceCollection service,
         IConfiguration configuration)
     {
-        service.AddFileHelpers();
+        service.AddFileHelpers(configuration);
 
         service.AddPersistence(configuration);
 
@@ -120,14 +120,22 @@ public static partial class ServiceCollectionExtensions
             ConnectionMultiplexer.Connect(redisStackConnection!));
     }
 
-    /*
-        Using all file helpers
-     */
-    private static void AddFileHelpers(this IServiceCollection service)
+    /// <summary>
+    /// Using all file helpers
+    /// </summary>
+    /// <param name="service"></param>
+    /// <param name="configuration"></param>
+    private static void AddFileHelpers(this IServiceCollection service, IConfiguration configuration)
     {
         service.AddTransient<IFileReader, JsonFileReader>();
-        service.AddTransient<ILocalStorageService, LocalStorageService>();
-        service.AddTransient<IPathService, LocalStorageService>();
+
+        string? localStorageSettings = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath");
+
+        service.AddSingleton<LocalStorageService>(sp =>
+            new LocalStorageService(localStorageSettings!));
+
+        service.AddSingleton<ILocalStorageService>(sp => sp.GetRequiredService<LocalStorageService>());
+        service.AddSingleton<IPathService>(sp => sp.GetRequiredService<LocalStorageService>());
     }
 
     /// <summary>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
@@ -71,8 +73,12 @@ internal static class ApplicationBuilderExtensions
     /// <returns></returns>
     public static void ApplyStaticMiddleware(this IApplicationBuilder app)
     {
-        // "C:\ProgramData\SproutVRSchool\Content"
-        string contenRootPath = AppCts.FilePaths.LocalContentRootPath;
+        // "C:\ProgramData\SproutVRSchool\Content" in Development Mode
+        using IServiceScope scope = app.ApplicationServices.CreateScope();
+        IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+        string contenRootPath = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath")
+            ?? throw new InvalidOperationException("FileStorageSettings:ContentRootPath is not configured.");
 
         Directory.CreateDirectory(contenRootPath);
 
