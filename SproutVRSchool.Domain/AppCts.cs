@@ -42,16 +42,21 @@ public static class AppCts
 
     public static class FilePaths
     {
+        // NOT WORKING INSIDE THE CONTAINER
+
+#pragma warning disable S125 // Sections of code should not be commented out
         // offical path to store files
         // macOS: /Library/Application Support
         // Windows: C:\ProgramData
         // Linux: /var/lib
-        private static readonly string CommonAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-        public static readonly string LocalContentRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
 
-        // "C:\ProgramData\SproutVRSchool\Content\Avatars"
-        public static readonly string AvatarsFolderPath = Path.Combine(LocalContentRootPath, "Avatars");
-        public static readonly string DefaultAvatarFilePath = Path.Combine(AvatarsFolderPath, "default_avatar.png");
+        //private static readonly string CommonAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        //public static readonly string LocalContentRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
+
+        //// "C:\ProgramData\SproutVRSchool\Content\Avatars"
+        //public static readonly string AvatarsFolderPath = Path.Combine(LocalContentRootPath, "Avatars");
+        //public static readonly string DefaultAvatarFilePath = Path.Combine(AvatarsFolderPath, "default_avatar.png");
+#pragma warning restore S125 // Sections of code should not be commented out
 
         public const string FOLDER_NAME_RESOURCES = "Resources";
         public const string FOLDER_NAME_PRESETS = "Presets";

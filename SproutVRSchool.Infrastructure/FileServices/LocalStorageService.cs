@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 
@@ -7,13 +8,20 @@ namespace SproutVRSchool.Infrastructure.FileServices;
 
 public sealed class LocalStorageService : ILocalStorageService, IPathService
 {
+    private readonly string _localContentRootPath;
+
+    public LocalStorageService(string localContentRootPath)
+    {
+        _localContentRootPath = localContentRootPath;
+    }
+
     // =============================
     // === Get Files & Paths
     // =============================
 
     public string GetTeacherAbsoluteFolderPath(Guid teacherId)
     {
-        return Path.Combine(AppCts.FilePaths.LocalContentRootPath, teacherId.ToString());
+        return Path.Combine(_localContentRootPath, teacherId.ToString());
     }
 
     public string GetLessonAbsoluteFolderPath(Guid teacherId, Guid lessonId)
@@ -162,7 +170,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     /// </summary>
     /// <param name="publicRelativeFilePath"></param>
     /// <returns></returns>
-    private static string ConvertToAbsoluteLocalFilePath(string publicRelativeFilePath)
+    private string ConvertToAbsoluteLocalFilePath(string publicRelativeFilePath)
     {
         // /content/... --> ...
         string relativeFilePath = publicRelativeFilePath.Replace(AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH + "/", "");
@@ -170,7 +178,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         // .../.../ --> ...\\...\\, depends on the OS
         relativeFilePath = relativeFilePath.Replace('/', Path.DirectorySeparatorChar);
 
-        string absoluteFilePath = Path.Combine(AppCts.FilePaths.LocalContentRootPath, relativeFilePath);
+        string absoluteFilePath = Path.Combine(_localContentRootPath, relativeFilePath);
 
         return absoluteFilePath;
     }

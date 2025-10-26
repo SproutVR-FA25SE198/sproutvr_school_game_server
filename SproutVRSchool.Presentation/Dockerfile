@@ -13,6 +13,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
+COPY ["SproutVRSchool.Infrastructure/SproutVRSchool.Infrastructure.csproj", "SproutVRSchool.Infrastructure/"]
 COPY ["SproutVRSchool.Presentation/SproutVRSchool.Presentation.csproj", "SproutVRSchool.Presentation/"]
 COPY ["SproutVRSchool.Application/SproutVRSchool.Application.csproj", "SproutVRSchool.Application/"]
 COPY ["SproutVRSchool.Domain/SproutVRSchool.Domain.csproj", "SproutVRSchool.Domain/"]
@@ -31,4 +32,8 @@ RUN dotnet publish "./SproutVRSchool.Presentation.csproj" -c $BUILD_CONFIGURATIO
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir /app/storage
+RUN chmod -R 777 /app/storage
+
 ENTRYPOINT ["dotnet", "SproutVRSchool.Presentation.dll"]
