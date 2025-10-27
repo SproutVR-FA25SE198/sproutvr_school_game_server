@@ -15,7 +15,7 @@ public sealed class GetLessonByIdQueryHandler(
     IUnitOfWork uow
     ) : IRequestHandler<GetLessonByIdQuery, GetLessonByIdResponseDto>
 {
-    async Task<GetLessonByIdResponseDto> IRequestHandler<GetLessonByIdQuery, GetLessonByIdResponseDto>.Handle(GetLessonByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetLessonByIdResponseDto> Handle(GetLessonByIdQuery request, CancellationToken cancellationToken)
     {
         // 1. Fetch the lesson entity from the repo
         var spec = new LessonSpecification(request.Id);

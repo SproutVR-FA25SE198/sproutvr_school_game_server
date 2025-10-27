@@ -3,6 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.VRLessons.CreateVRLesson;
+using SproutVRSchool.Application.RequestHandlers.VRLessons.DesignVRLessonPreset;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
@@ -38,5 +39,17 @@ public class VRLessonController(IMediator mediator) : BaseApiController
             nameof(GetVRLesson),
             new { id = vrLessonId },
             new { id = vrLessonId });
+    }
+
+    // PATCH: api/v1/teacher/vrlessons/{id}/design-preset
+    [HttpPatch("{id:guid}/design-preset")]
+    public async Task<IActionResult> DesignVRLessonPreset(
+        [FromRoute] Guid id,
+        [FromBody] DesignVRLessonPresetCommand command,
+        CancellationToken cancellationToken)
+    {
+        command.VRLessonId = id;
+        await mediator.Send(command, cancellationToken);
+        return NoContent();
     }
 }

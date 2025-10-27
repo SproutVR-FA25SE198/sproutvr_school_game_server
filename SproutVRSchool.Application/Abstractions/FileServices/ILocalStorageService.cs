@@ -26,6 +26,17 @@ public interface ILocalStorageService
     Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file);
 
     /// <summary>
+    /// Save a VRLesson from a stream
+    /// </summary>
+    /// <param name="teacherId"></param>
+    /// <param name="lessonId"></param>
+    /// <param name="vrLessonId"></param>
+    /// <param name="fileName"></param>
+    /// <param name="fileContent"></param>
+    /// <returns></returns>
+    Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent);
+
+    /// <summary>
     /// Save a VRLesson's image file.
     /// </summary>
     /// <param name="teacherId"></param>
