@@ -20,10 +20,12 @@ public class LessonController(IMediator mediator) : BaseApiController
     // GET: api/v1/teacher/lessons/{id}
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLessonById(
-        [FromRoute] Guid id)
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken
+        )
     {
         var query = new GetLessonByIdQuery(id);
-        GetLessonByIdResponseDto lessonResponseDto = await mediator.Send(query);
+        GetLessonByIdResponseDto lessonResponseDto = await mediator.Send(query, cancellationToken);
 
         return Ok(lessonResponseDto);
     }

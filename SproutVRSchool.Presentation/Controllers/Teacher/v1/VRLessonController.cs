@@ -1,9 +1,12 @@
 ﻿using System.Numerics;
+using System.Threading.Tasks;
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SproutVRSchool.Application.RequestHandlers.Lessons.GetLessonById;
 using SproutVRSchool.Application.RequestHandlers.VRLessons.CreateVRLesson;
 using SproutVRSchool.Application.RequestHandlers.VRLessons.DesignVRLessonPreset;
+using SproutVRSchool.Application.RequestHandlers.VRLessons.GetVRLessonById;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
@@ -16,10 +19,15 @@ public class VRLessonController(IMediator mediator) : BaseApiController
     // === GETs
     // ========================
 
+    // GET: api/v1/teacher/vrlessons/{id}
     [HttpGet("{id:guid}")]
-    public IActionResult GetVRLesson(Guid id)
+    public async Task<IActionResult> GetVRLesson(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
     {
-        return Ok(new { Id = id });
+        var query = new GetVRLessonByIdQuery(id);
+        GetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
     }
 
     // ========================
@@ -40,6 +48,10 @@ public class VRLessonController(IMediator mediator) : BaseApiController
             new { id = vrLessonId },
             new { id = vrLessonId });
     }
+
+    // ========================
+    // === PATCHs
+    // ========================
 
     // PATCH: api/v1/teacher/vrlessons/{id}/design-preset
     [HttpPatch("{id:guid}/design-preset")]
