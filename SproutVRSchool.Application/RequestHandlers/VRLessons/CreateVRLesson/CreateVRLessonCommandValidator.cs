@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Validators;
 
 namespace SproutVRSchool.Application.RequestHandlers.VRLessons.CreateVRLesson;
 
@@ -21,13 +22,34 @@ public sealed class CreateVRLessonCommandValidator : AbstractValidator<CreateVRL
             .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
 
         RuleFor(x => x.MaxDuration)
-            .NotEmpty().WithMessage("MaxDuration is required.")
-            .GreaterThan(TimeSpan.Zero).WithMessage("MaxDuration must be greater than zero.");
+            .GreaterThan(TimeSpan.Zero).WithMessage("MaxDuration must be a positive time span.");
 
-        RuleFor(x => x.ImageUrl)
-            .NotEmpty().WithMessage("ImageUrl is required.")
-            .MaximumLength(300).WithMessage("ImageUrl must not exceed 300 characters.")
-            .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
-            .WithMessage("'{PropertyName}' must be a valid URL.");
+        RuleFor(x => x.Tasks)
+            .NotEmpty().WithMessage("At least one task is required.");
+
+        RuleForEach(x => x.Tasks)
+            .SetValidator(new CreateVRLessonTaskValidator());
+    }
+}
+
+internal sealed class CreateVRLessonTaskValidator : AbstractValidator<CreateVRLessonTaskRequestDto>
+{
+    public CreateVRLessonTaskValidator()
+    {
+        RuleFor(x => x.TaskLocationId)
+            .NotEmpty().WithMessage("TaskLocationId is required.");
+
+        RuleFor(x => x.MapObjectId)
+            .NotEmpty().WithMessage("MapObjectId is required.");
+
+        RuleFor(x => x.ActivityTypeId)
+            .NotEmpty().WithMessage("ActivityTypeId is required.");
+
+        RuleFor(x => x.TaskNumber)
+            .NotEmpty().WithMessage("TaskNumber is required.");
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("Task Description is required.")
+            .MaximumLength(255).WithMessage("Task Description must not exceed 255 characters.");
     }
 }

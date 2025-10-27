@@ -96,15 +96,13 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
     public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
     {
-        string vrLessonPresentPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+        string vrLessonPresetPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
 
         string fileName = file.FileName;
         using Stream fileContent = file.OpenReadStream();
 
-        // write content into the  
-        await WriteFileAsync(vrLessonPresentPath, fileName, fileContent);
+        await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
 
-        // return the relative path
         string relativeUrlPath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
@@ -112,6 +110,21 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
             AppCts.FilePaths.FOLDER_NAME_PRESETS,
             fileName);
 
+        return ConvertToPublicPath(relativeUrlPath);
+    }
+
+    public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent)
+    {
+        string vrLessonPresetPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
+
+        string relativeUrlPath = Path.Combine(
+            teacherId.ToString(),
+            lessonId.ToString(),
+            vrLessonId.ToString(),
+            AppCts.FilePaths.FOLDER_NAME_PRESETS,
+            fileName);
         return ConvertToPublicPath(relativeUrlPath);
     }
 

@@ -1,6 +1,7 @@
 ﻿using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.Maps;
 using SproutVRSchool.Domain.Entities.VRLearningSessions;
+using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Domain.Entities.VRLessons;
 
@@ -18,11 +19,21 @@ public sealed class VRLesson : BaseEntity
     public Lesson Lesson { get; set; }
     public Map Map { get; set; }
     public ICollection<VRLearningSession> VRLearningSessions { get; set; } = [];
+    public ICollection<VRTask> VRTasks { get; set; } = [];
 
     // ========================================
     // === Factory method
     // ========================================
 
+    /// <summary>
+    /// Create 
+    /// </summary>
+    /// <param name="lessonId"></param>
+    /// <param name="mapId"></param>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    /// <param name="maxDuration"></param>
+    /// <returns></returns>
     public static VRLesson Create(
         Guid lessonId,
         Guid mapId,
@@ -43,6 +54,13 @@ public sealed class VRLesson : BaseEntity
             CreatedAtUtc = DateTime.UtcNow,
             UpdatedAtUtc = DateTime.UtcNow
         };
+    }
+
+    public void SetPresetFile(
+        string presetJsonRelativeFilePath)
+    {
+        PresetJsonRelativeFilePath = presetJsonRelativeFilePath;
+        UpdatedAtUtc = DateTime.UtcNow;
     }
 }
 

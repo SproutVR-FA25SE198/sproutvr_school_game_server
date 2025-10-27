@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251024135913_IdentityMigration")]
+    [Migration("20251026135207_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -844,14 +844,16 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("TaskLocationId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("TaskNumber")
-                        .IsRequired()
-                        .HasColumnType("citext");
+                    b.Property<int>("TaskNumber")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+
+                    b.Property<Guid>("VRLessonId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -860,6 +862,8 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.HasIndex("MapObjectId");
 
                     b.HasIndex("TaskLocationId");
+
+                    b.HasIndex("VRLessonId");
 
                     b.ToTable("VRTasks", "app");
                 });
@@ -1139,11 +1143,19 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SproutVRSchool.Domain.Entities.VRLessons.VRLesson", "VRLesson")
+                        .WithMany("VRTasks")
+                        .HasForeignKey("VRLessonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("ActivityType");
 
                     b.Navigation("MapObject");
 
                     b.Navigation("TaskLocation");
+
+                    b.Navigation("VRLesson");
                 });
 
             modelBuilder.Entity("SproutVRSchool.Domain.Entities.Identities.SchoolAdmin", b =>
@@ -1228,6 +1240,8 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
             modelBuilder.Entity("SproutVRSchool.Domain.Entities.VRLessons.VRLesson", b =>
                 {
                     b.Navigation("VRLearningSessions");
+
+                    b.Navigation("VRTasks");
                 });
 
             modelBuilder.Entity("SproutVRSchool.Domain.Entities.VRTasks.VRTask", b =>

@@ -506,6 +506,40 @@ public partial class IdentityMigration : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "VRLearningSessions",
+            schema: "app",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false),
+                VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
+                TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
+                StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                EndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
+                UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_VRLearningSessions", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_VRLearningSessions_Teachers_TeacherId",
+                    column: x => x.TeacherId,
+                    principalSchema: "auth",
+                    principalTable: "Teachers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Restrict);
+                table.ForeignKey(
+                    name: "FK_VRLearningSessions_VRLessons_VRLessonId",
+                    column: x => x.VRLessonId,
+                    principalSchema: "app",
+                    principalTable: "VRLessons",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Restrict);
+            });
+
+        migrationBuilder.CreateTable(
             name: "VRTasks",
             schema: "app",
             columns: table => new
@@ -514,7 +548,8 @@ public partial class IdentityMigration : Migration
                 TaskLocationId = table.Column<Guid>(type: "uuid", nullable: false),
                 MapObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 ActivityTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                TaskNumber = table.Column<string>(type: "citext", nullable: false),
+                VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
+                TaskNumber = table.Column<int>(type: "integer", nullable: false),
                 Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
@@ -543,35 +578,8 @@ public partial class IdentityMigration : Migration
                     principalTable: "TaskLocations",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Restrict);
-            });
-
-        migrationBuilder.CreateTable(
-            name: "VRLearningSessions",
-            schema: "app",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false),
-                VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
-                TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
-                StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                EndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
-                Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
-                UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_VRLearningSessions", x => x.Id);
                 table.ForeignKey(
-                    name: "FK_VRLearningSessions_Teachers_TeacherId",
-                    column: x => x.TeacherId,
-                    principalSchema: "auth",
-                    principalTable: "Teachers",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Restrict);
-                table.ForeignKey(
-                    name: "FK_VRLearningSessions_VRLessons_VRLessonId",
+                    name: "FK_VRTasks_VRLessons_VRLessonId",
                     column: x => x.VRLessonId,
                     principalSchema: "app",
                     principalTable: "VRLessons",
@@ -841,6 +849,12 @@ public partial class IdentityMigration : Migration
             schema: "app",
             table: "VRTasks",
             column: "TaskLocationId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_VRTasks_VRLessonId",
+            schema: "app",
+            table: "VRTasks",
+            column: "VRLessonId");
     }
 
     /// <inheritdoc />
@@ -903,10 +917,6 @@ public partial class IdentityMigration : Migration
             schema: "app");
 
         migrationBuilder.DropTable(
-            name: "VRLessons",
-            schema: "app");
-
-        migrationBuilder.DropTable(
             name: "ActivityTypes",
             schema: "app");
 
@@ -916,6 +926,10 @@ public partial class IdentityMigration : Migration
 
         migrationBuilder.DropTable(
             name: "TaskLocations",
+            schema: "app");
+
+        migrationBuilder.DropTable(
+            name: "VRLessons",
             schema: "app");
 
         migrationBuilder.DropTable(

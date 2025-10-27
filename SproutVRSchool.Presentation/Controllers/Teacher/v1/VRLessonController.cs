@@ -1,19 +1,67 @@
-﻿using Asp.Versioning;
+﻿using System.Numerics;
+using System.Threading.Tasks;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SproutVRSchool.Application.RequestHandlers.Lessons.GetLessonById;
+using SproutVRSchool.Application.RequestHandlers.VRLessons.CreateVRLesson;
+using SproutVRSchool.Application.RequestHandlers.VRLessons.DesignVRLessonPreset;
+using SproutVRSchool.Application.RequestHandlers.VRLessons.GetVRLessonById;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
 
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/teacher/vrlessons")]
-public class VRLessonController : BaseApiController
+public class VRLessonController(IMediator mediator) : BaseApiController
 {
+    // ========================
+    // === GETs
+    // ========================
+
+    // GET: api/v1/teacher/vrlessons/{id}
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetVRLesson(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetVRLessonByIdQuery(id);
+        GetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
 
     // ========================
-    // === POST
+    // === POSTs
     // ========================
 
     // POST: api/v1/teacher/vrlessons
+    [HttpPost]
+    public async Task<IActionResult> CreateVRLesson(
+         [FromBody] CreateVRLessonCommand command,
+         CancellationToken cancellationToken)
+    {
+        Guid vrLessonId = await mediator.Send(command, cancellationToken);
 
+        // 201 Created response
+        return CreatedAtAction(
+            nameof(GetVRLesson),
+            new { id = vrLessonId },
+            new { id = vrLessonId });
+    }
+
+    // ========================
+    // === PATCHs
+    // ========================
+
+    // PATCH: api/v1/teacher/vrlessons/{id}/design-preset
+    [HttpPatch("{id:guid}/design-preset")]
+    public async Task<IActionResult> DesignVRLessonPreset(
+        [FromRoute] Guid id,
+        [FromBody] DesignVRLessonPresetCommand command,
+        CancellationToken cancellationToken)
+    {
+        command.VRLessonId = id;
+        await mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
 }
