@@ -32,7 +32,7 @@ public sealed class CreateVRLessonCommandValidator : AbstractValidator<CreateVRL
     }
 }
 
-internal sealed class CreateVRLessonTaskValidator : AbstractValidator<CreateVRLessonTaskRequestDto>
+public sealed class CreateVRLessonTaskValidator : AbstractValidator<CreateVRLessonTaskRequestDto>
 {
     public CreateVRLessonTaskValidator()
     {

@@ -11,3 +11,11 @@ public record CreateVRLessonCommand(
     string Description,
     TimeSpan MaxDuration,
     List<CreateVRLessonTaskRequestDto> Tasks) : IRequest<Guid>;
+
+public record CreateVRLessonTaskRequestDto(
+    Guid TaskLocationId,
+    Guid MapObjectId,
+    Guid ActivityTypeId,
+    int TaskNumber,
+    string Description
+);

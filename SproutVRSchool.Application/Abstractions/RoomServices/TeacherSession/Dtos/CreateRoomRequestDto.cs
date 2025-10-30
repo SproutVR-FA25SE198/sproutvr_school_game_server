@@ -5,13 +5,13 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dt
 public record CreateRoomRequestDto(
     string TeacherId,
     string VrLessionId,
-    string SessionName)
+    string ClassName)
 {
     public static CreateRoomRequestDto MapFromGrpcRequest(CreateRoomRequest request)
     {
         return new CreateRoomRequestDto(
             request.TeacherId,
             request.VrLessonId,
-            request.SessionName);
+            request.ClassName);
     }
 }

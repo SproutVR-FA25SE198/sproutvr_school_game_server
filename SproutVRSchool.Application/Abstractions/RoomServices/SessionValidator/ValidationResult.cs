@@ -77,27 +77,6 @@ public record ValidationResult(
           ),
           modelVRLearningSession
       );
-
-
-
-
-#pragma warning disable S125 // Sections of code should not be commented out
-    //// VR glasses can join the room, but the json content is empty (later stringify)
-    //public static ValidationResult Success(
-    //    string vrLearningSessionId,
-    //    ModelVRLearningSession modelVRLearningSession) =>
-    //    new ValidationResult(
-    //        IsValid: true,
-    //        JoinRoomResponseDto: new JoinRoomResponseDto(
-    //            JoinStatus.Success,
-    //            "Successfully joined the learning session.",
-    //            vrLearningSessionId,
-    //            PresetJsonContent: string.Empty
-    //        ),
-    //        modelVRLearningSession
-    //    );
-
-#pragma warning restore S125 // Sections of code should not be commented out
 }
 
 

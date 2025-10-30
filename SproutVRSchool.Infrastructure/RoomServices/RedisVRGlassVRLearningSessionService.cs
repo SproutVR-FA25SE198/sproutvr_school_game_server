@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
+using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
@@ -41,7 +42,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
     // === Methods
     // ===============================
     public async Task<JoinRoomResponseDto> JoinRoomAsync(JoinRoomRequestDto joinRoomRequestDto)
-
     {
         // 1. Validate the join attempt
         ValidationResult validation = await _validator.ValidateJoinAttemptAsync(
@@ -74,7 +74,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
 
         //UNDONE: 5. Stringtify the PresetJsonUrl and added
         // - validation at here is success
-        
 
         return validation.JoinRoomResponseDto!;
     }

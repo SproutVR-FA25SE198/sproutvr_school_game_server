@@ -6,6 +6,7 @@ using Newtonsoft.Json.Serialization;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
@@ -73,7 +74,7 @@ public sealed class DesignVRLessonPresetCommandHandler(
         byte[] byteArray = Encoding.UTF8.GetBytes(jsonContent);
         await using var stream = new MemoryStream(byteArray);
 
-        string fileName = "preset.json";
+        string fileName = AppCts.FilePaths.FILE_NAME_PRESET_VR_LESSON;
         string relativePath = await localStorageService.SaveVrLessonPresetAsync(
             vrLesson.Lesson.TeacherId,
             vrLesson.LessonId,
