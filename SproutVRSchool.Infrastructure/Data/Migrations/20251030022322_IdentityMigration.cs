@@ -513,6 +513,7 @@ public partial class IdentityMigration : Migration
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
                 VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
                 TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
+                ClassName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                 EndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                 Duration = table.Column<TimeSpan>(type: "interval", nullable: false),

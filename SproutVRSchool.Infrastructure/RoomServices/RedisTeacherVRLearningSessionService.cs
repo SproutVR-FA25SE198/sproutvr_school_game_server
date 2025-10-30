@@ -9,6 +9,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 using SproutVRSchool.Domain;
+using SproutVRSchool.Domain.Entities.VRLessons;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
@@ -21,6 +22,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     private readonly ICodeGeneratorService _codeGenerator;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<RedisTeacherVRLearningSessionService> _logger;
 
     // ===============================
@@ -37,6 +39,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     {
         _codeGenerator = codeGenerator;
         _dateTimeProvider = dateTimeProvider;
+        _unitOfWork = unitOfWork;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
         _logger = logger;
@@ -48,19 +51,25 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request)
     {
+        // 1. Get the preset file
+        VRLesson vrLesson = await _unitOfWork.Repository<VRLesson>().GetEntityByIdAsync(Guid.Parse(request.VrLessionId));
+
+        // 2. Create a model for injecting in redis
         var vrLearningSesison = new ModelVRLearningSession
         {
             VRLearningSessionId = Guid.NewGuid().ToString(),
             TeacherId = request.TeacherId,
             VRLessonId = request.VrLessionId,
-            Status = ModelVRLearningSessionStatus.Pending
+            ClassName = request.ClassName,
+            PresetJsonRelativeFilePath = vrLesson.PresetJsonRelativeFilePath,
+            Status = ModelVRLearningSessionStatus.Pending,
         };
 
-        // prefix for grouping keys
+        // 3. Prefix for grouping keys
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSesison.VRLearningSessionId}";
         string jsonPayLoad = JsonSerializer.Serialize(vrLearningSesison, _jsonOptions);
 
-        // set into the redis db
+        // 4. Set into the redis db
         await _database.JSON().SetAsync(sessionKey, "$", jsonPayLoad, When.NotExists);
         return new CreateRoomResponseDto(vrLearningSesison.VRLearningSessionId);
     }
@@ -148,6 +157,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         if (!await transaction.ExecuteAsync())
         {
             // UNDONE: Improve the error handling and retry mechanism
+            // UNDONE: Store to the DB
             return new CancelRoomResponseDto(
                 Message: "Cancellation failed. Please try again");
         }

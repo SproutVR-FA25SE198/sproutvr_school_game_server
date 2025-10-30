@@ -9,6 +9,7 @@ public sealed class VRLearningSession : BaseEntity
 {
     public Guid VRLessonId { get; set; }
     public Guid TeacherId { get; set; }
+    public string ClassName { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
     public TimeSpan Duration { get; set; }

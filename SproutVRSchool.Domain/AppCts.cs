@@ -62,6 +62,7 @@ public static class AppCts
         public const string FOLDER_NAME_PRESETS = "Presets";
         public const string FOLDER_NAME_IMAGES = "Images";
         public const string PREFIX_PUBLIC_CONTENT_PATH = "/content";
+        public const string FILE_NAME_PRESET_VR_LESSON = "preset.json";
     }
 
     public static class SeederFilePaths

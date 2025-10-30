@@ -24,6 +24,10 @@ internal sealed class VRLearningSessionConfiguration : BaseEntityConfiguration<V
         builder.HasIndex(vrls => vrls.TeacherId);
 
         // Properties
+        builder.Property(vrls => vrls.ClassName)
+            .IsRequired()
+            .HasMaxLength(100);
+
         builder.Property(vrls => vrls.StartTime)
             .IsRequired();
 
