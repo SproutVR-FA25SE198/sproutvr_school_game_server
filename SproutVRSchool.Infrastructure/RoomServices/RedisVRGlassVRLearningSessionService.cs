@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
+using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
@@ -21,6 +22,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
     private readonly IDatabase _database;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly ILocalStorageService _localStorageService;
     private readonly IVRLearningSessionValidator _validator;
 
     // ===============================
@@ -30,10 +32,12 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
     public RedisVRGlassVRLearningSessionService(
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
+        ILocalStorageService localStorageService,
         IVRLearningSessionValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
         _dateTimeProvider = dateTimeProvider;
+        _localStorageService = localStorageService;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _validator = validator;
     }
@@ -71,8 +75,9 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
             throw new Exception($"Failed to update device status for session '{vrLearningSession.VRLearningSessionId}'.");
         }
 
-        //UNDONE: 5. Stringtify the PresetJsonUrl and added
-        // - validation at here is success
+        // 4. Stringtify the PresetJsonUrl and added
+        string fileContent = await _localStorageService.LoadFileContentAsync(vrLearningSession.PresetJsonRelativeFilePath!);
+        validation.JoinRoomResponseDto!.PresetJsonContent = fileContent;
 
         return validation.JoinRoomResponseDto!;
     }

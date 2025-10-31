@@ -73,7 +73,6 @@ internal sealed class RoomValidator : IVRLearningSessionValidator
         }
 
         // 5. Ok if passing all of those validation, return success with metadata
-
         return ValidationResult.Success(
             vrLearningSessionId: vrLearningSession.VRLearningSessionId,
             presetJsonContent: string.Empty,

@@ -52,4 +52,11 @@ public interface ILocalStorageService
     /// </summary>
     /// <param name="publicRelativeFilePath"></param>
     Task DeleteFileInLocalStorageAsync(string publicRelativeFilePath);
+
+    /// <summary>
+    /// Load the content based on the public relative file path
+    /// </summary>
+    /// <param name="publicRelativeFilePath"></param>
+    /// <returns></returns>
+    Task<string> LoadFileContentAsync(string publicRelativeFilePath);
 }
