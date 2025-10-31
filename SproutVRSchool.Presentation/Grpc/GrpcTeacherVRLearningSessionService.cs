@@ -58,7 +58,7 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
     /// <summary>
     /// A function to create a VR learning session room
     /// </summary>
-    /// <param name="request"></param>
+    /// <param name="request"></param>   
     /// <param name="context"></param>
     /// <returns></returns>
     public override async Task<CreateRoomResponse> CreateRoom(CreateRoomRequest request, ServerCallContext context)

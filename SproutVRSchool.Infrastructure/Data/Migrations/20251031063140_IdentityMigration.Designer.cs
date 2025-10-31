@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251030022322_IdentityMigration")]
+    [Migration("20251031063140_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />

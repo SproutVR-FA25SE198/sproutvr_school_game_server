@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using SproutVRSchool.Presentation.ExceptionHandlers;
+using SproutVRSchool.Presentation.Interceptors.UnaryUnary;
 
 namespace SproutVRSchool.Presentation.Extensions;
 
@@ -8,6 +9,7 @@ internal static partial class ServiceCollectionExtensions
     // =========================================
     // === Entry Point for service collections
     // =========================================
+
     public static IServiceCollection AddPresentation(
         this IServiceCollection service)
     {
@@ -29,7 +31,6 @@ internal static partial class ServiceCollectionExtensions
 
     /*
         Add configuration for controllers to use the fluent validations instead of default model state 
-
      */
     private static void AddControllersConfigs(this IServiceCollection service)
     {
@@ -82,6 +83,7 @@ internal static partial class ServiceCollectionExtensions
         service.AddGrpc(options =>
         {
             options.EnableDetailedErrors = true;
+            options.Interceptors.Add<NotFoundInterceptor>();
         });
 
         service.AddGrpcReflection();

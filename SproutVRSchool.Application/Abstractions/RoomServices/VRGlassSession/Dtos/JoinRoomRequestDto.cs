@@ -4,12 +4,10 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dt
 
 public record JoinRoomRequestDto(
     string RoomCode,
-    string VrDeviceSerialNumber,
-    string VrDeviceName)
+    string VrDeviceSerialNumber)
 {
     public static JoinRoomRequestDto MapFromGrpcRequest(JoinRoomRequest request) =>
         new JoinRoomRequestDto(
             RoomCode: request.RoomCode,
-            VrDeviceSerialNumber: request.VrDeviceSerialNumber,
-            VrDeviceName: request.VrDeviceName);
+            VrDeviceSerialNumber: request.VrDeviceSerialNumber);
 }

@@ -26,7 +26,7 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\Auth\" />
-		<Folder Include="Middlewares\" />
+		<Folder Include="Interceptors\Bidirectional\" />
 	</ItemGroup>
 
 </Project>

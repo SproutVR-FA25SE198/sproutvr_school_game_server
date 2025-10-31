@@ -23,10 +23,10 @@ public sealed class GetLessonByIdQueryHandler(
         Lesson? lesson = await uow.Repository<Lesson>()
             .GetEntityBySpec(spec);
 
-        // 2. If not found, throw NotFoundException
+        // 2. If not found, throw SvrNotFoundException
         if (lesson is null)
         {
-            throw new NotFoundException($"Lesson with ID {request.Id} not found.");
+            throw new SvrNotFoundException($"Lesson with ID {request.Id} not found.");
         }
 
         // 3. Map the lesson entity to GetLessonByIdResponseDto

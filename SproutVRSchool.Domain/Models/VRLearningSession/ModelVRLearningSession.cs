@@ -11,6 +11,6 @@ public class ModelVRLearningSession
     public DateTimeOffset? StartTimeAtUtc { get; set; }
     public DateTimeOffset? EndTimeAtUtc { get; set; }
     public string? PresetJsonRelativeFilePath { get; set; }
-    public ModelVRLearningSessionStatus Status { get; set; } = ModelVRLearningSessionStatus.Pending;
     public Dictionary<string, ModelVRDevice> Devices { get; set; } = new();
+    public ModelVRLearningSessionStatus Status { get; set; } = ModelVRLearningSessionStatus.Pending;
 }

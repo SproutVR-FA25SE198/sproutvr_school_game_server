@@ -27,13 +27,13 @@ public sealed class DesignVRLessonPresetCommandHandler(
         // 2. If not found, throw not found exception
         if (vrLesson == null)
         {
-            throw new NotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
+            throw new SvrNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
         }
 
         // 3. Construct the preset object
         var presetFileObject = new PresetFileDto
         {
-            Duration = request.Duration,
+            Duration = vrLesson.MaxDuration.TotalSeconds,
             IsSequential = request.IsSequential,
             MapCode = vrLesson.Map.MapCode,
             VrTasks = vrLesson.VRTasks.Select(task =>
@@ -89,7 +89,7 @@ public sealed class DesignVRLessonPresetCommandHandler(
         uow.Repository<VRLesson>().Update(vrLesson);
         await uow.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Serlize params into json content: {JsonContent}", jsonContent);
+        logger.LogInformation("Serialize params into json content: {JsonContent}", jsonContent);
 
         return Unit.Value;
     }

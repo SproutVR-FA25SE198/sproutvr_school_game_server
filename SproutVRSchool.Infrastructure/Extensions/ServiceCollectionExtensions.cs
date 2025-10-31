@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Retry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
@@ -9,6 +11,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
+using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Infrastructure.Backgrounds;
 using SproutVRSchool.Infrastructure.Clock;
@@ -41,7 +44,30 @@ public static partial class ServiceCollectionExtensions
 
         service.AddBackgrounds();
 
+        service.AddRetryPolicyRegistry();
+
         return service;
+    }
+
+    /*
+        Add Retry Policy Registry using Polly
+     */
+    private static void AddRetryPolicyRegistry(this IServiceCollection service)
+    {
+        // Configure retry policyes for Redis transaction
+        service.AddResiliencePipeline<string, bool>(
+            AppCts.RetryKeys.REDIS_TRANSACTION_KEY,
+            (pipelineBuilder) =>
+        {
+            pipelineBuilder.AddRetry(new RetryStrategyOptions<bool>
+            {
+                ShouldHandle = new PredicateBuilder<bool>().HandleResult(false),
+
+                MaxRetryAttempts = 3,
+                BackoffType = DelayBackoffType.Exponential, // Wait 50ms, then 100ms, then 200ms
+                Delay = TimeSpan.FromMilliseconds(50)
+            });
+        });
     }
 
     /*

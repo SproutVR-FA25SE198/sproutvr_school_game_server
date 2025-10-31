@@ -63,7 +63,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
         ITransaction transaction = _database.CreateTransaction();
         string deviceRedisPath = $"$.Devices['{joinRoomRequestDto.VrDeviceSerialNumber}']";
 
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.DeviceName", JsonSerializer.Serialize(joinRoomRequestDto.VrDeviceName));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.Status", JsonSerializer.Serialize(ModelVRDeviceStatus.Connected, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.JoinedAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow, _jsonOptions));
 

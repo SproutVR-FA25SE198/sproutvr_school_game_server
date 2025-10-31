@@ -9,6 +9,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 		<PackageReference Include="NRedisStack" Version="1.1.1" />
+		<PackageReference Include="Polly.Extensions" Version="8.6.4" />
 	</ItemGroup>
 
 	<ItemGroup>

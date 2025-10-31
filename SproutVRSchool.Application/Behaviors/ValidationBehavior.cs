@@ -25,14 +25,14 @@ internal sealed class ValidationBehavior<TRequest, TResponse>
         ValidationResult[] validationResults = await Task.WhenAll(_validators
             .Select(v => v.ValidateAsync(requestContext, cancellationToken)));
 
-        IEnumerable<ValidationError> errors = validationResults
+        IEnumerable<SvrValidationError> errors = validationResults
             .Where(r => !r.IsValid && r.Errors.Any())
             .SelectMany(r => r.Errors)
-            .Select(err => new ValidationError(err.PropertyName, err.ErrorMessage));
+            .Select(err => new SvrValidationError(err.PropertyName, err.ErrorMessage));
 
         if (errors.Any())
         {
-            throw new SproutVRSchool.Application.Exceptions.ValidationException(errors);
+            throw new SproutVRSchool.Application.Exceptions.SvrValidationException(errors);
         }
 
         // If no error, proceed

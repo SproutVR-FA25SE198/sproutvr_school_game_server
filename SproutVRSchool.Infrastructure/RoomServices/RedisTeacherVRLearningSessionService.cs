@@ -1,15 +1,21 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Concurrent;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using NRedisStack.RedisStackCommands;
+using Polly;
+using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
+using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.RequestHandlers.VRLessons;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
+using SproutVRSchool.Domain.Entities.VRTasks;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
@@ -23,6 +29,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ResiliencePipelineProvider<string> _pipelineProvider;
     private readonly ILogger<RedisTeacherVRLearningSessionService> _logger;
 
     // ===============================
@@ -34,12 +41,14 @@ internal sealed class RedisTeacherVRLearningSessionService
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         IUnitOfWork unitOfWork,
+        ResiliencePipelineProvider<string> resiliencePipelineProvider,
         ILogger<RedisTeacherVRLearningSessionService> logger
         )
     {
         _codeGenerator = codeGenerator;
         _dateTimeProvider = dateTimeProvider;
         _unitOfWork = unitOfWork;
+        _pipelineProvider = resiliencePipelineProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
         _logger = logger;
@@ -51,8 +60,14 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request)
     {
-        // 1. Get the preset file
+        // 1. Get essential variables
         VRLesson vrLesson = await _unitOfWork.Repository<VRLesson>().GetEntityByIdAsync(Guid.Parse(request.VrLessionId));
+
+        // If not found, then throw back to the client
+        if (vrLesson == null)
+        {
+            throw new SvrNotFoundException($"VR Lesson with ID '{request.VrLessionId}' not found.");
+        }
 
         // 2. Create a model for injecting in redis
         var vrLearningSesison = new ModelVRLearningSession
@@ -61,7 +76,6 @@ internal sealed class RedisTeacherVRLearningSessionService
             TeacherId = request.TeacherId,
             VRLessonId = request.VrLessionId,
             ClassName = request.ClassName,
-            PresetJsonRelativeFilePath = vrLesson.PresetJsonRelativeFilePath,
             Status = ModelVRLearningSessionStatus.Pending,
         };
 
@@ -77,62 +91,76 @@ internal sealed class RedisTeacherVRLearningSessionService
     public async Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request)
     {
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{request.LearningSessionId}";
-        string roomCode = _codeGenerator.GenerateCode();
-        string roomCodeKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE}:{roomCode}";
+        string roomCode = string.Empty;
+        ResiliencePipeline<bool> retryPipeline = _pipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
 
-        // UNDONE:
-        // Get the list tasks related to the VRLesson from repositories
-        // Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
-        var fakeTasksForLesson = new List<ModelTaskProgress>
+        // 1. Get vr lesson info for duration and task lists
+        VRLesson vrLesson = await _unitOfWork.Repository<VRLesson>().GetEntityByIdAsync(Guid.Parse(request.VrLessonId));
+
+        // If not found, then throw back to the client
+        if (vrLesson == null)
         {
-            new ModelTaskProgress { VRTaskId = "task-uuid-01", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted},
-            new ModelTaskProgress { VRTaskId = "task-uuid-02", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted},
-            new ModelTaskProgress { VRTaskId = "task-uuid-03", IsCompleted = false, IsCorrect = false, Status = ModelTaskProgressStatus.Uncompleted}
-        };
+            throw new SvrNotFoundException($"VR Lesson with ID '{request.VrLessonId}' not found.");
+        }
 
-        // Generate code for the room
-        var initialDevices = request.AssignedDeviceSerials.ToDictionary(
-            serialNumber => serialNumber, serialNumber => new ModelVRDevice
+        // 2. Get the list tasks related to the VRLesson from repositories
+        // Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
+        (IReadOnlyList<VRTask> Data, int Count) vrTasks = await _unitOfWork.Repository<VRTask>()
+            .ListAsync(new VRTaskSpecification(vrLesson.Id));
+
+        var taskTemplate = vrTasks.Data.ToDictionary(
+            vrTask => vrTask.Id.ToString(),
+            vrTask => new ModelTaskProgress
             {
-                SerialNumber = serialNumber,
-                Status = ModelVRDeviceStatus.Disconnected,
-                Tasks = new System.Collections.Concurrent.ConcurrentDictionary<string, ModelTaskProgress>(
-                    fakeTasksForLesson.ToDictionary(
-                        task => task.VRTaskId,
-                        task => task
-                    )
-                )
+                VRTaskId = vrTask.Id.ToString(),
+                IsCompleted = false,
+                IsCorrect = false,
+                CompletionTimeAtUtc = null,
+                Status = ModelTaskProgressStatus.Uncompleted
             });
 
-        ITransaction transaction = _database.CreateTransaction();
+        var initialDevices = request.AssignedDeviceSerials.ToDictionary(
+            el => el.VrDeviceSerialNumber, el => new ModelVRDevice
+            {
+                VrDeviceSerialNumber = el.VrDeviceSerialNumber,
+                StudentName = el.StudentName,
+                Status = ModelVRDeviceStatus.Disconnected,
+                Tasks = new ConcurrentDictionary<string, ModelTaskProgress>(taskTemplate)
+            });
 
-        // Set the roomcode -> vr_learning_session_id for lookup
-        // only set if the room code is not exist, if already exist, then generate the other code
-        _ = transaction.StringSetAsync(
-            roomCodeKey,
-            request.LearningSessionId,
-            TimeSpan.FromMinutes(AppCts.Redis.CODE_DURATION_IN_MINUTES),
-            When.NotExists);
-
-        // Set into the active lists, but must be in the tranasction
-        _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, request.LearningSessionId);
-
-        // Set params to the room to Activate the room
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(request.StartTimeUtc));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", request.DurationInMinutes);
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
-
-        // UNDONE: Set the PresetJsonRelativeFilePath extract from the database
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.PresetJsonRelativeFilePath", JsonSerializer.Serialize("/presets/money", _jsonOptions));
-
-        if (!await transaction.ExecuteAsync())
+        // 3. Retry execute the activate if failed due to room code conflict
+        bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
         {
-            // UNDONE: Improve the error handling and retry mechanism
-            // This can fail if the room code wasn't unique or the session key doesn't exist.
-            // A retry loop could be added here for more robustness.
-            throw new Exception("Failed to activate session. The generated room code might have conflicted or the session ID is invalid.");
+            roomCode = _codeGenerator.GenerateCode();
+            string roomCodeKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE}:{roomCode}";
+
+            ITransaction transaction = _database.CreateTransaction();
+
+            // Set the roomcode -> vr_learning_session_id for lookup
+            // only set if the room code is not exist, if already exist, then generate the other code
+            _ = transaction.StringSetAsync(
+                roomCodeKey,
+                request.LearningSessionId,
+                vrLesson.MaxDuration,
+                When.NotExists);
+
+            // Set into the active lists, but must be in the tranasction
+            _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, request.LearningSessionId);
+
+            // Set params to the room to Activate the room
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(request.StartTimeUtc));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", vrLesson.MaxDuration.TotalMinutes);
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.PresetJsonRelativeFilePath", JsonSerializer.Serialize(vrLesson.PresetJsonRelativeFilePath, _jsonOptions));
+
+            return await transaction.ExecuteAsync();
+        });
+
+        if (!isSuccess)
+        {
+            throw new Exception("Failed to activate session. Please try again.");
         }
 
         return new ActivateRoomResponseDto(roomCode);

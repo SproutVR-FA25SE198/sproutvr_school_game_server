@@ -12,7 +12,7 @@ public class FileNotSupportedExceptionHandler(
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         // If not, move to the next handler in the pipeline
-        if (exception is not FileNotSupportedException fileException)
+        if (exception is not SvrFileNotSupportedException fileException)
         {
             return false;
         }
