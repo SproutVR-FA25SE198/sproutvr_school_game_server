@@ -7,7 +7,7 @@ public class ModelVRLearningSession
     public string TeacherId { get; set; }
     public string ClassName { get; set; }
     public string? RoomCode { get; set; }
-    public int? DurationInMinutes { get; set; }
+    public int? DurationInSeconds { get; set; }
     public DateTimeOffset? StartTimeAtUtc { get; set; }
     public DateTimeOffset? EndTimeAtUtc { get; set; }
     public string? PresetJsonRelativeFilePath { get; set; }

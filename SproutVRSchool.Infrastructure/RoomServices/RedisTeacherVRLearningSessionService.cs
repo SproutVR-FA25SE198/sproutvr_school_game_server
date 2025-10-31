@@ -151,7 +151,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(request.StartTimeUtc));
-            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInMinutes", vrLesson.MaxDuration.TotalMinutes);
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInSeconds", vrLesson.MaxDuration.TotalSeconds);
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.PresetJsonRelativeFilePath", JsonSerializer.Serialize(vrLesson.PresetJsonRelativeFilePath, _jsonOptions));
 
