@@ -7,10 +7,8 @@ namespace SproutVRSchool.Application.RequestHandlers.VRLessons.DesignVRLessonPre
 // ================================
 // === For Command
 // ================================
-
 public record DesignVRLessonPresetCommand
 (
-    double Duration,
     bool IsSequential,
     List<DesignVRLessonPresetTaskConfigRequestDto> TaskConfigs
 ) : IRequest<Unit>

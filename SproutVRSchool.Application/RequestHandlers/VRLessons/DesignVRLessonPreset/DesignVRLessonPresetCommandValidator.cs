@@ -16,9 +16,6 @@ public sealed class DesignVRLessonPresetCommandValidator
         RuleFor(x => x.VRLessonId)
         .NotEmpty().WithMessage("VRLessonId is required.");
 
-        RuleFor(x => x.Duration)
-        .GreaterThan(0).WithMessage("Duration must be a positive time span.");
-
         RuleFor(x => x.TaskConfigs)
             .NotEmpty().WithMessage("At least one TaskConfig is required.");
 
