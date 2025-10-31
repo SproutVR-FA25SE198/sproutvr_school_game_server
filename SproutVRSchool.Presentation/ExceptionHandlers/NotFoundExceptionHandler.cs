@@ -9,7 +9,7 @@ internal sealed class NotFoundExceptionHandler(
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        if (exception is not NotFoundException notFoundException)
+        if (exception is not SvrNotFoundException notFoundException)
         {
             return false;
         }

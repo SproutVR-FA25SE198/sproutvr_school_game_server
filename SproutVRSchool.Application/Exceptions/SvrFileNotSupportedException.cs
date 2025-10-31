@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace SproutVRSchool.Application.Exceptions;
 
-public sealed class FileNotSupportedException : Exception
+public sealed class SvrFileNotSupportedException : Exception
 {
     public string FileName { get; }
-    public FileNotSupportedException(string? message) : base(message)
+    public SvrFileNotSupportedException(string? message) : base(message)
     {
     }
 
-    public FileNotSupportedException() :
+    public SvrFileNotSupportedException() :
         base("The specified file type is not supported")
     {
 

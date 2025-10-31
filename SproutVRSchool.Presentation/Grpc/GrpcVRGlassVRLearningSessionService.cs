@@ -118,6 +118,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             }
         }
     }
+
 #pragma warning disable S1172 // Unused method parameters should be removed
     private async Task SendServerMessagesAsync(
         IAsyncStreamReader<ClientToServerMessage> requestStream,

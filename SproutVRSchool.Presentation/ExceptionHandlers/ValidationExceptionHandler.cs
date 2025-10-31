@@ -7,9 +7,9 @@ internal sealed class ValidationExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        // Only handle ValidationException
+        // Only handle SvrValidationException
         // If not, next handler in chain
-        if (exception is not Application.Exceptions.ValidationException validationException)
+        if (exception is not Application.Exceptions.SvrValidationException validationException)
         {
             return false;
         }

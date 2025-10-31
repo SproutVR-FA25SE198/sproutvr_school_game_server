@@ -83,4 +83,14 @@ public static class AppCts
         public static readonly string LessonFilePath = Path.Combine(JsonFolderPath, "Lesson.json");
         public static readonly string VRLessonFilePath = Path.Combine(JsonFolderPath, "VRLesson.json");
     }
+
+    public static class Grpc
+    {
+        public const string ERROR_MESSAGE_KEY = "error_message";
+    }
+
+    public static class RetryKeys
+    {
+        public const string REDIS_TRANSACTION_KEY = "Redis_Transaction_Retry";
+    }
 }

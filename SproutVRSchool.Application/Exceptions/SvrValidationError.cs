@@ -1,4 +1,4 @@
 ﻿namespace SproutVRSchool.Application.Exceptions;
 
-public sealed record ValidationError
+public sealed record SvrValidationError
     (string PropertyName, string ErrorMessage);
