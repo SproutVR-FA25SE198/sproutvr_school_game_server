@@ -64,13 +64,13 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         await WriteFileAsync(lessonResourcesPath, fileName, fileContent);
 
         // return the relative path
-        string relativeUrlPath = Path.Combine(
+        string relativePublicFilePath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
             AppCts.FilePaths.FOLDER_NAME_RESOURCES,
             fileName);
 
-        return ConvertToPublicPath(relativeUrlPath);
+        return ConvertToPublicPath(relativePublicFilePath);
     }
 
     public async Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
@@ -84,14 +84,14 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         await WriteFileAsync(vrLessonImagesPath, fileName, fileContent);
 
         // return the relative path
-        string relativeUrlPath = Path.Combine(
+        string relativePublicFilePath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
             vrLessonId.ToString(),
             AppCts.FilePaths.FOLDER_NAME_IMAGES,
             fileName);
 
-        return ConvertToPublicPath(relativeUrlPath);
+        return ConvertToPublicPath(relativePublicFilePath);
     }
 
     public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
@@ -103,6 +103,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
         await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
 
+        // return the local relative path
         string relativeUrlPath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
@@ -119,12 +120,14 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
         await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
 
+        // return the local relative path
         string relativeUrlPath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
             vrLessonId.ToString(),
             AppCts.FilePaths.FOLDER_NAME_PRESETS,
             fileName);
+
         return ConvertToPublicPath(relativeUrlPath);
     }
 
@@ -142,6 +145,23 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task<string> LoadFileContentAsync(string publicRelativeFilePath)
+    {
+        if (string.IsNullOrEmpty(publicRelativeFilePath))
+        {
+            return string.Empty;
+        }
+
+        string absoluteFilePath = ConvertToAbsoluteLocalFilePath(publicRelativeFilePath);
+        if (string.IsNullOrEmpty(absoluteFilePath))
+        {
+            return string.Empty;
+        }
+
+        string jsonContent = await File.ReadAllTextAsync(absoluteFilePath);
+        return jsonContent;
     }
 
     // =============================
@@ -169,11 +189,11 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     /// e.g. C:\ProgramData\SproutVRSchool\Content\{teacher_id}\{lesson_id}\Resources\file.pdf
     /// e.g. Into: /content/{teacher_id}/{lesson_id}/Resources/file.pdf
     /// </summary>
-    /// <param name="windowPath"></param>
+    /// <param name="localWindowPath"></param>
     /// <returns></returns>
-    private static string ConvertToPublicPath(string windowPath)
+    private static string ConvertToPublicPath(string localWindowPath)
     {
-        return $"{AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH}/{windowPath.Replace('\\', '/')}";
+        return $"{AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH}/{localWindowPath.Replace('\\', '/')}";
     }
 
     /// <summary>
@@ -195,4 +215,5 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
         return absoluteFilePath;
     }
+
 }
