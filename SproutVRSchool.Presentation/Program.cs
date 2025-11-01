@@ -27,7 +27,7 @@ if (env.IsDevelopment())
     app.ApplyDatabaseMigrations();
 
 #pragma warning disable S125 // Sections of code should not be commented out
-    //await app.ApplySeedingDevelopment();
+    await app.ApplySeedingDevelopment();
     app.MapGrpcReflectionService().AllowAnonymous();
 #pragma warning restore S125 // Sections of code should not be commented out
 }
