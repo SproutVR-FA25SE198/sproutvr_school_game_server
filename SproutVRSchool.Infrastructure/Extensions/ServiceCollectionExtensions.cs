@@ -103,7 +103,6 @@ public static partial class ServiceCollectionExtensions
     /// Related to the application's repositories
     /// </summary>
     /// <param name="service"></param>
-
     private static void AddRepositories(this IServiceCollection service)
     {
         service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

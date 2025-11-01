@@ -50,9 +50,6 @@ public static class AppCts
         // Windows: C:\ProgramData
         // Linux: /var/lib
 
-        //private static readonly string CommonAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-        //public static readonly string LocalContentRootPath = Path.Combine(CommonAppDataPath, "SproutVRSchool", "Content");
-
         //// "C:\ProgramData\SproutVRSchool\Content\Avatars"
         //public static readonly string AvatarsFolderPath = Path.Combine(LocalContentRootPath, "Avatars");
         //public static readonly string DefaultAvatarFilePath = Path.Combine(AvatarsFolderPath, "default_avatar.png");

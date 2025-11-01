@@ -36,4 +36,7 @@ COPY --from=publish /app/publish .
 RUN mkdir /app/storage
 RUN chmod -R 777 /app/storage
 
+RUN mkdir /app/tempseedings
+RUN chmod -R 777 /app/tempseedings
+
 ENTRYPOINT ["dotnet", "SproutVRSchool.Presentation.dll"]
