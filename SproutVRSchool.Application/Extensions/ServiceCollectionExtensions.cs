@@ -11,6 +11,8 @@ public static partial class ServiceCollectionExtensions
     {
         AddMediaR(service);
 
+        service.AddHttpClient();
+
         return service;
     }
 

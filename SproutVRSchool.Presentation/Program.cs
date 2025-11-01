@@ -25,8 +25,11 @@ if (env.IsDevelopment())
 {
     app.ApplyDatabaseDrop(miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false);
     app.ApplyDatabaseMigrations();
-    await app.ApplySeedingDevelopment();
+
+#pragma warning disable S125 // Sections of code should not be commented out
+    //await app.ApplySeedingDevelopment();
     app.MapGrpcReflectionService().AllowAnonymous();
+#pragma warning restore S125 // Sections of code should not be commented out
 }
 else if (env.IsProduction())
 {

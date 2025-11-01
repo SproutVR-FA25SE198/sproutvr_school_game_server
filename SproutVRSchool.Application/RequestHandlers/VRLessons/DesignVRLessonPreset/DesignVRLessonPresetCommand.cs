@@ -60,7 +60,7 @@ public class PresetMapObjectDto
 }
 
 /// <summary>
-/// Represents the activity type and its dynamic configuration.
+/// Represents the activity type and its dynamic _configuration.
 /// </summary>
 public class PresetActivityTypeDto
 {

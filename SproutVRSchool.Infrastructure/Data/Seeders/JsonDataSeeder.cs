@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Application.Exceptions;
 using SproutVRSchool.Domain.Entities;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
@@ -35,10 +37,10 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
     /// <summary>
     /// Add the relative path of the json file as longh as the entity type
     /// </summary>
-    /// <param name="relativefilePath"></param>
-    public void AddRelativePath<T>(string relativefilePath) where T : BaseEntity
+    /// <param name="relativeFilePath"></param>
+    public void AddRelativePath<T>(string relativeFilePath) where T : BaseEntity
     {
-        _seedFileInfors.Add((relativefilePath, typeof(T)));
+        _seedFileInfors.Add((relativeFilePath, typeof(T)));
     }
 
     /// <summary>
@@ -118,6 +120,33 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
         }
 
         // Save change to the database
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task SeedSingleFileAsync<T>(string absoluteFilePath, DbSet<T> dbSet) where T : class
+    {
+        if (!File.Exists(absoluteFilePath))
+        {
+            throw new SvrNotFoundException($"Seed file not found: {absoluteFilePath}");
+        }
+
+        string jsonContent = await File.ReadAllTextAsync(absoluteFilePath);
+        var settings = new JsonSerializerSettings()
+        {
+            NullValueHandling = NullValueHandling.Include,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            DateFormatHandling = DateFormatHandling.IsoDateFormat,
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+        };
+
+        List<T>? entities = JsonConvert.DeserializeObject<List<T>>(jsonContent, settings);
+        if (entities is null || !entities.Any())
+        {
+            throw new SvrNotFoundException($"No data found in seed file: {absoluteFilePath}");
+        }
+
+        // Save change to the database
+        await dbSet.AddRangeAsync(entities);
         await _dbContext.SaveChangesAsync();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
 using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Domain.Entities.Lessons;
@@ -45,4 +47,12 @@ public interface ISchoolServerDbContext
     DbSet<UserAccount> UserAccounts { get; set; }
     DbSet<Teacher> Teachers { get; set; }
     DbSet<SchoolAdmin> SchoolAdmins { get; set; }
+
+    // =============================
+    // ==== DbContext Methods
+    // =============================
+    Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+    Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default);
+    Task RollbackTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default);
 }

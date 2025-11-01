@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
@@ -77,5 +78,25 @@ public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserA
 
         // Apply all configurations from the current assembly
         builder.ApplyConfigurationsFromAssembly(typeof(SchoolServerDbContext).Assembly);
+    }
+
+    async Task<bool> ISchoolServerDbContext.SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return await base.SaveChangesAsync(cancellationToken) > 0;
+    }
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return await base.Database.BeginTransactionAsync(cancellationToken);
+    }
+
+    public async Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default)
+    {
+        await transaction.CommitAsync(cancellationToken);
+    }
+
+    public async Task RollbackTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default)
+    {
+        await transaction.RollbackAsync(cancellationToken);
     }
 }
