@@ -46,6 +46,9 @@ app.UseExceptionHandler();
 
 // Static Files & Routing
 app.ApplyStaticMiddleware();
+
+app.UseCors("DesktopAppPolicy");
+
 app.UseRouting();
 
 // Controller

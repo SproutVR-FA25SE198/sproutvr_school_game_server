@@ -29,6 +29,34 @@ internal static partial class ServiceCollectionExtensions
     // === Services
     // =========================================
 
+    private static void AddCorsConfigs(
+        this IServiceCollection service, IConfiguration configuration)
+    {
+        string? desktopAppUrl = configuration.GetValue<string>("DesktopAppUrl");
+        service.AddCors(options =>
+        {
+            options.AddPolicy("DesktopAppPolicy", policy =>
+            {
+                if (!string.IsNullOrEmpty(desktopAppUrl))
+                {
+                    // Configure specific origin for the desktop app, allowing headers and credentials
+                    // Note: AllowCredentials requires specifying the origin(s), not using AllowAnyOrigin()
+                    policy.WithOrigins(desktopAppUrl)
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+                }
+                else
+                {
+                    // Fallback for maximum flexibility (e.g., if DesktopAppUrl is missing, or for general development)
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                }
+            });
+        });
+    }
+
     /*
         Add configuration for controllers to use the fluent validations instead of default model state 
      */
