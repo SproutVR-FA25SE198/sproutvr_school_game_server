@@ -11,7 +11,7 @@ internal static partial class ServiceCollectionExtensions
     // =========================================
 
     public static IServiceCollection AddPresentation(
-        this IServiceCollection service)
+        this IServiceCollection service, IConfiguration configuration)
     {
 
         service.AddControllersConfigs();
@@ -21,6 +21,8 @@ internal static partial class ServiceCollectionExtensions
         service.AddExceptionHandlers();
 
         service.AddGrpcConfigs();
+
+        service.AddCorsConfigs(configuration);
 
         return service;
     }
