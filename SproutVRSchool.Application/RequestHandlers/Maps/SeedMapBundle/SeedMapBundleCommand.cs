@@ -15,8 +15,14 @@ using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Exceptions;
 using SproutVRSchool.Domain;
+using SproutVRSchool.Domain.Entities.ActivityTypes;
+using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.Maps;
 using SproutVRSchool.Domain.Entities.MasterSubjects;
+using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
+using SproutVRSchool.Domain.Entities.ObjectLocations;
+using SproutVRSchool.Domain.Entities.Subjects;
+using SproutVRSchool.Domain.Entities.TaskLocations;
 
 namespace SproutVRSchool.Application.RequestHandlers.Maps.SeedMapBundle;
 
@@ -120,12 +126,21 @@ public sealed class SeedMapBundleCommandHandler : IRequestHandler<SeedMapBundleC
         {
             // Seed .json file data into the database
             await _fileSeeder.SeedSingleFileAsync<MasterSubject>(Path.Combine(_tempExtractedPath, "MasterSubject.json"), dbContext.MasterSubjects);
+            await _fileSeeder.SeedSingleFileAsync<Subject>(Path.Combine(_tempExtractedPath, "Subject.json"), dbContext.Subjects);
+            await _fileSeeder.SeedSingleFileAsync<ActivityType>(Path.Combine(_tempExtractedPath, "ActivityType.json"), dbContext.ActivityTypes);
+            await _fileSeeder.SeedSingleFileAsync<Map>(Path.Combine(_tempExtractedPath, "Map.json"), dbContext.Maps);
+            await _fileSeeder.SeedSingleFileAsync<MapObject>(Path.Combine(_tempExtractedPath, "MapObject.json"), dbContext.MapObjects);
+            await _fileSeeder.SeedSingleFileAsync<TaskLocation>(Path.Combine(_tempExtractedPath, "TaskLocation.json"), dbContext.TaskLocations);
+            await _fileSeeder.SeedSingleFileAsync<ObjectActivityType>(Path.Combine(_tempExtractedPath, "ObjectActivityType.json"), dbContext.ObjectActivityTypes);
+            await _fileSeeder.SeedSingleFileAsync<ObjectLocation>(Path.Combine(_tempExtractedPath, "ObjectLocation.json"), dbContext.ObjectLocations);
 
+            // Save changes and commit transaction to DB
             await dbContext.SaveChangesAsync(cancellationToken);
             await dbContext.CommitTransactionAsync(transaction, cancellationToken);
         }
         catch (Exception ex)
         {
+            CleanUp();
             await dbContext.RollbackTransactionAsync(transaction, cancellationToken);
             throw new SvrInstallFailedException($"Failed to seed map data from folder '{_tempExtractedPath}': {ex.Message}");
         }
@@ -157,6 +172,7 @@ public sealed class SeedMapBundleCommandHandler : IRequestHandler<SeedMapBundleC
         }
         catch (Exception ex)
         {
+            CleanUp();
             throw new SvrDownloadFailedException($"Failed to download or unzip the map bundle from '{downloadUrl}': {ex.Message}");
         }
     }

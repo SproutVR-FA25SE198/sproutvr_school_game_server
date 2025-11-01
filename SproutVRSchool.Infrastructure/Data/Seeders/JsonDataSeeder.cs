@@ -146,7 +146,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
         }
 
         // Save change to the database
-        await dbSet.AddRangeAsync(entities);
+        dbSet.AddRange(entities);
         await _dbContext.SaveChangesAsync();
     }
 }
