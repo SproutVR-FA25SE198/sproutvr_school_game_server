@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using NRedisStack.RedisStackCommands;
 using Polly;
@@ -12,7 +11,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 using SproutVRSchool.Application.Exceptions;
-using SproutVRSchool.Application.RequestHandlers.VRLessons;
+using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
 using SproutVRSchool.Domain.Entities.VRTasks;

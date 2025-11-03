@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
 using SproutVRSchool.Domain.Entities.Identities;

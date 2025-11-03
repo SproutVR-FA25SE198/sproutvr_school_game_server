@@ -41,6 +41,10 @@ internal sealed class MapConfiguration : BaseEntityConfiguration<Map>
             .IsRequired()
             .HasMaxLength(255);
 
+        builder.Property(m => m.PreviewUrl)
+            .IsRequired()
+            .HasMaxLength(255);
+
         builder.Property(m => m.Status)
             .IsRequired()
             .HasMaxLength(50)

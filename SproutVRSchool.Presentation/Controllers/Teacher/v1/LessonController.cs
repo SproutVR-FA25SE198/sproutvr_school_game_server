@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.RequestHandlers.Lessons.CreateLesson;
-using SproutVRSchool.Application.RequestHandlers.Lessons.GetLessonById;
-using SproutVRSchool.Application.RequestHandlers.Lessons.UpdateLesson;
+using SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Commands.CreateLesson;
+using SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Commands.UpdateLesson;
+using SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Queries.GetLessonById;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
@@ -24,8 +24,8 @@ public class LessonController(IMediator mediator) : BaseApiController
         CancellationToken cancellationToken
         )
     {
-        var query = new GetLessonByIdQuery(id);
-        GetLessonByIdResponseDto lessonResponseDto = await mediator.Send(query, cancellationToken);
+        var query = new TeacherGetLessonByIdQuery(id);
+        TeacherGetLessonByIdQueryResponseDto lessonResponseDto = await mediator.Send(query, cancellationToken);
 
         return Ok(lessonResponseDto);
     }
@@ -38,7 +38,7 @@ public class LessonController(IMediator mediator) : BaseApiController
     // application-type: multipart/form-data
     [HttpPost]
     public async Task<IActionResult> CreateLesson(
-        [FromForm] CreateLessonCommand createLessonCommand)
+        [FromForm] TeacherCreateLessonCommand createLessonCommand)
     {
         Guid lessonId = await mediator.Send(createLessonCommand);
 
@@ -46,7 +46,8 @@ public class LessonController(IMediator mediator) : BaseApiController
         return CreatedAtAction(
             nameof(GetLessonById),
             new { id = lessonId },
-            new { Id = lessonId });
+            new { id = lessonId }
+        );
     }
 
     // ========================
@@ -57,7 +58,7 @@ public class LessonController(IMediator mediator) : BaseApiController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLesson(
         [FromRoute] Guid id,
-        [FromForm] UpdateLessonCommand updateLessonCommand)
+        [FromForm] TeacherUpdateLessonCommand updateLessonCommand)
     {
         updateLessonCommand.LessonId = id;
         await mediator.Send(updateLessonCommand);

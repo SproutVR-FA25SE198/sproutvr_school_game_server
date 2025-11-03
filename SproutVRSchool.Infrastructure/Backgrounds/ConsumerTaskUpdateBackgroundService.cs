@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Clock;
-using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;

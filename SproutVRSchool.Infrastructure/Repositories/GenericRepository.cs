@@ -55,7 +55,7 @@ public sealed class GenericRepository<T> : IGenericRepository<T>
     /// list will be empty and the count will be 0 if no entities are found.</returns>
     public async Task<(IReadOnlyList<T> Data, int Count)> ListAllAsync()
     {
-        List<T> list = await _context.Set<T>().ToListAsync();
+        List<T> list = await _context.Set<T>().AsNoTracking().ToListAsync();
         int count = list.Count;
 
         return (list, count);
@@ -70,8 +70,8 @@ public sealed class GenericRepository<T> : IGenericRepository<T>
     /// entities matching the specification and the total count of matching entities.</returns>
     public async Task<(IReadOnlyList<T> Data, int Count)> ListAsync(ISpecification<T> spec)
     {
-        List<T> list = await ApplySpecification(spec).ToListAsync();
-        int count = list.Count;
+        List<T> list = await ApplySpecification(spec).AsNoTracking().ToListAsync();
+        int count = await CountAsync(spec);
 
         return (list, count);
     }

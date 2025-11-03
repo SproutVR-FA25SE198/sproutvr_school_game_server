@@ -1,12 +1,9 @@
-﻿using System.Numerics;
-using System.Threading.Tasks;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.RequestHandlers.Lessons.GetLessonById;
-using SproutVRSchool.Application.RequestHandlers.VRLessons.CreateVRLesson;
-using SproutVRSchool.Application.RequestHandlers.VRLessons.DesignVRLessonPreset;
-using SproutVRSchool.Application.RequestHandlers.VRLessons.GetVRLessonById;
+using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
+using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
+using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
@@ -25,8 +22,8 @@ public class VRLessonController(IMediator mediator) : BaseApiController
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var query = new GetVRLessonByIdQuery(id);
-        GetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
+        var query = new TeacherGetVRLessonByIdQuery(id);
+        TeacherGetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
@@ -37,7 +34,7 @@ public class VRLessonController(IMediator mediator) : BaseApiController
     // POST: api/v1/teacher/vrlessons
     [HttpPost]
     public async Task<IActionResult> CreateVRLesson(
-         [FromBody] CreateVRLessonCommand command,
+         [FromBody] TeacherCreateVRLessonCommand command,
          CancellationToken cancellationToken)
     {
         Guid vrLessonId = await mediator.Send(command, cancellationToken);
@@ -57,7 +54,7 @@ public class VRLessonController(IMediator mediator) : BaseApiController
     [HttpPatch("{id:guid}/design-preset")]
     public async Task<IActionResult> DesignVRLessonPreset(
         [FromRoute] Guid id,
-        [FromBody] DesignVRLessonPresetCommand command,
+        [FromBody] TeacherDesignVRLessonPresetCommand command,
         CancellationToken cancellationToken)
     {
         command.VRLessonId = id;

@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
-using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;

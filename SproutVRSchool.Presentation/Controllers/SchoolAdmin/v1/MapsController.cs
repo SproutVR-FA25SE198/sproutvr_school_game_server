@@ -1,8 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.RequestHandlers.Maps.SeedMapBundle;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.SeedMapBundle;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
@@ -21,9 +20,9 @@ public class MapsController(IMediator mediator) : BaseApiController
     // ========================
 
     [HttpPost("seed-bundle")]
-    public async Task<IActionResult> SeedMapBundle([FromBody] SeedMapBundleCommand request)
+    public async Task<IActionResult> SeedMapBundle([FromBody] SASeedMapBundleCommand request)
     {
-        SeedMapBundleResponseDto result = await mediator.Send(request);
+        SASeedMapBundleCommandResponseDto result = await mediator.Send(request);
         return Ok(result);
     }
 

@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Controllers\Auth\" />
+		<Folder Include="Controllers\Guest\" />
 		<Folder Include="Interceptors\Bidirectional\" />
 	</ItemGroup>
 
