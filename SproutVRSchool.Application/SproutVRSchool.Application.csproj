@@ -12,13 +12,16 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
+
 	<ItemGroup>
-		<Folder Include="Commons\Requests\" />
+		<Protobuf Include="Protos\learning_session.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<Protobuf Include="Protos\learning_session.proto" GrpcServices="Server" />
+	  <Folder Include="RequestHandlers\Authorized\VRDevices\Commands\" />
+	  <Folder Include="RequestHandlers\Guest\" />
+	  <Folder Include="RequestHandlers\SchoolAdmin\VRDevices\Querries\" />
 	</ItemGroup>
 
 </Project>
