@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
-using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;

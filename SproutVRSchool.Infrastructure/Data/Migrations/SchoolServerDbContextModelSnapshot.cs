@@ -399,6 +399,11 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("citext");
 
+                    b.Property<string>("PreviewUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)

@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Domain.Entities.VRLessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 

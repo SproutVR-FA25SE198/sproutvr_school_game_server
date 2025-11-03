@@ -1,4 +1,4 @@
-﻿using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Querries.SearchVRDevices;
+﻿using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.SearchVRDevices;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRDevices;
 

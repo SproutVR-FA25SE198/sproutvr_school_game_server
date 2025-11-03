@@ -8,7 +8,6 @@ using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Exceptions;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;

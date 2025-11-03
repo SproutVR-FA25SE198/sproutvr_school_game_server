@@ -121,5 +121,35 @@ public static class AppCts
             public const string NAME_ASC = "nameAsc";
             public const string NAME_DESC = "nameDesc";
         }
+
+        public static class MasterSubjects
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
+
+        public static class Lessons
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
+
+        public static class TaskLocations
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
+
+        public static class ActivityTypes
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
+
+        public static class MapObjects
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
     }
 }

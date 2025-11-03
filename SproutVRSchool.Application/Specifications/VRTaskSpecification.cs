@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SproutVRSchool.Domain.Entities.VRLessons;
-using SproutVRSchool.Domain.Entities.VRTasks;
+﻿using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Application.Specifications;
 

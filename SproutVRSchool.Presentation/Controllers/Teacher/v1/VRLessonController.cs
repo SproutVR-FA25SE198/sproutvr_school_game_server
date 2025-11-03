@@ -1,11 +1,9 @@
-﻿using System.Numerics;
-using System.Threading.Tasks;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
-using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Querries.GetVRLessonById;
+using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;

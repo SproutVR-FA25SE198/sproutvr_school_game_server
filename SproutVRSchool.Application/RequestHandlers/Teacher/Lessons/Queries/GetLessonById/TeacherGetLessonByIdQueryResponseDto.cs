@@ -1,6 +1,4 @@
 ﻿using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Domain.Entities.Identities;
-using SproutVRSchool.Domain.Entities.Subjects;
 
 namespace SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Queries.GetLessonById;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using SproutVRSchool.Domain;
+﻿using System.Text.Json.Serialization;
 
 namespace SproutVRSchool.Application.Commons.Responses;
 

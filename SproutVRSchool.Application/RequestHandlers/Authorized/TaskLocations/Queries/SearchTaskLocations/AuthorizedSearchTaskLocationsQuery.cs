@@ -1,0 +1,7 @@
+﻿using MediatR;
+using SproutVRSchool.Application.Commons.Responses;
+
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.SearchTaskLocations;
+
+public sealed record AuthorizedSearchTaskLocationsQuery(AuthorizedSearchTaskLocationsQueryParams AuthorizedSearchTaskLocationsQueryParams)
+    : IRequest<GetListResultResponseDto<AuthorizedSearchTaskLocationsQueryResponseDto>>;

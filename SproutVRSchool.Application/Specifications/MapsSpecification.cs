@@ -1,7 +1,6 @@
-﻿using SproutVRSchool.Application.RequestHandlers.Authorized.Maps.Querries.SearchMaps;
+﻿using SproutVRSchool.Application.RequestHandlers.Authorized.Maps.Queries.SearchMaps;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Maps;
-using SproutVRSchool.Domain.Entities.Subjects;
 
 namespace SproutVRSchool.Application.Specifications;
 

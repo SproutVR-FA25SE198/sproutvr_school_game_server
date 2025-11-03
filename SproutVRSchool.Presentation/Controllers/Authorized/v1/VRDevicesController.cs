@@ -3,8 +3,8 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Querries.GetVRDevice;
-using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Querries.SearchVRDevices;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.GetVRDevice;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.SearchVRDevices;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;

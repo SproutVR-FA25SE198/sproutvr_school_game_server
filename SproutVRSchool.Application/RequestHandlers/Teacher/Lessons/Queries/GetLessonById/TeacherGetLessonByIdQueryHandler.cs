@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions;
@@ -19,7 +14,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
     public async Task<TeacherGetLessonByIdQueryResponseDto> Handle(TeacherGetLessonByIdQuery request, CancellationToken cancellationToken)
     {
         // 1. Fetch the lesson entity from the repo
-        var spec = new LessonSpecification(request.Id);
+        var spec = new LessonsSpecification(request.Id);
 
         Lesson? lesson = await uow.Repository<Lesson>()
             .GetEntityBySpec(spec);
