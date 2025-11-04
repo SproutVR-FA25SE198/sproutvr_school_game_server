@@ -18,7 +18,7 @@ public sealed class AuthorizedGetVRDeviceQueryHandler(IUnitOfWork uow)
 
         if (device == null)
         {
-            throw new SvrNotFoundException($"VR Device with ID '{request.Id}' was not found.");
+            throw new SvrResourceNotFoundException($"VR Device with ID '{request.Id}' was not found.");
         }
 
         // 1. Map progresses using the new DTO name

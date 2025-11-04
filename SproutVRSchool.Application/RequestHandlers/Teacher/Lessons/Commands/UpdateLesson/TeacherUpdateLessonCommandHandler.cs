@@ -19,7 +19,7 @@ public sealed class TeacherUpdateLessonCommandHandler(
         // 2. Check if lesson not exists
         if (existingLesson is null)
         {
-            throw new SvrNotFoundException($"Lesson with ID {request.LessonId} not found.");
+            throw new SvrResourceNotFoundException($"Lesson with ID {request.LessonId} not found.");
         }
 
         // 3. If uploading new file, then retrieve the relative file path

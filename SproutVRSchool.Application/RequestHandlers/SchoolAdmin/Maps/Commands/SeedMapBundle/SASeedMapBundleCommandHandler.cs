@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.Repositories;
-using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
 using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.Maps;

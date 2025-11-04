@@ -1,4 +1,4 @@
-﻿namespace SproutVRSchool.Application.Exceptions;
+﻿namespace SproutVRSchool.Application.Exceptions.ContentSeedings;
 
 public sealed class SvrInstallFailedException : Exception
 {

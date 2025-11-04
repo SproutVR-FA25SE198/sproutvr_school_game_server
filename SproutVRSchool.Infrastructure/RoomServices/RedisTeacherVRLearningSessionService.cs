@@ -65,7 +65,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         // If not found, then throw back to the client
         if (vrLesson == null)
         {
-            throw new SvrNotFoundException($"VR Lesson with ID '{request.VrLessionId}' not found.");
+            throw new SvrResourceNotFoundException($"VR Lesson with ID '{request.VrLessionId}' not found.");
         }
 
         // 2. Create a model for injecting in redis
@@ -99,7 +99,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         // If not found, then throw back to the client
         if (vrLesson == null)
         {
-            throw new SvrNotFoundException($"VR Lesson with ID '{request.VrLessonId}' not found.");
+            throw new SvrResourceNotFoundException($"VR Lesson with ID '{request.VrLessonId}' not found.");
         }
 
         // 2. Get the list tasks related to the VRLesson from repositories

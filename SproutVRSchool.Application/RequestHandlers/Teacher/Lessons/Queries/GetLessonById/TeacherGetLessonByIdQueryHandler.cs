@@ -22,7 +22,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
         // 2. If not found, throw SvrNotFoundException
         if (lesson is null)
         {
-            throw new SvrNotFoundException($"Lesson with ID {request.Id} not found.");
+            throw new SvrResourceNotFoundException($"Lesson with ID {request.Id} not found.");
         }
 
         // 3. Map the lesson entity to GetLessonByIdResponseDto

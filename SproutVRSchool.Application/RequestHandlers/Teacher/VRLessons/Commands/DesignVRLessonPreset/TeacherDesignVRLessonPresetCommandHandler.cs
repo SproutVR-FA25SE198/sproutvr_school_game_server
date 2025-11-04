@@ -27,7 +27,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
         // 2. If not found, throw not found exception
         if (vrLesson == null)
         {
-            throw new SvrNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
+            throw new SvrResourceNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
         }
 
         // 3. Construct the preset object

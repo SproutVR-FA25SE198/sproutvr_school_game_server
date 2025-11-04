@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 
 namespace SproutVRSchool.Application.Behaviors;
 
@@ -25,14 +25,14 @@ internal sealed class ValidationBehavior<TRequest, TResponse>
         ValidationResult[] validationResults = await Task.WhenAll(_validators
             .Select(v => v.ValidateAsync(requestContext, cancellationToken)));
 
-        IEnumerable<SvrValidationError> errors = validationResults
+        IEnumerable<SvrResourceValidationError> errors = validationResults
             .Where(r => !r.IsValid && r.Errors.Any())
             .SelectMany(r => r.Errors)
-            .Select(err => new SvrValidationError(err.PropertyName, err.ErrorMessage));
+            .Select(err => new SvrResourceValidationError(err.PropertyName, err.ErrorMessage));
 
         if (errors.Any())
         {
-            throw new SproutVRSchool.Application.Exceptions.SvrValidationException(errors);
+            throw new SproutVRSchool.Application.Exceptions.SvrResourceValidationException(errors);
         }
 
         // If no error, proceed

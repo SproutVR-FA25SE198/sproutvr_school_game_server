@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 using Grpc.Core.Interceptors;
-using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Interceptors.UnaryUnary;
@@ -15,7 +15,7 @@ public sealed class NotFoundInterceptor(
         {
             return await continuation(request, context);
         }
-        catch (SvrNotFoundException ex)
+        catch (SvrResourceNotFoundException ex)
         {
             // warining for development
             logger.LogDebug(ex, "Not Found Exception intercepted: {Message}", ex.Message);
