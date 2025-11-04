@@ -6,7 +6,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.RoomServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 internal sealed class RoomValidator : IVRLearningSessionValidator
 {

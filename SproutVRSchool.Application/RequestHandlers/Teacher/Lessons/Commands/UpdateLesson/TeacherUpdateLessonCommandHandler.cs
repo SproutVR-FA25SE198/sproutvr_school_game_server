@@ -2,6 +2,7 @@
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain.Entities.Lessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Commands.UpdateLesson;

@@ -9,7 +9,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Backgrounds;
+namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;
 
 public class ConsumerTaskUpdateBackgroundService : BackgroundService
 {

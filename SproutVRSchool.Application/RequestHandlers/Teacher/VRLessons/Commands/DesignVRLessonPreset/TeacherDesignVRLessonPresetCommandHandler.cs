@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
-using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;

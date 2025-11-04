@@ -1,6 +1,6 @@
 ﻿using LearningSession.V1;
 
-namespace SproutVRSchool.Infrastructure.RoomServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 public static class ServerToClientMessageFactory
 {

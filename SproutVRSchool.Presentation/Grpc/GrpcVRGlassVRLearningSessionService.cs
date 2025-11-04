@@ -5,7 +5,7 @@ using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Infrastructure.RoomServices;
+using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Presentation.Grpc;

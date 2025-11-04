@@ -14,6 +14,15 @@ public static class AppCts
         public const string ROLE_SCHOOL_ADMIN = "School Admin";
     }
 
+    public static class Accounts
+    {
+        // OTP
+        public const int OTP_CODE_LENGTH = 6;
+        public const int OTP_CODE_VALID_DURATION_IN_MINUTES = 5;
+
+        // Password
+    }
+
     public static class TimeOffSet
     {
         public const int VN = +7;

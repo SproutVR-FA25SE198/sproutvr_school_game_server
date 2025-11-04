@@ -1,6 +1,6 @@
 ﻿using SproutVRSchool.Application.Abstractions.Clock;
 
-namespace SproutVRSchool.Infrastructure.Clock;
+namespace SproutVRSchool.Infrastructure.Services.Clock;
 
 internal sealed class DateTimeProvider : IDateTimeProvider
 {

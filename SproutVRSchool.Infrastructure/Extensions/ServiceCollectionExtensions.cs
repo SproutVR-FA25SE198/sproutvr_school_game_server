@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Retry;
+using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
@@ -13,13 +14,14 @@ using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
-using SproutVRSchool.Infrastructure.Backgrounds;
-using SproutVRSchool.Infrastructure.Clock;
 using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
-using SproutVRSchool.Infrastructure.FileServices;
 using SproutVRSchool.Infrastructure.Repositories;
-using SproutVRSchool.Infrastructure.RoomServices;
+using SproutVRSchool.Infrastructure.Services.AccountServices;
+using SproutVRSchool.Infrastructure.Services.BackgroundServices;
+using SproutVRSchool.Infrastructure.Services.Clock;
+using SproutVRSchool.Infrastructure.Services.FileServices;
+using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Extensions;
@@ -32,7 +34,7 @@ public static partial class ServiceCollectionExtensions
     {
         service.AddFileHelpers(configuration);
 
-        service.AddPersistence(configuration);
+        service.AddDbContextAndSeeders(configuration);
 
         service.AddRepositories();
 
@@ -40,13 +42,24 @@ public static partial class ServiceCollectionExtensions
 
         service.AddRedisStack(configuration);
 
-        service.AddBusinessServices();
+        service.AddVRLearningSessionService();
 
-        service.AddBackgrounds();
+        service.AddBackgroundService();
+
+        service.AddAccountsService();
 
         service.AddRetryPolicyRegistry();
 
         return service;
+    }
+
+    /*
+        Contains services related to user accounts includning OTP, JWT Tokens, etc.
+     */
+    private static void AddAccountsService(
+        this IServiceCollection service)
+    {
+        service.AddScoped<ITokenService, JwtTokenService>();
     }
 
     /*
@@ -73,7 +86,7 @@ public static partial class ServiceCollectionExtensions
     /*
         Configure for DbContext & Seedings
      */
-    private static void AddPersistence(
+    private static void AddDbContextAndSeeders(
         this IServiceCollection service,
         IConfiguration configuration)
     {
@@ -122,7 +135,7 @@ public static partial class ServiceCollectionExtensions
     /// Related to the core domain business logic
     /// </summary>
     /// <param name="service"></param>
-    private static void AddBusinessServices(this IServiceCollection service)
+    private static void AddVRLearningSessionService(this IServiceCollection service)
     {
         service.AddScoped<IVRLearningSessionTeacherService, RedisTeacherVRLearningSessionService>();
         service.AddScoped<IVRLearningSessionWithVRGlassService, RedisVRGlassVRLearningSessionService>();
@@ -154,10 +167,10 @@ public static partial class ServiceCollectionExtensions
     {
         service.AddTransient<IFileReader, JsonFileReader>();
 
-        string? localStorageSettings = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath");
+        string? contentRootPath = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath");
 
         service.AddSingleton<LocalStorageService>(sp =>
-            new LocalStorageService(localStorageSettings!));
+            new LocalStorageService(contentRootPath!));
 
         service.AddSingleton<ILocalStorageService>(sp => sp.GetRequiredService<LocalStorageService>());
         service.AddSingleton<IPathService>(sp => sp.GetRequiredService<LocalStorageService>());
@@ -167,7 +180,7 @@ public static partial class ServiceCollectionExtensions
     /// Add group of backgrounds to handle computational parts
     /// </summary>
     /// <param name="service"></param>
-    private static void AddBackgrounds(this IServiceCollection service)
+    private static void AddBackgroundService(this IServiceCollection service)
     {
         service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
     }

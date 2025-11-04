@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using SproutVRSchool.Application.Abstractions.FileServices;
 
-namespace SproutVRSchool.Infrastructure.FileServices;
+namespace SproutVRSchool.Infrastructure.Services.FileServices;
 
 public class JsonFileReader : IFileReader
 {

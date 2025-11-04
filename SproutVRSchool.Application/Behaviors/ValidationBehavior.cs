@@ -32,7 +32,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse>
 
         if (errors.Any())
         {
-            throw new SproutVRSchool.Application.Exceptions.SvrResourceValidationException(errors);
+            throw new SvrResourceValidationException(errors);
         }
 
         // If no error, proceed

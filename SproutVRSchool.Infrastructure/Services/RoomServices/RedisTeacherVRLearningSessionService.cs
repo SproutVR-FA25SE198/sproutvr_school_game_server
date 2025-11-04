@@ -11,6 +11,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
@@ -18,7 +19,7 @@ using SproutVRSchool.Domain.Entities.VRTasks;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.RoomServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 internal sealed class RedisTeacherVRLearningSessionService
     : IVRLearningSessionTeacherService

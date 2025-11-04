@@ -2,6 +2,7 @@
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.Lessons;
 

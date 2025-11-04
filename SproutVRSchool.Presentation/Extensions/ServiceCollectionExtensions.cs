@@ -31,6 +31,9 @@ internal static partial class ServiceCollectionExtensions
     // === Services
     // =========================================
 
+    /*
+        Add CORS for desktop app clients
+     */
     private static void AddCorsConfigs(
         this IServiceCollection service, IConfiguration configuration)
     {

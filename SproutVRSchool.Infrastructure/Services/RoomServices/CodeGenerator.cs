@@ -2,7 +2,7 @@
 using System.Text;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 
-namespace SproutVRSchool.Infrastructure.RoomServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 public class CodeGenerator : ICodeGeneratorService
 {

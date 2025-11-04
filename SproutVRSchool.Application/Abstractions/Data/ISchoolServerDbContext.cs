@@ -47,9 +47,9 @@ public interface ISchoolServerDbContext
     DbSet<Teacher> Teachers { get; set; }
     DbSet<SchoolAdmin> SchoolAdmins { get; set; }
 
-    // =============================
-    // ==== DbContext Methods
-    // =============================
+    // ========================================
+    // ==== DbContext Methods for Transactions
+    // ========================================
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default);
