@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Domain.Entities.Identities;
@@ -17,7 +19,7 @@ public sealed class JwtTokenService(
     IDateTimeProvider dateTimeProvider,
     IConfiguration configuration) : ITokenService
 {
-    public (string Token, DateTimeOffset ExpiredAtVietNam) GenerateToken(UserAccount user, IList<string> role, TimeSpan durationInMinutes)
+    public (string Token, DateTimeOffset ExpiredAtVietNam) GenerateToken(UserAccount user, IList<string> roles, TimeSpan durationInMinutes)
     {
         // 1. Get settings 
         string secretKey = configuration.GetValue<string>("Jwt:SecretKey")
@@ -35,7 +37,10 @@ public sealed class JwtTokenService(
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        // 3. Add Claims
+        // 3. Add Role Claims
+        roles.Add("User");
+
+        // 4. Add Claims
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -44,13 +49,8 @@ public sealed class JwtTokenService(
             new(JwtRegisteredClaimNames.FamilyName, user.LastName),
             new(JwtRegisteredClaimNames.GivenName, user.FirstName),
             new("status", user.Status.ToString()),
+            new("roles", JsonConvert.SerializeObject(roles), JsonClaimValueTypes.JsonArray),
         };
-
-        // 4. Add Role Claims
-        foreach (string r in role)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, r));
-        }
 
         // 5. Create the token
         DateTimeOffset expiresAtVietnam = dateTimeProvider.VietNamDateTimeNow.Add(durationInMinutes);

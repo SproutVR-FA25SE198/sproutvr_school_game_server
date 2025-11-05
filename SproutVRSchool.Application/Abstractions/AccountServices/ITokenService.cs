@@ -23,7 +23,7 @@ public interface ITokenService
     /// be greater than zero.</param>
     /// <returns>A tuple containing the generated token as a string and the expiration time in Vietnam time as a <see
     /// cref="DateTimeOffset"/>.</returns>
-    (string Token, DateTimeOffset ExpiredAtVietNam) GenerateToken(UserAccount user, IList<string> role, TimeSpan durationInMinutes);
+    (string Token, DateTimeOffset ExpiredAtVietNam) GenerateToken(UserAccount user, IList<string> roles, TimeSpan durationInMinutes);
 
     /// <summary>
     /// Manullay Validate Token, could integrate it in the middleware

@@ -1,6 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Net;
+using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Polly;
 using Polly.Retry;
 using SproutVRSchool.Application.Abstractions.AccountServices;
@@ -46,7 +53,7 @@ public static partial class ServiceCollectionExtensions
 
         service.AddBackgroundService();
 
-        service.AddAccountsService();
+        service.AddAccountsService(configuration);
 
         service.AddRetryPolicyRegistry();
 
@@ -57,8 +64,105 @@ public static partial class ServiceCollectionExtensions
         Contains services related to user accounts includning OTP, JWT Tokens, etc.
      */
     private static void AddAccountsService(
-        this IServiceCollection service)
+        this IServiceCollection service, IConfiguration configuration)
     {
+        // 1. Get JWT Settings
+        string secretKey = configuration.GetValue<string>("Jwt:SecretKey")
+            ?? throw new InvalidOperationException("JWT SecretKey not configured");
+
+        string issuer = configuration.GetValue<string>("Jwt:Issuer")
+            ?? throw new InvalidOperationException("JWT Issuer not configured");
+
+        string[] audiences = configuration
+            .GetSection("Jwt:Audiences")
+            .Get<string[]>()
+            ?? throw new InvalidOperationException("JWT Audiences not configured");
+
+        // 2. Add
+        service.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        }).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                ValidateIssuer = true,
+                ValidIssuer = issuer,
+                ValidateAudience = true,
+                ValidAudiences = audiences,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                // Authentication failed
+                OnAuthenticationFailed = async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+
+                    string detailMessage = context.Exception switch
+                    {
+                        SecurityTokenExpiredException => "The token has expired.",
+                        _ => "Authentication failed due to an invalid token."
+                    };
+
+                    var problemDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status401Unauthorized,
+                        Title = "Unauthorized Access",
+                        Detail = detailMessage,
+                        Instance = context.Request.Path,
+                        Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
+                    };
+
+                    await context.Response.WriteAsJsonAsync(problemDetails);
+                },
+
+                // Changling when unauthorized access
+                OnChallenge = async context =>
+                {
+                    // Skip the default challenge's logic.
+                    context.HandleResponse();
+
+                    var problemDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status401Unauthorized,
+                        Title = "Unauthorized Access",
+                        Detail = context.Error switch
+                        {
+                            "invalid_token" => "The token provided is invalid.",
+                            "expired_token" => "The token has expired.",
+                            _ => "You are not authorized to access this resource."
+                        },
+                        Instance = context.Request.Path,
+                        Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
+                    };
+
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+
+                    await context.Response.WriteAsJsonAsync(problemDetails);
+                }
+            };
+        }
+
+
+
+
+
+
+        );
+
+
+
+
+
         service.AddScoped<ITokenService, JwtTokenService>();
     }
 
