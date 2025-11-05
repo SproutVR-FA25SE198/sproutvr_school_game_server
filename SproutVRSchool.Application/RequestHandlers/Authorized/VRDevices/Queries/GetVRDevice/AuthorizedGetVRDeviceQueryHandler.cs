@@ -2,6 +2,7 @@
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
@@ -18,7 +19,7 @@ public sealed class AuthorizedGetVRDeviceQueryHandler(IUnitOfWork uow)
 
         if (device == null)
         {
-            throw new SvrNotFoundException($"VR Device with ID '{request.Id}' was not found.");
+            throw new SvrResourceNotFoundException($"VR Device with ID '{request.Id}' was not found.");
         }
 
         // 1. Map progresses using the new DTO name

@@ -2,6 +2,7 @@
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
@@ -18,7 +19,7 @@ public sealed class TeacherGetVRLessonByIdQueryHandler(
 
         // 2. Fetch the VRLesson using the specification
         VRLesson vrLesson = await uow.Repository<VRLesson>().GetEntityBySpec(spec)
-            ?? throw new SvrNotFoundException($"VRLesson with ID {request.id} not found.");
+            ?? throw new SvrResourceNotFoundException($"VRLesson with ID {request.id} not found.");
 
         // 3. Map the entity to the response DTO
         return new TeacherGetVRLessonByIdResponseDto

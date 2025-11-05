@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.Data;
-using SproutVRSchool.Infrastructure.Data.Seeders;
 
 namespace SproutVRSchool.Presentation.Extensions;
 
@@ -42,8 +42,8 @@ internal static class ApplicationBuilderExtensions
     public static async Task ApplySeedingDevelopment(this IApplicationBuilder app)
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
-        SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
-        IdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IdentityDbContextSeeder>();
+        ISchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<ISchoolServerDbContextSeeder>();
+        IIdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IIdentityDbContextSeeder>();
 
         await identitySeeder.SeedDevelopmentAsync();
         await seeder.SeedDevelopmentAsync();
@@ -57,8 +57,8 @@ internal static class ApplicationBuilderExtensions
     public static async Task ApplySeedingProduction(this IApplicationBuilder app)
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
-        SchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<SchoolServerDbContextSeeder>();
-        IdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IdentityDbContextSeeder>();
+        ISchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<ISchoolServerDbContextSeeder>();
+        IIdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IIdentityDbContextSeeder>();
 
         await identitySeeder.SeedProductionAsync();
         await seeder.SeedProductionAsync();
@@ -83,7 +83,7 @@ internal static class ApplicationBuilderExtensions
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(contenRootPath),
-            RequestPath = AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH // e.g. /content
+            RequestPath = AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH // e.g. /content
         });
     }
 }

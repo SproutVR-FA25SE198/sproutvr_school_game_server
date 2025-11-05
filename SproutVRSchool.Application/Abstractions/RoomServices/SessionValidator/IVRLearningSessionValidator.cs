@@ -2,7 +2,7 @@
 
 public interface IVRLearningSessionValidator
 {
-    Task<ValidationResult> ValidateJoinAttemptAsync(
+    Task<ValidationResultDto> ValidateJoinAttemptAsync(
             string roomCode,
             string deviceSerialNumber);
 }

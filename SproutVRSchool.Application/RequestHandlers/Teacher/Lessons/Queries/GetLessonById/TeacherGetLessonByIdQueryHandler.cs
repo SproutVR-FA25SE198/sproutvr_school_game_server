@@ -2,6 +2,7 @@
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.Lessons;
 
@@ -22,7 +23,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
         // 2. If not found, throw SvrNotFoundException
         if (lesson is null)
         {
-            throw new SvrNotFoundException($"Lesson with ID {request.Id} not found.");
+            throw new SvrResourceNotFoundException($"Lesson with ID {request.Id} not found.");
         }
 
         // 3. Map the lesson entity to GetLessonByIdResponseDto

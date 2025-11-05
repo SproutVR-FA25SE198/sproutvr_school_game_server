@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain.Entities;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
@@ -126,7 +127,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
     {
         if (!File.Exists(absoluteFilePath))
         {
-            throw new SvrNotFoundException($"Seed file not found: {absoluteFilePath}");
+            throw new SvrResourceNotFoundException($"Seed file not found: {absoluteFilePath}");
         }
 
         string jsonContent = await File.ReadAllTextAsync(absoluteFilePath);
@@ -141,7 +142,7 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
         List<T>? entities = JsonConvert.DeserializeObject<List<T>>(jsonContent, settings);
         if (entities is null || !entities.Any())
         {
-            throw new SvrNotFoundException($"No data found in seed file: {absoluteFilePath}");
+            throw new SvrResourceNotFoundException($"No data found in seed file: {absoluteFilePath}");
         }
 
         // Save change to the database

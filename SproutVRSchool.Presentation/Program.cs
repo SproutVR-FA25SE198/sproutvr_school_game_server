@@ -25,11 +25,8 @@ if (env.IsDevelopment())
 {
     app.ApplyDatabaseDrop(miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false);
     app.ApplyDatabaseMigrations();
-
-#pragma warning disable S125 // Sections of code should not be commented out
     await app.ApplySeedingDevelopment();
     app.MapGrpcReflectionService().AllowAnonymous();
-#pragma warning restore S125 // Sections of code should not be commented out
 }
 else if (env.IsProduction())
 {
@@ -47,9 +44,15 @@ app.UseExceptionHandler();
 // Static Files & Routing
 app.ApplyStaticMiddleware();
 
+// Cors
 app.UseCors("DesktopAppPolicy");
 
+// Determine endpoints
 app.UseRouting();
+
+// Authentication & Authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Controller
 app.MapControllers();

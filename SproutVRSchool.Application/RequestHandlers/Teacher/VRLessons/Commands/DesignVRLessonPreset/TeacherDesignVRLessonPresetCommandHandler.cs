@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
-using SproutVRSchool.Application.Exceptions;
+using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
@@ -27,7 +27,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
         // 2. If not found, throw not found exception
         if (vrLesson == null)
         {
-            throw new SvrNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
+            throw new SvrResourceNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
         }
 
         // 3. Construct the preset object
@@ -74,7 +74,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
         byte[] byteArray = Encoding.UTF8.GetBytes(jsonContent);
         await using var stream = new MemoryStream(byteArray);
 
-        string fileName = AppCts.FilePaths.FILE_NAME_PRESET_VR_LESSON;
+        string fileName = AppCts.Files.FILE_NAME_PRESET_VR_LESSON;
         string relativePath = await localStorageService.SaveVrLessonPresetAsync(
             vrLesson.Lesson.TeacherId,
             vrLesson.LessonId,

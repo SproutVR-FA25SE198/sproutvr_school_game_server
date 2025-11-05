@@ -31,6 +31,9 @@ internal static partial class ServiceCollectionExtensions
     // === Services
     // =========================================
 
+    /*
+        Add CORS for desktop app clients
+     */
     private static void AddCorsConfigs(
         this IServiceCollection service, IConfiguration configuration)
     {
@@ -133,9 +136,9 @@ internal static partial class ServiceCollectionExtensions
             };
         });
 
-        service.AddExceptionHandler<FileNotSupportedExceptionHandler>();
-        service.AddExceptionHandler<ValidationExceptionHandler>();
-        service.AddExceptionHandler<NotFoundExceptionHandler>();
+        service.AddExceptionHandler<AccountExceptionHandler>();
+        service.AddExceptionHandler<ResourcesExceptionHandler>();
+        service.AddExceptionHandler<ContentSeedingsExceptionHandler>();
         service.AddExceptionHandler<GeneralExceptionHandler>();
     }
 }

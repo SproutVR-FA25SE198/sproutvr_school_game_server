@@ -1,0 +1,217 @@
+﻿using Microsoft.AspNetCore.Http;
+using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Domain;
+
+namespace SproutVRSchool.Infrastructure.Services.FileServices;
+
+public sealed class LocalStorageService : ILocalStorageService, IPathService
+{
+    private readonly string _localContentRootPath;
+
+    public LocalStorageService(string localContentRootPath)
+    {
+        _localContentRootPath = localContentRootPath;
+    }
+
+    // =============================
+    // === Get Files & Paths
+    // =============================
+
+    public string GetTeacherAbsoluteFolderPath(Guid teacherId)
+    {
+        return Path.Combine(_localContentRootPath, teacherId.ToString());
+    }
+
+    public string GetLessonAbsoluteFolderPath(Guid teacherId, Guid lessonId)
+    {
+        return Path.Combine(GetTeacherAbsoluteFolderPath(teacherId), lessonId.ToString());
+    }
+
+    public string GetLessonResourcesAbsoluteFolderPath(Guid teacherId, Guid lessonId)
+    {
+        return Path.Combine(GetLessonAbsoluteFolderPath(teacherId, lessonId), AppCts.Files.FOLDER_NAME_RESOURCES);
+    }
+
+    public string GetVRLessonAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
+    {
+        return Path.Combine(GetLessonAbsoluteFolderPath(teacherId, lessonId), vrLessonId.ToString());
+    }
+
+    public string GetVRLessonImagesAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
+    {
+        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.Files.FOLDER_NAME_IMAGES);
+    }
+
+    public string GetVRLessonPresetsAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
+    {
+        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.Files.FOLDER_NAME_PRESETS);
+    }
+
+    // =============================
+    // === Save Files & Resources
+    // =============================
+
+    public async Task<string> SaveLessonResourceAsync(Guid teacherId, Guid lessonId, IFormFile file)
+    {
+        string lessonResourcesPath = GetLessonResourcesAbsoluteFolderPath(teacherId, lessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
+
+        // write content into the  
+        await WriteFileAsync(lessonResourcesPath, fileName, fileContent);
+
+        // return the relative path
+        string relativePublicFilePath = Path.Combine(
+            teacherId.ToString(),
+            lessonId.ToString(),
+            AppCts.Files.FOLDER_NAME_RESOURCES,
+            fileName);
+
+        return ConvertToPublicPath(relativePublicFilePath);
+    }
+
+    public async Task<string> SaveVrLessonImageAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
+    {
+        string vrLessonImagesPath = GetVRLessonImagesAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
+
+        // write content into the  
+        await WriteFileAsync(vrLessonImagesPath, fileName, fileContent);
+
+        // return the relative path
+        string relativePublicFilePath = Path.Combine(
+            teacherId.ToString(),
+            lessonId.ToString(),
+            vrLessonId.ToString(),
+            AppCts.Files.FOLDER_NAME_IMAGES,
+            fileName);
+
+        return ConvertToPublicPath(relativePublicFilePath);
+    }
+
+    public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, IFormFile file)
+    {
+        string vrLessonPresetPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        string fileName = file.FileName;
+        using Stream fileContent = file.OpenReadStream();
+
+        await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
+
+        // return the local relative path
+        string relativeUrlPath = Path.Combine(
+            teacherId.ToString(),
+            lessonId.ToString(),
+            vrLessonId.ToString(),
+            AppCts.Files.FOLDER_NAME_PRESETS,
+            fileName);
+
+        return ConvertToPublicPath(relativeUrlPath);
+    }
+
+    public async Task<string> SaveVrLessonPresetAsync(Guid teacherId, Guid lessonId, Guid vrLessonId, string fileName, Stream fileContent)
+    {
+        string vrLessonPresetPath = GetVRLessonPresetsAbsoluteFolderPath(teacherId, lessonId, vrLessonId);
+
+        await WriteFileAsync(vrLessonPresetPath, fileName, fileContent);
+
+        // return the local relative path
+        string relativeUrlPath = Path.Combine(
+            teacherId.ToString(),
+            lessonId.ToString(),
+            vrLessonId.ToString(),
+            AppCts.Files.FOLDER_NAME_PRESETS,
+            fileName);
+
+        return ConvertToPublicPath(relativeUrlPath);
+    }
+
+    public Task DeleteFileInLocalStorageAsync(string publicRelativeFilePath)
+    {
+        if (string.IsNullOrEmpty(publicRelativeFilePath))
+        {
+            return Task.CompletedTask;
+        }
+
+        string absoluteFilePath = ConvertToAbsoluteLocalFilePath(publicRelativeFilePath);
+        if (File.Exists(absoluteFilePath))
+        {
+            File.Delete(absoluteFilePath);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public async Task<string> LoadFileContentAsync(string publicRelativeFilePath)
+    {
+        if (string.IsNullOrEmpty(publicRelativeFilePath))
+        {
+            return string.Empty;
+        }
+
+        string absoluteFilePath = ConvertToAbsoluteLocalFilePath(publicRelativeFilePath);
+        if (string.IsNullOrEmpty(absoluteFilePath))
+        {
+            return string.Empty;
+        }
+
+        string jsonContent = await File.ReadAllTextAsync(absoluteFilePath);
+        return jsonContent;
+    }
+
+    // =============================
+    // === Helpers
+    // =============================
+
+    /// <summary>
+    /// This is a function that create a file at the given folder path
+    /// </summary>
+    /// <param name="absoluteFolderPath"></param>
+    /// <param name="fileName"></param>
+    /// <param name="fileContent"></param>
+    /// <returns></returns>
+    private static async Task WriteFileAsync(string absoluteFolderPath, string fileName, Stream fileContent)
+    {
+        Directory.CreateDirectory(absoluteFolderPath);
+        string absoluteFilePath = Path.Combine(absoluteFolderPath, fileName);
+
+        using var fileStream = new FileStream(absoluteFilePath, FileMode.Create, FileAccess.Write);
+        await fileContent.CopyToAsync(fileStream);
+    }
+
+    /// <summary>
+    /// Convert a Windows-style path to a public URL path
+    /// e.g. C:\ProgramData\SproutVRSchool\Content\{teacher_id}\{lesson_id}\Resources\file.pdf
+    /// e.g. Into: /content/{teacher_id}/{lesson_id}/Resources/file.pdf
+    /// </summary>
+    /// <param name="localWindowPath"></param>
+    /// <returns></returns>
+    private static string ConvertToPublicPath(string localWindowPath)
+    {
+        return $"{AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH}/{localWindowPath.Replace('\\', '/')}";
+    }
+
+    /// <summary>
+    /// Convert a public URL path to Absolute Local FilePath for retrieving the file
+    /// e.g. /content/{teacher_id}/{lesson_id}/Resources/file.pdf
+    /// e.g. Into: C:\ProgramData\SproutVRSchool\Content\{teacher_id}\{lesson_id}\Resources\file.pdf
+    /// </summary>
+    /// <param name="publicRelativeFilePath"></param>
+    /// <returns></returns>
+    private string ConvertToAbsoluteLocalFilePath(string publicRelativeFilePath)
+    {
+        // /content/... --> ...
+        string relativeFilePath = publicRelativeFilePath.Replace(AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH + "/", "");
+
+        // .../.../ --> ...\\...\\, depends on the OS
+        relativeFilePath = relativeFilePath.Replace('/', Path.DirectorySeparatorChar);
+
+        string absoluteFilePath = Path.Combine(_localContentRootPath, relativeFilePath);
+
+        return absoluteFilePath;
+    }
+
+}
