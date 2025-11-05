@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.MasterSubjects.Queries.SearchMasterSubjects;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.Subjects;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
 

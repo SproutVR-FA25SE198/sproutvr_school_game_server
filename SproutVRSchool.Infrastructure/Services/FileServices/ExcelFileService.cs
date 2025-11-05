@@ -11,7 +11,7 @@ namespace SproutVRSchool.Infrastructure.Services.FileServices;
 public class ExcelFileService(
     ILogger<ExcelFileService> excelFileService) : IExcelFileService
 {
-    public IReadOnlyList<TeacherAccountExcelRowDto> ReadTeacherExcel(IFormFile excelFile)
+    public IReadOnlyList<TeacherAccountExcelRowDto> ReadTeachersExcel(IFormFile excelFile)
     {
         // 1. Load the workbook to the memory for reading
         using Stream stream = excelFile.OpenReadStream();
@@ -50,7 +50,7 @@ public class ExcelFileService(
             // Must have UserName
             if (string.IsNullOrWhiteSpace(username))
             {
-                excelFileService.LogWarning("Skipping row {Row} due to missing email.", row);
+                excelFileService.LogWarning("Skipping row {Row} due to missing username.", row);
                 continue;
             }
 
@@ -68,6 +68,56 @@ public class ExcelFileService(
                 DefaultPassword: defaultPassword);
 
             result.Add(teacherAccount);
+        }
+
+        return result.ToList();
+    }
+
+    public IReadOnlyList<VRDeviceExcelRowDto> ReadVRDevicesExcel(IFormFile excelFile)
+    {
+        // 1. Load the workbook to the memory for reading
+        using Stream stream = excelFile.OpenReadStream();
+        using var package = new ExcelPackage(stream);
+
+        // 2. Get the sheet named "VRDevices", or get the first sheet if it does not exist
+        ExcelWorksheet worksheet = package.Workbook.Worksheets[AppCts.Files.EXCEL_WORKSHEET_VRDEVICES]
+            ?? package.Workbook.Worksheets.FirstOrDefault()
+            ?? throw new SvrFileNotSupportedException("Excel file does not contain a valid 'VRDevices' worksheet.");
+
+        // 3. Validate Data Rows
+        int totalRows = worksheet.Dimension?.Rows ?? 0;
+        if (totalRows < 2)
+        {
+            throw new SvrFileNotSupportedException("Excel file does not contain any data rows.");
+        }
+
+        // 4. Get the data rows
+        var result = new HashSet<VRDeviceExcelRowDto>();
+
+        for (int row = 2; row <= totalRows; row++)
+        {
+            string name = worksheet.Cells[row, 1].Text?.Trim() ?? string.Empty;
+            string serialNumber = worksheet.Cells[row, 2].Text?.Trim() ?? string.Empty;
+
+            // Must have device name
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                excelFileService.LogWarning("Skipping row {Row} due to missing device name.", row);
+                continue;
+            }
+
+            // Must have device's serial number
+            if (string.IsNullOrWhiteSpace(serialNumber))
+            {
+                excelFileService.LogWarning("Skipping row {Row} due to missing device serial number.", row);
+                continue;
+            }
+
+            var vrDevice = new VRDeviceExcelRowDto(
+                DeviceName: name,
+                SerialNumber: serialNumber);
+
+            result.Add(vrDevice);
         }
 
         return result.ToList();

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Data;
-using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.FileServices.Dtos;
 using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Domain;

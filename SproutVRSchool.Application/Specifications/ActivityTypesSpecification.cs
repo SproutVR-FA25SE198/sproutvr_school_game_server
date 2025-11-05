@@ -20,7 +20,7 @@ public sealed class ActivityTypesSpecification : BaseSpecification<ActivityType>
                         searchParams.PageSize.Value);
         }
 
-        // Sorting (only by Name)
+        // Sorting (only by DeviceName)
         if (string.IsNullOrEmpty(searchParams.SortBy))
         {
             searchParams.SortBy = AppCts.SortingKeys.DEFAULT;

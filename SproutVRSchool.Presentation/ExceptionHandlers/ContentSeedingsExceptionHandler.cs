@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Exceptions.ContentSeedings;
 
 namespace SproutVRSchool.Presentation.ExceptionHandlers;

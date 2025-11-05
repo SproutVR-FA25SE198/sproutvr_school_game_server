@@ -13,8 +13,8 @@ public sealed class TeacherCreateVRLessonCommandValidator : AbstractValidator<Te
             .NotEmpty().WithMessage("MapId is required.");
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required.")
-            .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+            .NotEmpty().WithMessage("DeviceName is required.")
+            .MaximumLength(100).WithMessage("DeviceName must not exceed 100 characters.");
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.")

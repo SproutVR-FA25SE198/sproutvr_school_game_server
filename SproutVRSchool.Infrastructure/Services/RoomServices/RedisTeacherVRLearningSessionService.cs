@@ -10,7 +10,6 @@ using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
-using SproutVRSchool.Application.Exceptions;
 using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;

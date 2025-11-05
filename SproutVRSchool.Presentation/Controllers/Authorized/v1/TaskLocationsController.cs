@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.SearchLessons;
 using SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.SearchTaskLocations;
 using SproutVRSchool.Domain;
 
