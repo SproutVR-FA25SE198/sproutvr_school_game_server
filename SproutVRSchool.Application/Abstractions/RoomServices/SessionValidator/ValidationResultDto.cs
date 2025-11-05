@@ -7,15 +7,15 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 /// <summary>
 /// This interface will validate the learning session state
 /// </summary>
-public record ValidationResult(
+public record ValidationResultDto(
     bool IsValid,
     JoinRoomResponseDto? JoinRoomResponseDto = null,
     ModelVRLearningSession? ModelVRLearningSession = null  // after validation, return the learning session info to avoid fetching twice
 )
 {
     // VR glasses cannot join the room due to wrong room code
-    public static ValidationResult InvalidRoomCode =>
-        new ValidationResult(
+    public static ValidationResultDto InvalidRoomCode =>
+        new ValidationResultDto(
             IsValid: false,
             JoinRoomResponseDto: new JoinRoomResponseDto(
                 JoinStatus.InvalidRoomCode,
@@ -24,8 +24,8 @@ public record ValidationResult(
         );
 
     // VR glasses type correct room code but not in the assigned devices
-    public static ValidationResult DeviceNotAssigned =>
-        new ValidationResult(
+    public static ValidationResultDto DeviceNotAssigned =>
+        new ValidationResultDto(
             IsValid: false,
             JoinRoomResponseDto: new JoinRoomResponseDto(
                 JoinStatus.DeviceNotAuthorized,
@@ -34,8 +34,8 @@ public record ValidationResult(
         );
 
     // VR glases cannot join the room at Pending, Completed, Cancelled
-    public static ValidationResult SessionNotActive =>
-        new ValidationResult(
+    public static ValidationResultDto SessionNotActive =>
+        new ValidationResultDto(
             IsValid: false,
             JoinRoomResponseDto: new JoinRoomResponseDto(
                 JoinStatus.RoomNotActive,
@@ -44,8 +44,8 @@ public record ValidationResult(
         );
 
     // Room not found
-    public static ValidationResult SessionExpiredOrNotFound =>
-        new ValidationResult(
+    public static ValidationResultDto SessionExpiredOrNotFound =>
+        new ValidationResultDto(
             IsValid: false,
             JoinRoomResponseDto: new JoinRoomResponseDto(
                 JoinStatus.Unspecified,
@@ -54,8 +54,8 @@ public record ValidationResult(
         );
 
     // VR glasses cannot rejoin the room
-    public static ValidationResult AlreayJoined =>
-       new ValidationResult(
+    public static ValidationResultDto AlreayJoined =>
+       new ValidationResultDto(
            IsValid: false,
            JoinRoomResponseDto: new JoinRoomResponseDto(
                JoinStatus.AlreadyJoined,
@@ -63,11 +63,11 @@ public record ValidationResult(
            )
        );
 
-    public static ValidationResult Success(
+    public static ValidationResultDto Success(
       string vrLearningSessionId,
       string presetJsonContent,
       ModelVRLearningSession? modelVRLearningSession) =>
-      new ValidationResult(
+      new ValidationResultDto(
           IsValid: true,
           JoinRoomResponseDto: new JoinRoomResponseDto(
               JoinStatus.Success,

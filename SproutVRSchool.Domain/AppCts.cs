@@ -70,7 +70,7 @@ public static class AppCts
         public static readonly string VRLessonFilePath = Path.Combine(JSON_FOLDER_PATH, "VRLesson.json");
     }
 
-    public static class FilePaths
+    public static class Files
     {
         // NOT WORKING INSIDE THE CONTAINER
 
@@ -90,6 +90,9 @@ public static class AppCts
         public const string FOLDER_NAME_IMAGES = "Images";
         public const string PREFIX_PUBLIC_CONTENT_PATH = "/content";
         public const string FILE_NAME_PRESET_VR_LESSON = "preset.json";
+
+        public const string EXCEL_WORKSHEET_ACCOUNTS = "Accounts";
+        public const string EXCEL_WORKSHEET_DEVICES = "Devices";
     }
 
     public static class Grpc

@@ -29,7 +29,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
     public string GetLessonResourcesAbsoluteFolderPath(Guid teacherId, Guid lessonId)
     {
-        return Path.Combine(GetLessonAbsoluteFolderPath(teacherId, lessonId), AppCts.FilePaths.FOLDER_NAME_RESOURCES);
+        return Path.Combine(GetLessonAbsoluteFolderPath(teacherId, lessonId), AppCts.Files.FOLDER_NAME_RESOURCES);
     }
 
     public string GetVRLessonAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
@@ -39,12 +39,12 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
 
     public string GetVRLessonImagesAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
     {
-        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.FilePaths.FOLDER_NAME_IMAGES);
+        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.Files.FOLDER_NAME_IMAGES);
     }
 
     public string GetVRLessonPresetsAbsoluteFolderPath(Guid teacherId, Guid lessonId, Guid vrLessonId)
     {
-        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.FilePaths.FOLDER_NAME_PRESETS);
+        return Path.Combine(GetVRLessonAbsoluteFolderPath(teacherId, lessonId, vrLessonId), AppCts.Files.FOLDER_NAME_PRESETS);
     }
 
     // =============================
@@ -65,7 +65,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
         string relativePublicFilePath = Path.Combine(
             teacherId.ToString(),
             lessonId.ToString(),
-            AppCts.FilePaths.FOLDER_NAME_RESOURCES,
+            AppCts.Files.FOLDER_NAME_RESOURCES,
             fileName);
 
         return ConvertToPublicPath(relativePublicFilePath);
@@ -86,7 +86,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
             teacherId.ToString(),
             lessonId.ToString(),
             vrLessonId.ToString(),
-            AppCts.FilePaths.FOLDER_NAME_IMAGES,
+            AppCts.Files.FOLDER_NAME_IMAGES,
             fileName);
 
         return ConvertToPublicPath(relativePublicFilePath);
@@ -106,7 +106,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
             teacherId.ToString(),
             lessonId.ToString(),
             vrLessonId.ToString(),
-            AppCts.FilePaths.FOLDER_NAME_PRESETS,
+            AppCts.Files.FOLDER_NAME_PRESETS,
             fileName);
 
         return ConvertToPublicPath(relativeUrlPath);
@@ -123,7 +123,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
             teacherId.ToString(),
             lessonId.ToString(),
             vrLessonId.ToString(),
-            AppCts.FilePaths.FOLDER_NAME_PRESETS,
+            AppCts.Files.FOLDER_NAME_PRESETS,
             fileName);
 
         return ConvertToPublicPath(relativeUrlPath);
@@ -191,7 +191,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     /// <returns></returns>
     private static string ConvertToPublicPath(string localWindowPath)
     {
-        return $"{AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH}/{localWindowPath.Replace('\\', '/')}";
+        return $"{AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH}/{localWindowPath.Replace('\\', '/')}";
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public sealed class LocalStorageService : ILocalStorageService, IPathService
     private string ConvertToAbsoluteLocalFilePath(string publicRelativeFilePath)
     {
         // /content/... --> ...
-        string relativeFilePath = publicRelativeFilePath.Replace(AppCts.FilePaths.PREFIX_PUBLIC_CONTENT_PATH + "/", "");
+        string relativeFilePath = publicRelativeFilePath.Replace(AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH + "/", "");
 
         // .../.../ --> ...\\...\\, depends on the OS
         relativeFilePath = relativeFilePath.Replace('/', Path.DirectorySeparatorChar);

@@ -1,48 +1,48 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using SproutVRSchool.Application.Abstractions.Data;
+using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Application.Abstractions.FileServices.Dtos;
+using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
-public class IdentityDbContextSeeder
+
+public class IdentityDbContextSeeder(
+    IConfiguration configuration,
+    ILogger<IdentityDbContextSeeder> logger,
+    RoleManager<UserAccountRole> roleManager,
+    UserManager<UserAccount> userManager) : IIdentityDbContextSeeder
 {
-    // ==========================
-    // === Fields
-    // ==========================
-
-    private readonly IConfiguration _configuration;
-    private readonly RoleManager<UserAccountRole> _roleManager;
-    private readonly UserManager<UserAccount> _userManager;
-
-    // ==========================
-    // === Constructors
-    // ==========================
-
-    public IdentityDbContextSeeder(IConfiguration configuration, RoleManager<UserAccountRole> roleManager, UserManager<UserAccount> userManager)
-    {
-        _configuration = configuration;
-        _roleManager = roleManager;
-        _userManager = userManager;
-    }
-
     // ==========================
     // === Methods
     // ==========================
 
+    /// <summary>
+    /// Seeding for Development
+    /// </summary>
+    /// <returns></returns>
     public async Task SeedDevelopmentAsync()
     {
 
         await SeedRolesAsync();
-        await SeedAdminUserAsync();
+        await SeedSchoolAdminUserAsync();
         await SeedTeacherUsersAsync();
     }
 
+    /// <summary>
+    /// Seeding for Production Environment
+    /// </summary>
+    /// <returns></returns>
     public async Task SeedProductionAsync()
     {
 
         await SeedRolesAsync();
-        await SeedAdminUserAsync();
+        await SeedSchoolAdminUserAsync();
     }
 
     /// <summary>
@@ -56,24 +56,28 @@ public class IdentityDbContextSeeder
 
         foreach (string roleName in roleNames)
         {
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            if (!await roleManager.RoleExistsAsync(roleName))
             {
                 var role = new UserAccountRole { Name = roleName };
-                await _roleManager.CreateAsync(role);
+                await roleManager.CreateAsync(role);
             }
         }
     }
+
+    // ==========================
+    // === Seed School Admin User
+    // ==========================
 
     /// <summary>
     /// Seed Admin User
     /// </summary>
     /// <returns></returns>
-    private async Task SeedAdminUserAsync()
+    private async Task SeedSchoolAdminUserAsync()
     {
-        string? adminUserName = _configuration["SeedingSettings:DefaultAdminUser:UserName"];
-        string? adminPassword = _configuration["SeedingSettings:DefaultAdminUser:Password"] ?? "000000";
+        string? adminUserName = configuration["SeedingSettings:DefaultAdminUser:UserName"];
+        string? adminPassword = configuration["SeedingSettings:DefaultAdminUser:Password"] ?? "000000";
 
-        if (string.IsNullOrEmpty(adminUserName) || await _userManager.FindByEmailAsync(adminUserName) != null)
+        if (string.IsNullOrEmpty(adminUserName) || await userManager.FindByEmailAsync(adminUserName) != null)
         {
             return;
         }
@@ -90,25 +94,67 @@ public class IdentityDbContextSeeder
             UpdatedAtUtc = DateTimeOffset.UtcNow
 
         };
-        IdentityResult result = await _userManager.CreateAsync(adminUser, adminPassword);
+        IdentityResult result = await userManager.CreateAsync(adminUser, adminPassword);
         if (result.Succeeded)
         {
-            await _userManager.AddToRoleAsync(adminUser, AppCts.Db.ROLE_SCHOOL_ADMIN);
+            await userManager.AddToRoleAsync(adminUser, AppCts.Db.ROLE_SCHOOL_ADMIN);
         }
     }
 
     // ==========================
     // === Seed Teacher Users
     // ==========================
+
+    /// <summary>
+    /// Seeding teachers by excel file row
+    /// </summary>
+    /// <param name="account"></param>
+    /// <returns></returns>
+    /// <exception cref="SvrInstallFailedException"></exception>
+    public async Task<bool> SeedTeacherFromExcelFileAsync(TeacherAccountExcelRowDto account)
+    {
+        // 1. If the teacher (username or email) already exists, then skipping seeding 
+        bool isExistingUser = await userManager.FindByEmailAsync(account.Email) != null ||
+                             await userManager.FindByNameAsync(account.UserName) != null;
+
+        // 2. if existing, then return
+        if (isExistingUser)
+        {
+            logger.LogWarning("Already seeding the UserName {Username} with Email {Email}", account.UserName, account.Email);
+            return false;
+        }
+
+        // 3. Create new teacher entity
+        var teacher = Teacher.Create(username: account.UserName,
+                                     email: account.Email,
+                                     firstName: account.FirstName,
+                                     lastName: account.LastName);
+
+        IdentityResult createdResult = await userManager.CreateAsync(teacher, account.DefaultPassword);
+        if (!createdResult.Succeeded)
+        {
+            return false;
+        }
+
+        // 4. Assign role Teacher to the created account
+        await userManager.AddToRoleAsync(teacher, AppCts.Db.ROLE_TEACHER);
+        logger.LogInformation("Seeded new Teacher account: {Email}", account.Email);
+        return true;
+    }
+
+    /// <summary>
+    /// Seeding teachers for Development only 
+    /// </summary>
+    /// <returns></returns>
     private async Task SeedTeacherUsersAsync()
     {
         // --- Teacher 1 ---
-        string teacher1Email = _configuration["SeedingSettings:DefaultTeacherUsers:0:UserName"]!;
-        string teacher1Password = _configuration["SeedingSettings:DefaultTeacherUsers:0:Password"]!;
+        string teacher1Email = configuration["SeedingSettings:DefaultTeacherUsers:0:UserName"]!;
+        string teacher1Password = configuration["SeedingSettings:DefaultTeacherUsers:0:Password"]!;
         var teacher1Id = new Guid("0199f4b1-8487-4352-8a2a-320a00e40e58");
 
         // Check if the first teacher already exists
-        if (await _userManager.FindByEmailAsync(teacher1Email) == null)
+        if (await userManager.FindByEmailAsync(teacher1Email) == null)
         {
             var teacherUser1 = new Teacher
             {
@@ -122,20 +168,20 @@ public class IdentityDbContextSeeder
                 UpdatedAtUtc = DateTimeOffset.UtcNow
             };
 
-            IdentityResult result1 = await _userManager.CreateAsync(teacherUser1, teacher1Password);
+            IdentityResult result1 = await userManager.CreateAsync(teacherUser1, teacher1Password);
             if (result1.Succeeded)
             {
-                await _userManager.AddToRoleAsync(teacherUser1, "Teacher");
+                await userManager.AddToRoleAsync(teacherUser1, "Teacher");
             }
         }
 
         // --- Teacher 2 ---
-        string teacher2Email = _configuration["SeedingSettings:DefaultTeacherUsers:1:UserName"]!;
-        string teacher2Password = _configuration["SeedingSettings:DefaultTeacherUsers:1:Password"]!;
+        string teacher2Email = configuration["SeedingSettings:DefaultTeacherUsers:1:UserName"]!;
+        string teacher2Password = configuration["SeedingSettings:DefaultTeacherUsers:1:Password"]!;
         var teacher2Id = new Guid("0199f4b1-8487-4352-8a2a-320a00e40e59");
 
         // Check if the second teacher already exists
-        if (await _userManager.FindByEmailAsync(teacher2Email) == null)
+        if (await userManager.FindByEmailAsync(teacher2Email) == null)
         {
             var teacherUser2 = new Teacher
             {
@@ -148,10 +194,10 @@ public class IdentityDbContextSeeder
                 CreatedAtUtc = DateTimeOffset.UtcNow
             };
 
-            IdentityResult result2 = await _userManager.CreateAsync(teacherUser2, teacher2Password);
+            IdentityResult result2 = await userManager.CreateAsync(teacherUser2, teacher2Password);
             if (result2.Succeeded)
             {
-                await _userManager.AddToRoleAsync(teacherUser2, AppCts.Db.ROLE_TEACHER);
+                await userManager.AddToRoleAsync(teacherUser2, AppCts.Db.ROLE_TEACHER);
             }
         }
     }

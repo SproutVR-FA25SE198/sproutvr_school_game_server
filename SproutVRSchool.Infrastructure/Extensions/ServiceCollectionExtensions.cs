@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 using Polly;
 using Polly.Retry;
 using SproutVRSchool.Application.Abstractions.AccountServices;
@@ -150,18 +151,7 @@ public static partial class ServiceCollectionExtensions
                     await context.Response.WriteAsJsonAsync(problemDetails);
                 }
             };
-        }
-
-
-
-
-
-
-        );
-
-
-
-
+        });
 
         service.AddScoped<ITokenService, JwtTokenService>();
     }
@@ -207,9 +197,9 @@ public static partial class ServiceCollectionExtensions
             options.Password.RequireUppercase = false;
         }).AddEntityFrameworkStores<SchoolServerDbContext>();
 
-        service.AddScoped<IdentityDbContextSeeder>();
+        service.AddScoped<IIdentityDbContextSeeder, IdentityDbContextSeeder>();
 
-        service.AddScoped<SchoolServerDbContextSeeder>();
+        service.AddScoped<ISchoolServerDbContextSeeder, SchoolServerDbContextSeeder>();
 
         service.AddScoped<ISchoolServerDbContext>(provider => provider.GetRequiredService<SchoolServerDbContext>());
 
@@ -269,15 +259,22 @@ public static partial class ServiceCollectionExtensions
     /// <param name="configuration"></param>
     private static void AddFileHelpers(this IServiceCollection service, IConfiguration configuration)
     {
+        // File Helper Services 
         service.AddTransient<IFileReader, JsonFileReader>();
 
         string? contentRootPath = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath");
 
         service.AddSingleton<LocalStorageService>(sp =>
             new LocalStorageService(contentRootPath!));
-
         service.AddSingleton<ILocalStorageService>(sp => sp.GetRequiredService<LocalStorageService>());
         service.AddSingleton<IPathService>(sp => sp.GetRequiredService<LocalStorageService>());
+
+        service.AddTransient<IFileValidationService, FileValidationService>();
+
+        service.AddTransient<IExcelFileService, ExcelFileService>();
+
+        // Excel File EPPlus Service
+        ExcelPackage.License.SetNonCommercialPersonal(configuration.GetValue<string>("Miscs:EPPlusLicenseContext"));
     }
 
     /// <summary>

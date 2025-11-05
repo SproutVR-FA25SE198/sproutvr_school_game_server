@@ -74,7 +74,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
         byte[] byteArray = Encoding.UTF8.GetBytes(jsonContent);
         await using var stream = new MemoryStream(byteArray);
 
-        string fileName = AppCts.FilePaths.FILE_NAME_PRESET_VR_LESSON;
+        string fileName = AppCts.Files.FILE_NAME_PRESET_VR_LESSON;
         string relativePath = await localStorageService.SaveVrLessonPresetAsync(
             vrLesson.Lesson.TeacherId,
             vrLesson.LessonId,

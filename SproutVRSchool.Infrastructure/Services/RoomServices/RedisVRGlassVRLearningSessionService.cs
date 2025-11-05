@@ -46,7 +46,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWit
     public async Task<JoinRoomResponseDto> JoinRoomAsync(JoinRoomRequestDto joinRoomRequestDto)
     {
         // 1. Validate the join attempt
-        ValidationResult validation = await _validator.ValidateJoinAttemptAsync(
+        ValidationResultDto validation = await _validator.ValidateJoinAttemptAsync(
             joinRoomRequestDto.RoomCode,
             joinRoomRequestDto.VrDeviceSerialNumber
         );

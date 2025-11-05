@@ -14,7 +14,7 @@ using SproutVRSchool.Domain.Entities.VRLessons;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
-public class SchoolServerDbContextSeeder
+public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
 {
     // ===========================
     // === Fields
