@@ -22,9 +22,9 @@ public sealed class TeacherUpdateLessonCommandValidator : AbstractValidator<Teac
             .NotEmpty().WithMessage("Lesson ID is required.");
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name cannot be set to an empty value.")
-            .MaximumLength(100).WithMessage("Name must not exceed 100 characters.")
-            .When(x => x.Name != null); // Apply these rules ONLY if Name is not null.
+            .NotEmpty().WithMessage("DeviceName cannot be set to an empty value.")
+            .MaximumLength(100).WithMessage("DeviceName must not exceed 100 characters.")
+            .When(x => x.Name != null); // Apply these rules ONLY if DeviceName is not null.
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description cannot be set to an empty value.")

@@ -92,7 +92,7 @@ public static class AppCts
         public const string FILE_NAME_PRESET_VR_LESSON = "preset.json";
 
         public const string EXCEL_WORKSHEET_ACCOUNTS = "Accounts";
-        public const string EXCEL_WORKSHEET_DEVICES = "Devices";
+        public const string EXCEL_WORKSHEET_VRDEVICES = "VRDevices";
     }
 
     public static class Grpc

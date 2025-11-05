@@ -65,4 +65,14 @@ public sealed class VRDevicesSpecification : BaseSpecification<VRDevice>
         AddInclude(d => d.VRDeviceSessionSummaries);
         AddInclude(d => d.VRDeviceTaskProgresses);
     }
+
+    /// <summary>
+    /// Find specific VR device by device name and serial number
+    /// </summary>
+    /// <param name="deviceName"></param>
+    /// <param name="serialNumber"></param>
+    public VRDevicesSpecification(string deviceName, string serialNumber)
+        : base(x => x.Name == deviceName && x.SerialNumber == serialNumber)
+    {
+    }
 }

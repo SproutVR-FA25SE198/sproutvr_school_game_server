@@ -4,15 +4,15 @@ using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.FileServices.Dtos;
 using SproutVRSchool.Application.Exceptions.ContentSeedings;
 
-namespace SproutVRSchool.Application.RequestHandlers.Auth.Commands.SeedAccountsFromExcel;
+namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.ImportAccountsFromExcel;
 
-public sealed class SeedAccountsFromExcelCommandHandler(
+public sealed class SAImportAccountsFromExcelCommandHandler(
     IFileValidationService fileValidationService,
     IExcelFileService excelFileService,
     IIdentityDbContextSeeder identityDbContextSeeder
-    ) : IRequestHandler<SeedAccountsFromExcelCommand, SeedAccountsFromExcelResponseDto>
+    ) : IRequestHandler<SAImportAccountsFromExcelCommand, SAImportAccountsFromExcelCommandResponseDto>
 {
-    public async Task<SeedAccountsFromExcelResponseDto> Handle(SeedAccountsFromExcelCommand request, CancellationToken cancellationToken)
+    public async Task<SAImportAccountsFromExcelCommandResponseDto> Handle(SAImportAccountsFromExcelCommand request, CancellationToken cancellationToken)
     {
         // 1. File Validation
         if (!fileValidationService.IsFileValid(request.ExcelFile))
@@ -26,21 +26,22 @@ public sealed class SeedAccountsFromExcelCommandHandler(
         }
 
         // 2. Process Excel File, get the readonly list
-        IReadOnlyList<TeacherAccountExcelRowDto> teacherAccounts = excelFileService.ReadTeacherExcel(request.ExcelFile);
+        IReadOnlyList<TeacherAccountExcelRowDto> teacherAccounts = excelFileService.ReadTeachersExcel(request.ExcelFile);
 
         // 3. Seed teacher accounts to the database
-        int newAccountsAdded = 0;
+        int totalNewSeeded = 0;
         foreach (TeacherAccountExcelRowDto teacherAccount in teacherAccounts)
         {
             if (await identityDbContextSeeder.SeedTeacherFromExcelFileAsync(teacherAccount))
             {
-                newAccountsAdded++;
+                totalNewSeeded++;
             }
         }
 
         // 4. Return response
-        return new SeedAccountsFromExcelResponseDto(
-            Message: $"Successfully seeded {newAccountsAdded} teacher accounts from the provided Excel file.");
+        return new SAImportAccountsFromExcelCommandResponseDto(
+            TotalNewSeeded: totalNewSeeded,
+            Message: $"Successfully imported {totalNewSeeded} teacher accounts from the provided Excel file.");
 
     }
 }

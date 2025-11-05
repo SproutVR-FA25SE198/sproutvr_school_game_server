@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Text;
-using Microsoft.AspNetCore.Authentication;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -27,8 +27,8 @@ public sealed class TeacherCreateLessonCommandValidator : AbstractValidator<Teac
             .NotEmpty().WithMessage("Teacher ID is required.");
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Lesson Name is required.")
-            .MaximumLength(100).WithMessage("Lesson Name must not exceed 100 characters.");
+            .NotEmpty().WithMessage("Lesson DeviceName is required.")
+            .MaximumLength(100).WithMessage("Lesson DeviceName must not exceed 100 characters.");
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.")
