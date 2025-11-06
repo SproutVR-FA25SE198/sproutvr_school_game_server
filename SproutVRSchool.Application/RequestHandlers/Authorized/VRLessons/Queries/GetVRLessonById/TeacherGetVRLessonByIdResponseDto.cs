@@ -1,6 +1,6 @@
 ﻿using SproutVRSchool.Application.Commons.Responses;
 
-namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
 public record TeacherGetVRLessonByIdResponseDto
 {
