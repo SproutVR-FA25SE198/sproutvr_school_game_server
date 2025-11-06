@@ -8,7 +8,9 @@ public record AuthorizedGetVRDeviceQueryResponseDto(
     string SerialNumber,
     StatusDto Status,
     IReadOnlyList<AuthorizedGetVRDeviceQueryTasksResponseDto> TaskProgresses,
-    IReadOnlyList<AuthorizedGetVRDeviceQuerySessionSummariesResponseDto> SessionSummaries)
+    IReadOnlyList<AuthorizedGetVRDeviceQuerySessionSummariesResponseDto> SessionSummaries,
+    DateTimeOffset CreatedAtUtc,
+    DateTimeOffset CreatedAtVietNam)
 { }
 
 public record AuthorizedGetVRDeviceQueryTasksResponseDto(

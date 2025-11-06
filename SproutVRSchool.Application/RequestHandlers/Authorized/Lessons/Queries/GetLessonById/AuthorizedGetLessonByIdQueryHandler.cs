@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions.Resources;
@@ -8,7 +9,8 @@ using SproutVRSchool.Domain.Entities.Lessons;
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.GetLessonById;
 
 public sealed class AuthorizedGetLessonByIdQueryHandler(
-    IUnitOfWork uow
+    IUnitOfWork uow,
+    IDateTimeProvider dateTimeProvider
     ) : IRequestHandler<AuthorizedGetLessonByIdQuery, AuthorizedGetLessonByIdQueryResponseDto>
 {
     public async Task<AuthorizedGetLessonByIdQueryResponseDto> Handle(AuthorizedGetLessonByIdQuery request, CancellationToken cancellationToken)
@@ -53,7 +55,8 @@ public sealed class AuthorizedGetLessonByIdQueryHandler(
             Description = lesson.Description,
             ResourceRelativeFilePath = lesson.ResourceRelativeFilePath,
             Status = new StatusDto(lesson.Status),
-            CreatedAtUtc = lesson.CreatedAtUtc
+            CreatedAtUtc = lesson.CreatedAtUtc,
+            CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(lesson.CreatedAtUtc)
         };
     }
 }

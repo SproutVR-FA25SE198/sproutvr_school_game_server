@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions.Resources;
@@ -7,7 +8,7 @@ using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.GetVRDevice;
 
-public sealed class AuthorizedGetVRDeviceQueryHandler(IUnitOfWork uow)
+public sealed class AuthorizedGetVRDeviceQueryHandler(IUnitOfWork uow, IDateTimeProvider dateTimeProvider)
     : IRequestHandler<AuthorizedGetVRDeviceQuery, AuthorizedGetVRDeviceQueryResponseDto>
 {
     public async Task<AuthorizedGetVRDeviceQueryResponseDto> Handle(AuthorizedGetVRDeviceQuery request, CancellationToken cancellationToken)
@@ -46,7 +47,9 @@ public sealed class AuthorizedGetVRDeviceQueryHandler(IUnitOfWork uow)
             device.SerialNumber,
             new StatusDto(device.Status),
             progresses,
-            summaries
+            summaries,
+            device.CreatedAtUtc,
+            dateTimeProvider.ConvertToVietNamTime(device.CreatedAtUtc)
         );
     }
 }

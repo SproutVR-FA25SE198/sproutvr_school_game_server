@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions.Resources;
@@ -7,11 +8,11 @@ using SproutVRSchool.Domain.Entities.VRLessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
-public sealed class TeacherGetVRLessonByIdQueryHandler(
-    IUnitOfWork uow)
-    : IRequestHandler<TeacherGetVRLessonByIdQuery, TeacherGetVRLessonByIdResponseDto>
+public sealed class AuthorizedGetVRLessonByIdQueryHandler(
+    IUnitOfWork uow, IDateTimeProvider dateTimeProvider)
+    : IRequestHandler<AuthorizedGetVRLessonByIdQuery, AuthorizedGetVRLessonByIdResponseDto>
 {
-    public async Task<TeacherGetVRLessonByIdResponseDto> Handle(TeacherGetVRLessonByIdQuery request, CancellationToken cancellationToken)
+    public async Task<AuthorizedGetVRLessonByIdResponseDto> Handle(AuthorizedGetVRLessonByIdQuery request, CancellationToken cancellationToken)
     {
         // 1. Create the specification
         var spec = new VRLessonSpecification(request.id);
@@ -21,7 +22,7 @@ public sealed class TeacherGetVRLessonByIdQueryHandler(
             ?? throw new SvrResourceNotFoundException($"VRLesson with ID {request.id} not found.");
 
         // 3. Map the entity to the response DTO
-        return new TeacherGetVRLessonByIdResponseDto
+        return new AuthorizedGetVRLessonByIdResponseDto
         {
             Id = vrLesson.Id,
             Name = vrLesson.Name,
@@ -29,9 +30,11 @@ public sealed class TeacherGetVRLessonByIdQueryHandler(
             Duration = vrLesson.MaxDuration,
             PresetJsonRelativeFilePath = vrLesson.PresetJsonRelativeFilePath,
             Status = new StatusDto(vrLesson.Status),
+            CreatedAtUtc = vrLesson.CreatedAtUtc,
+            CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(vrLesson.CreatedAtUtc),
 
             // Map the included Lesson entity to its DTO
-            Lesson = new GetVRLessonByIdLessonResponseDto
+            Lesson = new AuthorizedGetVRLessonByIdLessonResponseDto
             {
                 Id = vrLesson.Lesson.Id,
                 Name = vrLesson.Lesson.Name,
@@ -39,7 +42,7 @@ public sealed class TeacherGetVRLessonByIdQueryHandler(
             },
 
             // Map the included Map entity to its DTO
-            Map = new GetVRLessonByIdMapResponseDto
+            Map = new AuthorizedGetVRLessonByIdMapResponseDto
             {
                 Id = vrLesson.Map.Id,
                 Name = vrLesson.Map.Name,
@@ -48,28 +51,28 @@ public sealed class TeacherGetVRLessonByIdQueryHandler(
             },
 
             // Map the list of VRTask entities
-            Tasks = vrLesson.VRTasks.Select(task => new GetVRLessonByIdTaskResponseDto
+            Tasks = vrLesson.VRTasks.Select(task => new AuthorizedGetVRLessonByIdTaskResponseDto
             {
                 Id = task.Id,
                 TaskNumber = task.TaskNumber,
                 Description = task.Description,
 
                 // Map nested task relations
-                TaskLocation = new GetVRLessonByIdTaskLocationResponseDto
+                TaskLocation = new AuthorizedGetVRLessonByIdTaskLocationResponseDto
                 {
                     Id = task.TaskLocation.Id,
                     Name = task.TaskLocation.Name,
                     LocationCode = task.TaskLocation.LocationCode,
                     ImageUrl = task.TaskLocation.ImageUrl
                 },
-                MapObject = new GetVRLessonByIdMapObjectResponseDto
+                MapObject = new AuthorizedGetVRLessonByIdMapObjectResponseDto
                 {
                     Id = task.MapObject.Id,
                     Name = task.MapObject.Name,
                     ObjectCode = task.MapObject.ObjectCode,
                     ImageUrl = task.MapObject.ImageUrl
                 },
-                ActivityType = new GetVRLessonByIdActivityTypeResponseDto
+                ActivityType = new AuthorizedGetVRLessonByIdActivityTypeResponseDto
                 {
                     Id = task.ActivityType.Id,
                     Name = task.ActivityType.Name,

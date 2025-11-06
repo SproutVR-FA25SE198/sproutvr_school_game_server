@@ -12,6 +12,7 @@ public record AuthorizedGetLessonByIdQueryResponseDto
     public string ResourceRelativeFilePath { get; init; }
     public StatusDto Status { get; init; }
     public DateTimeOffset CreatedAtUtc { get; init; }
+    public DateTimeOffset CreatedAtVietNam { get; set; }
 }
 
 public record AuthorizedGetLessonByIdSubjectResponseDto

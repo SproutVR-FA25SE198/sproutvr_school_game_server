@@ -28,6 +28,8 @@ public sealed class ActivityTypesController(IMediator mediator) : BaseApiControl
         return Ok(result);
     }
 
+
+
     // ========================
     // === POSTs
     // ========================

@@ -22,8 +22,8 @@ public class VRLessonsController(IMediator mediator) : BaseApiController
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var query = new TeacherGetVRLessonByIdQuery(id);
-        TeacherGetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
+        var query = new AuthorizedGetVRLessonByIdQuery(id);
+        AuthorizedGetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
