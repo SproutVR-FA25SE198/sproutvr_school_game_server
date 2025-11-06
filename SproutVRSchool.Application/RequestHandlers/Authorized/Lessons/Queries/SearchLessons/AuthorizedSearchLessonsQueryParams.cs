@@ -9,5 +9,6 @@ public class AuthorizedSearchLessonsQueryParams : BaseGetListParams
     public LessonStatus? LessonStatus { get; set; }
     public Guid? SubjectId { get; set; }
     public Guid? TeacherId { get; set; }
+    public Guid? MasterSubjectId { get; set; }
     public string? SortBy { get; set; } = string.Empty;
 }

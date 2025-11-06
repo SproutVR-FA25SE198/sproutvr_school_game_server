@@ -24,11 +24,17 @@ public class AuthorizedSearchLessonsQueryHandler(
             Name: lesson.Name,
             Description: lesson.Description,
             ResourceRelativeFilePath: lesson.ResourceRelativeFilePath,
+            VRLessonsCount: lesson.VRLessons.Count,
             Status: new StatusDto(lesson.Status),
             Subject: new AuthorizedSearchLessonsQuerySubjectDto(
                 Name: lesson.Subject.Name,
                 Description: lesson.Subject.Description,
                 ImageUrl: lesson.Subject.ImageUrl
+            ),
+            MasterSubject: new AuthorizedSearchLessonsQueryMasterSubjectDto(
+                Name: lesson.Subject.MasterSubject.Name,
+                Description: lesson.Subject.MasterSubject.Description,
+                ImageUrl: lesson.Subject.MasterSubject.ImageUrl
             ),
             Teacher: new AuthorizedSearchLessonsQueryTeacherDto(
                 FirstName: lesson.Teacher.FirstName,

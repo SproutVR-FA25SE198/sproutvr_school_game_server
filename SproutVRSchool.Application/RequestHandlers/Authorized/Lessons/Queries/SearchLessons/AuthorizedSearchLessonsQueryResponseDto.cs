@@ -10,8 +10,16 @@ public record AuthorizedSearchLessonsQueryResponseDto(
     StatusDto Status,
     AuthorizedSearchLessonsQuerySubjectDto Subject,
     AuthorizedSearchLessonsQueryTeacherDto Teacher,
+    AuthorizedSearchLessonsQueryMasterSubjectDto MasterSubject,
     DateTimeOffset CreatedAtUtc,
-    DateTimeOffset CreatedAtVietNam
+    DateTimeOffset CreatedAtVietNam,
+    int VRLessonsCount
+);
+
+public record AuthorizedSearchLessonsQueryMasterSubjectDto(
+    string Name,
+    string Description,
+    string ImageUrl
 );
 
 public record AuthorizedSearchLessonsQuerySubjectDto(

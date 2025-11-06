@@ -1,4 +1,5 @@
-﻿using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.SearchLessons;
+﻿using Microsoft.EntityFrameworkCore;
+using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.SearchLessons;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Lessons;
 
@@ -25,6 +26,7 @@ public sealed class LessonsSpecification : BaseSpecification<Lesson>
            (string.IsNullOrEmpty(searchParams.Name) || x.Name.Contains(searchParams.Name)) &&
            (!searchParams.LessonStatus.HasValue || x.Status == searchParams.LessonStatus) &&
            (!searchParams.SubjectId.HasValue || x.SubjectId == searchParams.SubjectId.Value) &&
+           (!searchParams.MasterSubjectId.HasValue || x.Subject.MasterSubjectId == searchParams.MasterSubjectId.Value) &&
            (!searchParams.TeacherId.HasValue || x.TeacherId == searchParams.TeacherId.Value))
     {
         // Pagination
@@ -60,6 +62,8 @@ public sealed class LessonsSpecification : BaseSpecification<Lesson>
 
         // Include navigation properties
         AddInclude(x => x.Subject);
+        AddThenInclude(x => x.Include(j => j.Subject).ThenInclude(j => j.MasterSubject));
+        AddInclude(x => x.VRLessons);
         AddInclude(x => x.Teacher);
     }
 }
