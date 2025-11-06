@@ -3,8 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
-using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
 using SproutVRSchool.Domain;
+using SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
 
@@ -15,17 +15,6 @@ public class VRLessonController(IMediator mediator) : BaseApiController
     // ========================
     // === GETs
     // ========================
-
-    // GET: api/v1/teacher/vrlessons/{id}
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetVRLesson(
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken)
-    {
-        var query = new TeacherGetVRLessonByIdQuery(id);
-        TeacherGetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
-        return Ok(result);
-    }
 
     // ========================
     // === POSTs
@@ -41,8 +30,8 @@ public class VRLessonController(IMediator mediator) : BaseApiController
 
         // 201 Created response
         return CreatedAtAction(
-            nameof(GetVRLesson),
-            new { id = vrLessonId },
+            null,
+            null,
             new { id = vrLessonId });
     }
 

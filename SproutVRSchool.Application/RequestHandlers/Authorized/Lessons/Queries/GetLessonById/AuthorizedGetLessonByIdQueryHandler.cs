@@ -5,13 +5,13 @@ using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.Lessons;
 
-namespace SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Queries.GetLessonById;
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.GetLessonById;
 
-public sealed class TeacherGetLessonByIdQueryHandler(
+public sealed class AuthorizedGetLessonByIdQueryHandler(
     IUnitOfWork uow
-    ) : IRequestHandler<TeacherGetLessonByIdQuery, TeacherGetLessonByIdQueryResponseDto>
+    ) : IRequestHandler<AuthorizedGetLessonByIdQuery, AuthorizedGetLessonByIdQueryResponseDto>
 {
-    public async Task<TeacherGetLessonByIdQueryResponseDto> Handle(TeacherGetLessonByIdQuery request, CancellationToken cancellationToken)
+    public async Task<AuthorizedGetLessonByIdQueryResponseDto> Handle(AuthorizedGetLessonByIdQuery request, CancellationToken cancellationToken)
     {
         // 1. Fetch the lesson entity from the repo
         var spec = new LessonsSpecification(request.Id);
@@ -26,7 +26,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
         }
 
         // 3. Map the lesson entity to GetLessonByIdResponseDto
-        var subject = new GetLessonByIdSubjectResponseDto
+        var subject = new AuthorizedGetLessonByIdSubjectResponseDto
         {
             Id = lesson.Subject.Id,
             Name = lesson.Subject.Name,
@@ -35,7 +35,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
         };
 
         // 4. Map the teacher info
-        var teacher = new GetLessonByIdTeacherResponseDto
+        var teacher = new AuthorizedGetLessonByIdTeacherResponseDto
         {
             Id = lesson.Teacher.Id,
             FirstName = lesson.Teacher.FirstName,
@@ -44,7 +44,7 @@ public sealed class TeacherGetLessonByIdQueryHandler(
         };
 
         // 5. Return the response DTO
-        return new TeacherGetLessonByIdQueryResponseDto
+        return new AuthorizedGetLessonByIdQueryResponseDto
         {
             Id = lesson.Id,
             Subject = subject,

@@ -5,7 +5,7 @@ using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.VRLessons;
 
-namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
 public sealed class TeacherGetVRLessonByIdQueryHandler(
     IUnitOfWork uow)

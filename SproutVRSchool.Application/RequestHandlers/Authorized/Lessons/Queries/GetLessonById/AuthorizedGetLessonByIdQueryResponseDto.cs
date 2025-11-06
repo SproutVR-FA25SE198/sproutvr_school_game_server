@@ -1,12 +1,12 @@
 ﻿using SproutVRSchool.Application.Commons.Responses;
 
-namespace SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Queries.GetLessonById;
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.GetLessonById;
 
-public record TeacherGetLessonByIdQueryResponseDto
+public record AuthorizedGetLessonByIdQueryResponseDto
 {
     public Guid Id { get; init; }
-    public GetLessonByIdSubjectResponseDto Subject { get; init; }
-    public GetLessonByIdTeacherResponseDto Teacher { get; init; }
+    public AuthorizedGetLessonByIdSubjectResponseDto Subject { get; init; }
+    public AuthorizedGetLessonByIdTeacherResponseDto Teacher { get; init; }
     public string Name { get; init; }
     public string Description { get; init; }
     public string ResourceRelativeFilePath { get; init; }
@@ -14,7 +14,7 @@ public record TeacherGetLessonByIdQueryResponseDto
     public DateTimeOffset CreatedAtUtc { get; init; }
 }
 
-public record GetLessonByIdSubjectResponseDto
+public record AuthorizedGetLessonByIdSubjectResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
@@ -22,7 +22,7 @@ public record GetLessonByIdSubjectResponseDto
     public string ImageUrl { get; init; }
 }
 
-public record GetLessonByIdTeacherResponseDto
+public record AuthorizedGetLessonByIdTeacherResponseDto
 {
     public Guid Id { get; init; }
     public string FirstName { get; init; }

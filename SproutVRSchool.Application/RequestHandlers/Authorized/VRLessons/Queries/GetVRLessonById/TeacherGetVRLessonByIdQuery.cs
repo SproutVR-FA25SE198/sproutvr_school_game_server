@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Queries.GetVRLessonById;
+namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
 public record TeacherGetVRLessonByIdQuery(Guid id)
     : IRequest<TeacherGetVRLessonByIdResponseDto>
