@@ -1,5 +1,6 @@
 ﻿
 using Asp.Versioning;
+using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
@@ -19,7 +20,7 @@ public sealed class VRDevicesController(IMediator mediator) : BaseApiController
 
     // GET: api/v1/authorized/vrdevices
     [HttpGet]
-    public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>>> SearchDevices(
+    public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>>> SearchVRDevices(
         [FromQuery] AuthorizedSearchVRDevicesParams @params,
         CancellationToken cancellationToken
         )

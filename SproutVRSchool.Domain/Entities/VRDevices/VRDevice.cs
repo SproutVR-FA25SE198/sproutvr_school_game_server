@@ -33,4 +33,14 @@ public sealed class VRDevice : BaseEntity
             UpdatedAtUtc = DateTimeOffset.UtcNow
         };
     }
+
+    /// <summary>
+    /// Update status of the VR device
+    /// </summary>
+    /// <param name="status"></param>
+    public void UpdateStatus(VRDeviceStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

@@ -4,7 +4,7 @@ using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.FileServices.Dtos;
 using SproutVRSchool.Application.Exceptions.ContentSeedings;
 
-namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.ImportAccountsFromExcel;
+namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.ImportAccountsFromExcel;
 
 public sealed class SAImportAccountsFromExcelCommandHandler(
     IFileValidationService fileValidationService,
