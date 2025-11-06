@@ -7,7 +7,7 @@ using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
-namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.ImportVRDevicesFromExcel;
+namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.VRDevices.Commands.ImportVRDevicesFromExcel;
 
 public class SAImportVRDevicesFromExcelCommandHandler(
     IUnitOfWork uow,

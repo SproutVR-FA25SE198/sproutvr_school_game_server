@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.ImportAccountsFromExcel;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.ImportAccountsFromExcel;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
