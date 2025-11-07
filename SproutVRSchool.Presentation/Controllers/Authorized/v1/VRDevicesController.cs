@@ -19,14 +19,14 @@ public sealed class VRDevicesController(IMediator mediator) : BaseApiController
 
     // GET: api/v1/authorized/vrdevices
     [HttpGet]
-    public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>>> SearchVRDevices(
-        [FromQuery] AuthorizedSearchVRDevicesParams @params,
+    public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchVRDevicesQueryResponseDto>>> SearchVRDevices(
+        [FromQuery] AuthorizedSearchVRDevicesQueryParams @params,
         CancellationToken cancellationToken
         )
     {
         @params.ApplyPagingDefaults();
         var query = new AuthorizedSearchVRDevicesQuery(@params);
-        GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto> result = await mediator.Send(query, cancellationToken);
+        GetListResultResponseDto<AuthorizedSearchVRDevicesQueryResponseDto> result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 

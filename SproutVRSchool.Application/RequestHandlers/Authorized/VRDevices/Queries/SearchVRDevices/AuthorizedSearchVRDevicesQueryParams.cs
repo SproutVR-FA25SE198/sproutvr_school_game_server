@@ -3,7 +3,7 @@ using SproutVRSchool.Domain.Entities.VRDevices;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.SearchVRDevices;
 
-public sealed class AuthorizedSearchVRDevicesParams : BaseGetListParams
+public sealed class AuthorizedSearchVRDevicesQueryParams : BaseGetListParams
 {
     public string? Name { get; set; }
     public string? SerialNumber { get; set; }

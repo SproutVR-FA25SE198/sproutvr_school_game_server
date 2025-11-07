@@ -56,7 +56,6 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
     // === Methods
     // ===============================
-
     public async Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request)
     {
         // 1. Get essential variables
@@ -105,7 +104,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         // 2. Get the list tasks related to the VRLesson from repositories
         // Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
         (IReadOnlyList<VRTask> Data, int Count) vrTasks = await _unitOfWork.Repository<VRTask>()
-            .ListAsync(new VRTaskSpecification(vrLesson.Id));
+            .ListAsync(new VRTasksSpecification(new ActivateRoomParams(vrLesson.Id)));
 
         var taskTemplate = vrTasks.Data.ToDictionary(
             vrTask => vrTask.Id.ToString(),

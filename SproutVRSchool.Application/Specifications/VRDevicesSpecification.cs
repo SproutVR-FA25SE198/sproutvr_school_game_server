@@ -10,7 +10,7 @@ public sealed class VRDevicesSpecification : BaseSpecification<VRDevice>
     /// Searching VRDevices specification with filtering, sorting and pagination.
     /// </summary>
     /// <param name="searchVRDevicesParam"></param>
-    public VRDevicesSpecification(AuthorizedSearchVRDevicesParams searchVRDevicesParam)
+    public VRDevicesSpecification(AuthorizedSearchVRDevicesQueryParams searchVRDevicesParam)
         : base(x =>
             (string.IsNullOrEmpty(searchVRDevicesParam.Name) || x.Name.Contains(searchVRDevicesParam.Name)) &&
             (string.IsNullOrEmpty(searchVRDevicesParam.SerialNumber) || x.SerialNumber.Contains(searchVRDevicesParam.SerialNumber)) &&

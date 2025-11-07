@@ -2,47 +2,47 @@
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
-public record AuthorizedGetVRLessonByIdResponseDto
+public record AuthorizedGetVRLessonByIdQueryResponseDto
 {
     public Guid Id { get; init; }
-    public AuthorizedGetVRLessonByIdLessonResponseDto Lesson { get; init; }
-    public AuthorizedGetVRLessonByIdMapResponseDto Map { get; init; }
+    public AuthorizedGetVRLessonByIdQueryLessonResponseDto Lesson { get; init; }
+    public AuthorizedGetVRLessonByIdQueryMapResponseDto Map { get; init; }
     public string Name { get; init; }
     public string Description { get; init; }
     public TimeSpan Duration { get; init; }
     public string? PresetJsonRelativeFilePath { get; init; }
     public StatusDto Status { get; init; }
 
-    public IReadOnlyList<AuthorizedGetVRLessonByIdTaskResponseDto> Tasks { get; init; } = [];
+    public IReadOnlyList<AuthorizedGetVRLessonByIdQueryTaskResponseDto> Tasks { get; init; } = [];
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }
 
-public class AuthorizedGetVRLessonByIdLessonResponseDto
+public class AuthorizedGetVRLessonByIdQueryLessonResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
     public string Description { get; init; }
 }
 
-public record AuthorizedGetVRLessonByIdTaskResponseDto
+public record AuthorizedGetVRLessonByIdQueryTaskResponseDto
 {
     public Guid Id { get; init; }
-    public AuthorizedGetVRLessonByIdTaskLocationResponseDto TaskLocation { get; init; }
-    public AuthorizedGetVRLessonByIdMapObjectResponseDto MapObject { get; init; }
-    public AuthorizedGetVRLessonByIdActivityTypeResponseDto ActivityType { get; init; }
+    public AuthorizedGetVRLessonByIdQueryTaskLocationResponseDto TaskLocation { get; init; }
+    public AuthorizedGetVRLessonByIdQueryMapObjectResponseDto MapObject { get; init; }
+    public AuthorizedGetVRLessonByIdQueryActivityTypeResponseDto ActivityType { get; init; }
     public int TaskNumber { get; init; }
     public string Description { get; init; }
 }
 
-public class AuthorizedGetVRLessonByIdActivityTypeResponseDto
+public class AuthorizedGetVRLessonByIdQueryActivityTypeResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
     public string ActivityCode { get; init; }
 }
 
-public record AuthorizedGetVRLessonByIdMapObjectResponseDto
+public record AuthorizedGetVRLessonByIdQueryMapObjectResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
@@ -50,7 +50,7 @@ public record AuthorizedGetVRLessonByIdMapObjectResponseDto
     public string ImageUrl { get; init; }
 }
 
-public record AuthorizedGetVRLessonByIdTaskLocationResponseDto
+public record AuthorizedGetVRLessonByIdQueryTaskLocationResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
@@ -58,7 +58,7 @@ public record AuthorizedGetVRLessonByIdTaskLocationResponseDto
     public string ImageUrl { get; init; }
 }
 
-public record AuthorizedGetVRLessonByIdMapResponseDto
+public record AuthorizedGetVRLessonByIdQueryMapResponseDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }

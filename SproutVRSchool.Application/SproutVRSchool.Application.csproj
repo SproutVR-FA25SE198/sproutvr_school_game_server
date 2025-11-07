@@ -19,10 +19,7 @@
 
 
 	<ItemGroup>
-	  <Folder Include="RequestHandlers\Authorized\MapObjects\Commands\" />
 	  <Folder Include="RequestHandlers\Authorized\MasterSubjects\Commands\" />
-	  <Folder Include="RequestHandlers\Authorized\Subjects\Commands\" />
-	  <Folder Include="RequestHandlers\Authorized\TaskLocations\Commands\" />
 	  <Folder Include="RequestHandlers\Authorized\VRDevices\Commands\" />
 	  <Folder Include="RequestHandlers\Auth\Queries\" />
 	  <Folder Include="RequestHandlers\Guest\" />
