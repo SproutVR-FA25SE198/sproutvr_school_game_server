@@ -163,5 +163,16 @@ public static class AppCts
             public const string NAME_ASC = "nameAsc";
             public const string NAME_DESC = "nameDesc";
         }
+        public static class VRLessons
+        {
+            public const string NAME_ASC = "nameAsc";
+            public const string NAME_DESC = "nameDesc";
+        }
+
+        public static class VRTasks
+        {
+            public const string TASK_NUMBER_ASC = "taskNumberAsc";
+            public const string TASK_NUMBER_DESC = "taskNumberDesc";
+        }
     }
 }

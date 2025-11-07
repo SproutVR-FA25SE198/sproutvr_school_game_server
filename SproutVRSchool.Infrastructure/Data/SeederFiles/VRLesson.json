@@ -6,7 +6,7 @@
     "Name": "Solar System Exploration",
     "Description": "A guided tour of the planets in our solar system.",
     "MaxDuration": "00:45:00",
-    "PresetJsonRelativeFilePath": "Data\\Presets\\0199f4b1-8487-4352-8a2a-320a00e40e58\\preset1.json",
+    "PresetJsonRelativeFilePath": "",
     "Status": "Active"
   }
 ]

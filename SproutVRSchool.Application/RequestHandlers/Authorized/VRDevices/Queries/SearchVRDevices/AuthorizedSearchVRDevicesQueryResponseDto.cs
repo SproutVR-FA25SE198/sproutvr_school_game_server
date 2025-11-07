@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.SearchVRDevices;
 
-public record AuthorizedSearchVRDevicesResponseDto(
+public record AuthorizedSearchVRDevicesQueryResponseDto(
     Guid Id,
     string Name,
     string SerializeNumber,

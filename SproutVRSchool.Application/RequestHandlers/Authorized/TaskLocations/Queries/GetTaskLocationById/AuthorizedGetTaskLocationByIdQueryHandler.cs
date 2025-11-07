@@ -27,7 +27,7 @@ public sealed class AuthorizedGetTaskLocationByIdQueryHandler(
         }
 
         // 3. Map the nested Map info
-        var mapDto = new AuthorizedGetTaskLocationByIdMapResponseDto
+        var mapDto = new AuthorizedGetTaskLocationByIdQueryMapResponseDto
         {
             Id = taskLocation.Map.Id,
             MapCode = taskLocation.Map.MapCode,

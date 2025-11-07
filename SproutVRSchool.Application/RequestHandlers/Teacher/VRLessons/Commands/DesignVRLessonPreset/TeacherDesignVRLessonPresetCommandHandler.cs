@@ -21,7 +21,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
     public async Task<Unit> Handle(TeacherDesignVRLessonPresetCommand request, CancellationToken cancellationToken)
     {
         // 1. Fetch the VR Lesson and its realted Tasks (will all include)
-        var spec = new VRLessonSpecification(request.VRLessonId);
+        var spec = new VRLessonsSpecification(request.VRLessonId);
         VRLesson vrLesson = await uow.Repository<VRLesson>().GetEntityBySpec(spec);
 
         // 2. If not found, throw not found exception

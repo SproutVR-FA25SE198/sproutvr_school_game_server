@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.RequestHandlers.Authorized.ActivityTypes.Queries.GetActivityTypeById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.ActivityTypes.Queries.SearchActivityTypes;
 using SproutVRSchool.Domain;
 
@@ -16,7 +15,7 @@ public sealed class ActivityTypesController(IMediator mediator) : BaseApiControl
     // === GETs
     // =======================
 
-    // GET: api/v1/authorized/activty-types
+    // GET: api/v1/authorized/vrtasks
     [HttpGet]
     public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchActivityTypesQueryResponseDto>>> SearchActivityTypes(
       [FromQuery] AuthorizedSearchActivityTypesQueryParams @params,
@@ -26,16 +25,6 @@ public sealed class ActivityTypesController(IMediator mediator) : BaseApiControl
         var query = new AuthorizedSearchActivityTypesQuery(@params);
         GetListResultResponseDto<AuthorizedSearchActivityTypesQueryResponseDto> result = await mediator.Send(query, cancellationToken);
         return Ok(result);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetActivityTypeById(
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken)
-    {
-        var query = new AuthorizedGetActivityTypeByIdQuery(id);
-        AuthorizedGetActivityTypeByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
-        return Ok(response);
     }
 
     // ========================

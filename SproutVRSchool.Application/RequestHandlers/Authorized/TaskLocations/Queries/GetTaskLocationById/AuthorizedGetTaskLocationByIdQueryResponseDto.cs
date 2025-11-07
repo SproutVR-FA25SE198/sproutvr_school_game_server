@@ -3,7 +3,7 @@
 public record AuthorizedGetTaskLocationByIdQueryResponseDto
 {
     public Guid Id { get; init; }
-    public AuthorizedGetTaskLocationByIdMapResponseDto Map { get; init; } // Nested Map DTO
+    public AuthorizedGetTaskLocationByIdQueryMapResponseDto Map { get; init; } // Nested Map DTO
     public string LocationCode { get; init; }
     public string Name { get; init; }
     public string ImageUrl { get; init; }

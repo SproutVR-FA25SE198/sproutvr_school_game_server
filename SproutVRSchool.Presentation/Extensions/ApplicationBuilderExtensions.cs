@@ -83,7 +83,7 @@ internal static class ApplicationBuilderExtensions
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(contenRootPath),
-            RequestPath = AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH // e.g. /content
+            RequestPath = $"/api{AppCts.Files.PREFIX_PUBLIC_CONTENT_PATH}" // e.g. /api/content
         });
     }
 }

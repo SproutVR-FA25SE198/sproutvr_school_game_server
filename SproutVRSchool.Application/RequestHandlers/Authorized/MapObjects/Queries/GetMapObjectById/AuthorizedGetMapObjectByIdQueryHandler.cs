@@ -27,7 +27,7 @@ public sealed class AuthorizedGetMapObjectByIdQueryHandler(
         }
 
         // 3. Map the nested Map info
-        var mapDto = new AuthorizedGetMapObjectByIdMapResponseDto
+        var mapDto = new AuthorizedGetMapObjectByIdQueryMapResponseDto
         {
             Id = mapObject.Map.Id,
             MapCode = mapObject.Map.MapCode,

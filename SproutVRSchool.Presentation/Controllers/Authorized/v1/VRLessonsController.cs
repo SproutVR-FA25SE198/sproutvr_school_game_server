@@ -1,7 +1,9 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.SearchVRLessons;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
@@ -21,7 +23,22 @@ public class VRLessonsController(IMediator mediator) : BaseApiController
         CancellationToken cancellationToken)
     {
         var query = new AuthorizedGetVRLessonByIdQuery(id);
-        AuthorizedGetVRLessonByIdResponseDto result = await mediator.Send(query, cancellationToken);
+        AuthorizedGetVRLessonByIdQueryResponseDto result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    // GET: api/v1/authorized/vrlessons
+    [HttpGet]
+    public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchVRLessonsQueryResponseDto>>> SearchVRLessons(
+        [FromQuery] AuthorizedSearchVRLessonsQueryParams @params,
+        CancellationToken cancellationToken
+    )
+    {
+        @params.ApplyPagingDefaults();
+        var query = new AuthorizedSearchVRLessonsQuery(@params);
+
+        GetListResultResponseDto<AuthorizedSearchVRLessonsQueryResponseDto> result = await mediator.Send(query, cancellationToken);
+
         return Ok(result);
     }
 
@@ -34,3 +51,5 @@ public class VRLessonsController(IMediator mediator) : BaseApiController
     // ========================
 
 }
+
+

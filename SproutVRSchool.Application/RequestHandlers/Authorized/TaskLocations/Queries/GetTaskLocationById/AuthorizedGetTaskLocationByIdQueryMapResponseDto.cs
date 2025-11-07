@@ -1,6 +1,6 @@
 ﻿namespace SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.GetTaskLocationById;
 
-public record AuthorizedGetTaskLocationByIdMapResponseDto
+public record AuthorizedGetTaskLocationByIdQueryMapResponseDto
 {
     public Guid Id { get; init; }
     public string MapCode { get; init; }

@@ -10,19 +10,19 @@ namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Querie
 public sealed class AuthorizedSearchVRDevicesQueryHandler(
     IUnitOfWork uow,
     IDateTimeProvider dateTimeProvider
-    ) : IRequestHandler<AuthorizedSearchVRDevicesQuery, GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>>
+    ) : IRequestHandler<AuthorizedSearchVRDevicesQuery, GetListResultResponseDto<AuthorizedSearchVRDevicesQueryResponseDto>>
 {
-    public async Task<GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>> Handle(AuthorizedSearchVRDevicesQuery request, CancellationToken cancellationToken)
+    public async Task<GetListResultResponseDto<AuthorizedSearchVRDevicesQueryResponseDto>> Handle(AuthorizedSearchVRDevicesQuery request, CancellationToken cancellationToken)
     {
         // Get items & count from params
         (IReadOnlyList<VRDevice> Data, int Count) rawLists = await uow.Repository<VRDevice>()
             .ListAsync(new VRDevicesSpecification(request.AuthorizedSearchVRDevicesParams));
 
-        var result = new GetListResultResponseDto<AuthorizedSearchVRDevicesResponseDto>(
+        var result = new GetListResultResponseDto<AuthorizedSearchVRDevicesQueryResponseDto>(
             pageSize: request.AuthorizedSearchVRDevicesParams.PageSize,
             pageIndex: request.AuthorizedSearchVRDevicesParams.PageIndex,
             totalItems: rawLists.Count,
-            items: [.. rawLists.Data.Select(device => new AuthorizedSearchVRDevicesResponseDto(
+            items: [.. rawLists.Data.Select(device => new AuthorizedSearchVRDevicesQueryResponseDto(
                 Id: device.Id,
                 Name: device.Name,
                 SerializeNumber: device.SerialNumber,
