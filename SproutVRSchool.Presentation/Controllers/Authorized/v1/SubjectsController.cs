@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.Subjects.Queries.GetSubjectById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Subjects.Queries.SearchSubjects;
 using SproutVRSchool.Domain;
 
@@ -29,6 +30,18 @@ public class SubjectsController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
+    // GET: api/v1/authorized/subjects/{id}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetSubject(
+    [FromRoute] Guid id,
+    CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetSubjectByIdQuery(id);
+
+        AuthorizedGetSubjectByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+
+        return Ok(response);
+    }
 
 
     // ========================

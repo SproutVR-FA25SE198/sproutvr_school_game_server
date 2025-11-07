@@ -1,6 +1,5 @@
 ﻿
 using Asp.Versioning;
-using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;

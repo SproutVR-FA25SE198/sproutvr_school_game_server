@@ -1,8 +1,8 @@
-﻿
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.ActivityTypes.Queries.GetActivityTypeById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.ActivityTypes.Queries.SearchActivityTypes;
 using SproutVRSchool.Domain;
 
@@ -28,7 +28,15 @@ public sealed class ActivityTypesController(IMediator mediator) : BaseApiControl
         return Ok(result);
     }
 
-
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetActivityTypeById(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetActivityTypeByIdQuery(id);
+        AuthorizedGetActivityTypeByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+        return Ok(response);
+    }
 
     // ========================
     // === POSTs
