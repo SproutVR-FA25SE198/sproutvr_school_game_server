@@ -52,4 +52,9 @@ public sealed class SubjectsSpecification : BaseSpecification<Subject>
         // Include
         AddInclude(x => x.MasterSubject);
     }
+
+    public SubjectsSpecification(Guid id) : base(x => x.Id == id)
+    {
+        AddInclude(x => x.MasterSubject);
+    }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Commands.CreateLesson;
 using SproutVRSchool.Application.RequestHandlers.Teacher.Lessons.Commands.UpdateLesson;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
 

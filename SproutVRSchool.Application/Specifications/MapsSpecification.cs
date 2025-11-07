@@ -54,5 +54,11 @@ public sealed class MapsSpecification : BaseSpecification<Map>
         // Includes
         AddInclude(x => x.Subject);
     }
+
+    public MapsSpecification(Guid id) : base(x => x.Id == id)
+    {
+        // Eagerly load the Subject entity
+        AddInclude(x => x.Subject);
+    }
 }
 

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.GetTaskLocationById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.SearchTaskLocations;
 using SproutVRSchool.Domain;
 
@@ -28,6 +29,19 @@ public class TaskLocationsController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTaskLocationById(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetTaskLocationByIdQuery(id);
+
+        AuthorizedGetTaskLocationByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+
+        return Ok(response);
+    }
+
+
     // ========================
     // === PUTs
     // ========================
@@ -35,5 +49,4 @@ public class TaskLocationsController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
-
 }

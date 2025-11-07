@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.MasterSubjects.Queries.GetMasterSubjectById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.MasterSubjects.Queries.SearchMasterSubjects;
 using SproutVRSchool.Domain;
 
@@ -16,7 +17,6 @@ public class MasterSubjectsController(IMediator mediator) : BaseApiController
     // ========================
 
     // GET: api/v1/authorized/master-subjects
-
     [HttpGet]
     public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchMasterSubjectsQueryResponseDto>>> SearchMasterSubjects(
         [FromQuery] AuthorizedSearchMasterSubjectsQueryParams @params,
@@ -27,6 +27,19 @@ public class MasterSubjectsController(IMediator mediator) : BaseApiController
         var query = new AuthorizedSearchMasterSubjectsQuery(@params);
         GetListResultResponseDto<AuthorizedSearchMasterSubjectsQueryResponseDto> result = await mediator.Send(query, cancellationToken);
         return Ok(result);
+    }
+
+    // GET: api/v1/authorized/master-subjects/{id}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetMasterSubjectById(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetMasterSubjectByIdQuery(id);
+
+        AuthorizedGetMasterSubjectByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+
+        return Ok(response);
     }
 
     // ========================

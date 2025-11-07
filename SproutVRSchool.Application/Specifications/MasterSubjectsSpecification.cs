@@ -48,4 +48,9 @@ public sealed class MasterSubjectsSpecification : BaseSpecification<MasterSubjec
                 break;
         }
     }
+
+    public MasterSubjectsSpecification(Guid id) : base(x => x.Id == id)
+    {
+
+    }
 }

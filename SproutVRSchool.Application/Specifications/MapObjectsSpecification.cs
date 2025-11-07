@@ -47,5 +47,10 @@ public sealed class MapObjectsSpecification : BaseSpecification<MapObject>
         AddInclude(x => x.Map);
         AddInclude(x => x.ObjectLocations);
     }
+
+    public MapObjectsSpecification(Guid id) : base(x => x.Id == id)
+    {
+        AddInclude(x => x.Map);
+    }
 }
 

@@ -41,4 +41,8 @@ public sealed class ActivityTypesSpecification : BaseSpecification<ActivityType>
 
         AddInclude(x => x.ObjectActivityTypes);
     }
+
+    public ActivityTypesSpecification(Guid id) : base(x => x.Id == id)
+    {
+    }
 }

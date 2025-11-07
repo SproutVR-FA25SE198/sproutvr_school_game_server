@@ -3,6 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.MapObjects.Queries.GetMapObjectById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.MapObjects.Queries.SearchMapObjects;
 using SproutVRSchool.Domain;
 
@@ -28,6 +29,19 @@ public class MapObjectsController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
+    // GET: api/v1/authorized/map-objects/{id}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetMapObjectById(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetMapObjectByIdQuery(id);
+
+        AuthorizedGetMapObjectByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+
+        return Ok(response);
+    }
+
     // ========================
     // === POSTs
     // ========================
@@ -44,4 +58,3 @@ public class MapObjectsController(IMediator mediator) : BaseApiController
     // === DELETEs
     // ========================
 }
-

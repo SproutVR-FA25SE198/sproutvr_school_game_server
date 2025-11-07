@@ -2,11 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.Maps.Queries.GetMapById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Maps.Queries.SearchMaps;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
-
 
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/authorized/maps")]
@@ -17,7 +17,6 @@ public class MapsController(IMediator mediator) : BaseApiController
     // ========================
 
     // GET: api/v1/authorized/maps
-
     [HttpGet]
     public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchMapsQueryResponseDto>>> SearchMaps(
         [FromQuery] AuthorizedSearchMapsQueryParams @params,
@@ -30,6 +29,19 @@ public class MapsController(IMediator mediator) : BaseApiController
         return Ok(result);
     }
 
+    // GET: api/v1/authorized/maps/{id}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetMapById(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetMapByIdQuery(id);
+
+        AuthorizedGetMapByIdQueryResponseDto response = await mediator.Send(query, cancellationToken);
+
+        return Ok(response);
+    }
+
     // ========================
     // === PUTs
     // ========================
@@ -38,4 +50,3 @@ public class MapsController(IMediator mediator) : BaseApiController
     // === PATCHs
     // ========================
 }
-
