@@ -10,3 +10,10 @@ public record AuthorizedGetMapObjectByIdQueryResponseDto
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }
+
+public record AuthorizedGetMapObjectByIdQueryMapResponseDto
+{
+    public Guid Id { get; init; }
+    public string MapCode { get; init; }
+    public string Name { get; init; }
+}

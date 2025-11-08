@@ -17,18 +17,21 @@ public record AuthorizedSearchLessonsQueryResponseDto(
 );
 
 public record AuthorizedSearchLessonsQueryMasterSubjectDto(
+    Guid Id,
     string Name,
     string Description,
     string ImageUrl
 );
 
 public record AuthorizedSearchLessonsQuerySubjectDto(
+    Guid Id,
     string Name,
     string Description,
     string ImageUrl
 );
 
 public record AuthorizedSearchLessonsQueryTeacherDto(
+    Guid Id,
     string FirstName,
     string LastName
 );

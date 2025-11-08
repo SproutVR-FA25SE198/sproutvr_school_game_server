@@ -59,6 +59,7 @@ app.MapControllers();
 
 // Grpc Services
 app.MapGrpcService<GrpcTeacherVRLearningSessionService>();
+app.MapGrpcService<GrpcTeacherVRLearningSessionStateService>();
 app.MapGrpcService<GrpcVRGlassVRLearningSessionService>();
 
 app.MapGet("/", () => "gRPC Server is running.");

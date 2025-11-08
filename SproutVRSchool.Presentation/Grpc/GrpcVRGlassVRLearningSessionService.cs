@@ -16,7 +16,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     // === Fields
     // ===============================
 
-    private readonly IVRLearningSessionWithVRGlassService _vrLearningSessionWithVRGlassService;
+    private readonly IVRGlassVRLearningSessionService _vrLearningSessionWithVRGlassService;
     private readonly IDatabase _database;
     private readonly ILogger<GrpcVRGlassVRLearningSessionService> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -29,7 +29,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         ILogger<GrpcVRGlassVRLearningSessionService> logger,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
-        IVRLearningSessionWithVRGlassService vrLearningSessionWithVRGlassService)
+        IVRGlassVRLearningSessionService vrLearningSessionWithVRGlassService)
     {
         _vrLearningSessionWithVRGlassService = vrLearningSessionWithVRGlassService;
         _logger = logger;

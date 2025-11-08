@@ -28,6 +28,7 @@ public class AuthorizedSearchTaskLocationsQueryHandler(
             Name: taskLocation.Name,
             ImageUrl: taskLocation.ImageUrl,
             Map: new AuthorizedSearchTaskLocationsMapQueryResponseDto(
+                Id: taskLocation.Map.Id,
                 MapCode: taskLocation.Map.MapCode,
                 Name: taskLocation.Map.Name,
                 ImageUrl: taskLocation.Map.ImageUrl,

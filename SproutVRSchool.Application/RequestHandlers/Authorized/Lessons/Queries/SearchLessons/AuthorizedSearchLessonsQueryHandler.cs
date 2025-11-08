@@ -27,16 +27,19 @@ public class AuthorizedSearchLessonsQueryHandler(
             VRLessonsCount: lesson.VRLessons.Count,
             Status: new StatusDto(lesson.Status),
             Subject: new AuthorizedSearchLessonsQuerySubjectDto(
+                Id: lesson.Subject.Id,
                 Name: lesson.Subject.Name,
                 Description: lesson.Subject.Description,
                 ImageUrl: lesson.Subject.ImageUrl
             ),
             MasterSubject: new AuthorizedSearchLessonsQueryMasterSubjectDto(
+                Id: lesson.Subject.MasterSubject.Id,
                 Name: lesson.Subject.MasterSubject.Name,
                 Description: lesson.Subject.MasterSubject.Description,
                 ImageUrl: lesson.Subject.MasterSubject.ImageUrl
             ),
             Teacher: new AuthorizedSearchLessonsQueryTeacherDto(
+                Id: lesson.Teacher.Id,
                 FirstName: lesson.Teacher.FirstName,
                 LastName: lesson.Teacher.LastName
             ),

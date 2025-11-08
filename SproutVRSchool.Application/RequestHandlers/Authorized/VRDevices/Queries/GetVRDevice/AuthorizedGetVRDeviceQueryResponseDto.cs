@@ -14,13 +14,13 @@ public record AuthorizedGetVRDeviceQueryResponseDto(
 { }
 
 public record AuthorizedGetVRDeviceQueryTasksResponseDto(
-    Guid TaskProgressId,
+    Guid Id,
     Guid TaskId,
     bool IsCompleted,
     bool IsCorrect,
     DateTimeOffset CompletionTimeUtc);
 
 public record AuthorizedGetVRDeviceQuerySessionSummariesResponseDto(
-    Guid SummaryId,
+    Guid Id,
     string StudentName,
     int NoTasksCompleted);

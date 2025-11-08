@@ -13,12 +13,12 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
     // === Fields
     // ===============================
 
-    private readonly IVRLearningSessionTeacherService _vrLearningSessionTeacherService;
+    private readonly ITeacherVRLearningSessionService _vrLearningSessionTeacherService;
 
     // ===============================
     // === Constructors
     // ===============================
-    public GrpcTeacherVRLearningSessionService(IVRLearningSessionTeacherService vrLearningSessionTeacherService)
+    public GrpcTeacherVRLearningSessionService(ITeacherVRLearningSessionService vrLearningSessionTeacherService)
     {
         _vrLearningSessionTeacherService = vrLearningSessionTeacherService;
     }
