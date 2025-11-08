@@ -1,4 +1,4 @@
-﻿namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessonState.Dtos.StreamRoomState;
+﻿namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 
 public sealed record DeviceJoinedDto(
     string VrDeviceSerialNumber,

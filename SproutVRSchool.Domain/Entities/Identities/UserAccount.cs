@@ -10,6 +10,11 @@ public class UserAccount : IdentityUser<Guid>
     public UserAccountStatus Status { get; set; }
     public DateTimeOffset CreatedAtUtc { get; set; }
     public DateTimeOffset UpdatedAtUtc { get; set; }
+
+    public string GetFullName()
+    {
+        return $"{FirstName} {LastName}";
+    }
 }
 
 
