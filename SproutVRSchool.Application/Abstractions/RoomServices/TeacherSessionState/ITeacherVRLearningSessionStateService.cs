@@ -5,9 +5,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using LearningSession.V1;
-using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessonState.Dtos.StreamRoomState;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 
-namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessonState;
+namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 
 public interface ITeacherVRLearningSessionStateService
 {
@@ -16,7 +17,7 @@ public interface ITeacherVRLearningSessionStateService
     /// </summary>
     /// <param name="vrLearningSessionId"></param>
     /// <returns></returns>
-    Task<GetRoomStateResponse> GetRoomStateAsync(string vrLearningSessionId);
+    Task<GetRoomStateResponseDto> GetRoomStateAsync(GetRoomStateRequestDto getRoomStateRequestDto);
 
     /// <summary>
     /// Subscribe to redis pub/sub  events for the given vr learning session
@@ -29,3 +30,5 @@ public interface ITeacherVRLearningSessionStateService
         string vrLearningSessionId,
         CancellationToken cancellationToken);
 }
+
+

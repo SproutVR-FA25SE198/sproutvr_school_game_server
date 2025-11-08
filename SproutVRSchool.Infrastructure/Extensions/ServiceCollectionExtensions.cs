@@ -17,7 +17,7 @@ using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
-using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessonState;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;

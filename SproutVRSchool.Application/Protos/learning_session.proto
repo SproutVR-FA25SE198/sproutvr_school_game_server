@@ -28,31 +28,39 @@ message GetRoomStateRequest {
 
 message GetRoomStateResponse {
   string vr_learning_session_id = 1;
-  string vr_lesson_id = 2;
-  string teacher_id = 3;
+  TeacherInfo teacher = 2;
+  VRLessonInfo vrlesson = 3;
   string class_name = 4;
   string room_code = 5;
   int32 duration_in_seconds = 6;
-  google.protobuf.Timestamp start_time_at_utc = 7;
-  google.protobuf.Timestamp end_time_at_utc = 8;
-  string preset_json_relative_file_path = 9;
-  string status = 10;
-  repeated GetRoomStateDeviceResponse devices = 11;
+  string status = 7;
+  repeated DeviceInfo devices = 8;
 }
 
-message GetRoomStateDeviceResponse {
+message TeacherInfo {
+  string teacher_id = 1;
+  string teacher_name = 2;
+}
+
+message VRLessonInfo {
+  string vr_lesson_id = 1;
+  string name = 2;
+  string description = 3;
+  string preset_json_relative_file_path = 4;
+}
+
+message DeviceInfo {
   string vr_device_serial_number = 1;
   string student_name = 2;
   string status = 3;
-  google.protobuf.Timestamp joined_at_utc = 4;
-  repeated GetRoomStateTaskResponse tasks = 5;
+  repeated TaskInfo tasks = 4;
 }
 
-message GetRoomStateTaskResponse {
+message TaskInfo {
   string vr_task_id = 1;
   bool is_completed = 2;
   bool is_correct = 3;
-  google.protobuf.Timestamp completion_time_at_utc = 4;
+  string completion_time_at_vietnam = 4;
   string status = 5;
 }
 
@@ -66,38 +74,22 @@ message TeacherRoomUpdateResponse {
   string vr_learning_session_id = 1;
 
   oneof payload {
-    RoomActivated room_activated = 3;
-    RoomCancelled room_cancelled = 4;
-    RoomEnded room_ended = 5;
-    RoomCreated room_created = 2;
-    DeviceJoined device_joined = 6;
-    DeviceDisconnected device_disconnected = 7;
-    TaskUpdated task_updated = 8;
+    RoomCancelled room_cancelled = 2;
+    RoomEnded room_ended = 3;
+    DeviceJoined device_joined = 4;
+    DeviceDisconnected device_disconnected = 5;
+    TaskUpdated task_updated = 6;
   }
 }
 
-message RoomCreated {
-  string teacher_id = 1;                
-  string vr_lesson_id = 2;              
-  string class_name = 3;               
-  string status = 4;                    
-}
-
-message RoomActivated {
-  string room_code = 1;                          
-  google.protobuf.Timestamp start_time_at_utc = 2; 
-  int32 duration_in_seconds = 3;                   
-}
-
-message RoomCancelled {
-  string cancelled_by = 1;   
-  string reason = 2;         
+message RoomCancelled {   
+  string reason = 1;                    // "Room has been cancelled"
+  string room_status = 2;               // "Cancelled"
 }
 
 message RoomEnded {
-  string ended_by = 1;                  // teacher_id or system (timeout)
-  string reason = 2;          
-  google.protobuf.Timestamp end_time_at_utc = 3;
+  string reason = 1;                    // "Time's up"
+  string room_status = 2;               // "Completed"
 }
 
 message DeviceJoined {
@@ -129,7 +121,7 @@ service TeacherSessionManagement {
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
 
   // Teacher - Game Server: 
-  // - Set duration, start time, assign devices, and change status to Active
+  // - Set start time, assign devices, and change status to Active
   rpc ActivateRoom(ActivateRoomRequest) returns (ActivateRoomResponse);
 
   // Teacher - Game Server: 
