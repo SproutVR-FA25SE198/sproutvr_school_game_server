@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 
-public interface IVRLearningSessionTeacherService
+public interface ITeacherVRLearningSessionService
 {
     Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request);
 

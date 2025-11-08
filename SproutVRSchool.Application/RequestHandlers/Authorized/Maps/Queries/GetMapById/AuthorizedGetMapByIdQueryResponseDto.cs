@@ -15,3 +15,10 @@ public record AuthorizedGetMapByIdQueryResponseDto
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }
+
+public record AuthorizedGetMapByIdQuerySubjectResponseDto
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string ImageUrl { get; init; }
+}

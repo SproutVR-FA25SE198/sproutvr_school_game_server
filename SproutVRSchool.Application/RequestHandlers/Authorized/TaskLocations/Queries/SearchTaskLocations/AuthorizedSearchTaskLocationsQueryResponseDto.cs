@@ -12,6 +12,7 @@ public record AuthorizedSearchTaskLocationsQueryResponseDto(
 
 
 public record AuthorizedSearchTaskLocationsMapQueryResponseDto(
+    Guid Id,
     string MapCode,
     string Name,
     string ImageUrl,

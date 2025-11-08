@@ -26,7 +26,9 @@ public class AuthorizedSearchMapObjectsQueryHandler(
             ObjectCode: mapObject.ObjectCode,
             Name: mapObject.Name,
             ImageUrl: mapObject.ImageUrl,
-            Map: new AuthorizedSearchMapObjectsMapQueryResponseDto(
+            Map: new AuthorizedSearchMapObjectsMapQueryResponseDto
+            (
+                Id: mapObject.Map.Id,
                 MapCode: mapObject.Map.MapCode,
                 Name: mapObject.Map.Name,
                 ImageUrl: mapObject.Map.ImageUrl,

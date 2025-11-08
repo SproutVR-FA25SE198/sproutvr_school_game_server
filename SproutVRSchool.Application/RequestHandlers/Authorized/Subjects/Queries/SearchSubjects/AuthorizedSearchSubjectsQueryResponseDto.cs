@@ -14,6 +14,7 @@ public record AuthorizedSearchSubjectsQueryResponseDto(
 );
 
 public record AuthorizedSearchSubjectsQueryMasterSubjectResponseDto(
+    Guid Id,
     string Name,
     string Description,
     string ImageUrl,

@@ -23,6 +23,7 @@ public class AuthorizedSearchSubjectsQueryHandler(
         var items = rawLists.Data.Select(subject => new AuthorizedSearchSubjectsQueryResponseDto(
             Id: subject.Id,
             MasterSubject: new AuthorizedSearchSubjectsQueryMasterSubjectResponseDto(
+                Id: subject.MasterSubject.Id,
                 Name: subject.MasterSubject.Name,
                 Description: subject.MasterSubject.Description,
                 ImageUrl: subject.MasterSubject.ImageUrl,

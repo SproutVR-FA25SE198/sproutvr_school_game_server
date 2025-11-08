@@ -13,3 +13,11 @@ public record AuthorizedGetSubjectByIdQueryResponseDto
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }
+
+public record AuthorizedGetSubjectByIdQueryMasterSubjectResponseDto
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string Description { get; init; }
+    public string ImageUrl { get; init; }
+}
