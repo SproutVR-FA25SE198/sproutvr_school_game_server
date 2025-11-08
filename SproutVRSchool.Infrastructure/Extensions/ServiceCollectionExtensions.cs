@@ -17,6 +17,7 @@ using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessonState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
@@ -229,8 +230,9 @@ public static partial class ServiceCollectionExtensions
     /// <param name="service"></param>
     private static void AddVRLearningSessionService(this IServiceCollection service)
     {
-        service.AddScoped<IVRLearningSessionTeacherService, RedisTeacherVRLearningSessionService>();
-        service.AddScoped<IVRLearningSessionWithVRGlassService, RedisVRGlassVRLearningSessionService>();
+        service.AddScoped<ITeacherVRLearningSessionStateService, RedisTeacherVRLearningSessionStateService>();
+        service.AddScoped<ITeacherVRLearningSessionService, RedisTeacherVRLearningSessionService>();
+        service.AddScoped<IVRGlassVRLearningSessionService, RedisVRGlassVRLearningSessionService>();
         service.AddScoped<IVRLearningSessionValidator, RoomValidator>();
         service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
     }

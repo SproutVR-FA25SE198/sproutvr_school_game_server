@@ -21,7 +21,7 @@ using StackExchange.Redis;
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 internal sealed class RedisTeacherVRLearningSessionService
-    : IVRLearningSessionTeacherService
+    : ITeacherVRLearningSessionService
 {
     private readonly IDatabase _database;
     private readonly ICodeGeneratorService _codeGenerator;

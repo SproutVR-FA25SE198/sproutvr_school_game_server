@@ -11,7 +11,7 @@ using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
-public sealed class RedisVRGlassVRLearningSessionService : IVRLearningSessionWithVRGlassService
+public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSessionService
 {
     // ===============================
     // === Fields

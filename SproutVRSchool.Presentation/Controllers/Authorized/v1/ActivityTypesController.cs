@@ -16,7 +16,7 @@ public sealed class ActivityTypesController(IMediator mediator) : BaseApiControl
     // === GETs
     // =======================
 
-    // GET: api/v1/authorized/vrtasks
+    // GET: api/v1/authorized/activity-types
     [HttpGet]
     public async Task<ActionResult<GetListResultResponseDto<AuthorizedSearchActivityTypesQueryResponseDto>>> SearchActivityTypes(
       [FromQuery] AuthorizedSearchActivityTypesQueryParams @params,
