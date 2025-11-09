@@ -49,6 +49,18 @@ public static class AppCts
         public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS = "vr_learning_sessions_notify_events";
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE = "vr_learning_sessions_room_codes";
         public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS = "stream:vr_learning_sessions";
+
+        public static class PubSubEvents
+        {
+            public const string ROOM_CANCELLED = "ROOMCANCELLED";
+            public const string ROOM_ENDED = "ROOMENDED";
+            public const string DEVICE_JOINED = "DEVICEJOINED";
+            public const string DEVICE_DISCONNECTED = "DEVICEDISCONNECTED";
+            public const string TASK_UPDATED = "TASKUPDATED";
+            public const string END_SIGNAL = "ENDSIGNAL";     
+            public const string INFO = "INFO";                 
+            public const string WARNING = "WARNING";           
+        }
     }
 
     public static class SeederFilePaths

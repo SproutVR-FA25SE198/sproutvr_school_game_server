@@ -1,6 +1,11 @@
-﻿namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
+﻿using SproutVRSchool.Domain.Entities.VRLearningSessions;
+using SproutVRSchool.Domain.Models.VRLearningSession;
 
-public sealed record RoomCancelledDto(
-    string CancelledBy,
-    string Reason
-);
+namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
+
+public sealed class RoomCancelledDto
+{
+    public string Reason { get; set; } = "Room has been cancelled";
+    public string RoomStatus { get; set; } = ModelVRLearningSessionStatus.Cancelled.ToString();
+}
+

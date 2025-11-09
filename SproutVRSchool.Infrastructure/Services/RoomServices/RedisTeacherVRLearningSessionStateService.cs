@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Channels;
 using LearningSession.V1;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -10,12 +12,15 @@ using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Exceptions.Resources;
+using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Domain.Entities.Lessons;
+using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Entities.VRLessons;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
+using static SproutVRSchool.Domain.AppCts.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
@@ -47,7 +52,8 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() }
+            Converters = { new JsonStringEnumConverter() },
+            WriteIndented = false
         };
         _logger = logger;
         _userManager = userManager;
@@ -58,9 +64,129 @@ internal sealed class RedisTeacherVRLearningSessionStateService
     // === Methods
     // ============================
 
-    public IAsyncEnumerable<TeacherRoomUpdateResponseDto> StreamRoomUpdatesAsync(string vrLearningSessionId, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<TeacherRoomUpdateResponseDto> StreamRoomUpdatesAsync(
+        TeacherRoomUpdateRequestDto teacherRoomUpdateRequestDto,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        return null;
+        // 1. Create a channel 
+        ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
+        var channel = Channel.CreateUnbounded<RedisValue>(new UnboundedChannelOptions
+        {
+            SingleReader = true,
+            SingleWriter = false
+        });
+
+        // 2. Subscribe to Redis Pub/Sub channel
+        await subscriber.SubscribeAsync(
+         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS),
+         (redisChannel, message) =>
+         {
+             if (!channel.Writer.TryWrite(message))
+             {
+                 _logger.LogWarning("Failed to enqueue Redis message for session {SessionId}", teacherRoomUpdateRequestDto.VrLearningSessionId);
+             }
+         });
+
+        // 3. Read message (events) from the channel
+        try
+        {
+            // apply coroutine to handle the event immediately incase of problem occurs
+            await foreach (string redisMessage in channel.Reader.ReadAllAsync(cancellationToken))
+            {
+                // If redisMessage null, do nothing
+                (string? identifier, string? eventType, string? message, bool isEventType) redisEvent = redisMessage.DeparseRedisEventMessage();
+
+                if (!redisEvent.isEventType)
+                {
+                    continue;
+                }
+
+                // Only handle messages having the same identifier
+                if (!string.Equals(redisEvent.identifier, teacherRoomUpdateRequestDto.VrLearningSessionId, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                // Map to DTO based on event type
+                TeacherRoomUpdateResponseDto? responseDto = null;
+                switch (redisEvent.eventType)
+                {
+                    case AppCts.Redis.PubSubEvents.ROOM_CANCELLED:
+                        {
+                            RoomCancelledDto? dto = JsonSerializer.Deserialize<RoomCancelledDto>(redisEvent.message!);
+                            responseDto = new TeacherRoomUpdateResponseDto
+                            {
+                                VrLearningSessionId = teacherRoomUpdateRequestDto.VrLearningSessionId,
+                                RoomCancelled = dto
+                            };
+                            break;
+                        }
+
+                    case AppCts.Redis.PubSubEvents.ROOM_ENDED:
+                        {
+                            RoomEndedDto? dto = JsonSerializer.Deserialize<RoomEndedDto>(redisEvent.message!);
+                            responseDto = new TeacherRoomUpdateResponseDto
+                            {
+                                VrLearningSessionId = teacherRoomUpdateRequestDto.VrLearningSessionId,
+                                RoomEnded = dto
+                            };
+                            break;
+                        }
+
+                    case AppCts.Redis.PubSubEvents.DEVICE_JOINED:
+                        {
+                            DeviceJoinedDto? dto = JsonSerializer.Deserialize<DeviceJoinedDto>(redisEvent.message!);
+                            responseDto = new TeacherRoomUpdateResponseDto
+                            {
+                                VrLearningSessionId = teacherRoomUpdateRequestDto.VrLearningSessionId,
+                                DeviceJoined = dto
+                            };
+                            break;
+                        }
+
+                    case AppCts.Redis.PubSubEvents.DEVICE_DISCONNECTED:
+                        {
+                            DeviceDisconnectedDto? dto = JsonSerializer.Deserialize<DeviceDisconnectedDto>(redisEvent.message!);
+                            responseDto = new TeacherRoomUpdateResponseDto
+                            {
+                                VrLearningSessionId = teacherRoomUpdateRequestDto.VrLearningSessionId,
+                                DeviceDisconnected = dto
+                            };
+                            break;
+                        }
+
+                    case AppCts.Redis.PubSubEvents.TASK_UPDATED:
+                        {
+                            TaskUpdatedDto? dto = JsonSerializer.Deserialize<TaskUpdatedDto>(redisEvent.message!);
+                            responseDto = new TeacherRoomUpdateResponseDto
+                            {
+                                VrLearningSessionId = teacherRoomUpdateRequestDto.VrLearningSessionId,
+                                TaskUpdated = dto
+                            };
+                            break;
+                        }
+
+                    default:
+                        {
+                            _logger.LogWarning(
+                                "Unhandled Redis event type: {EventType} for session {SessionId}",
+                                redisEvent.eventType,
+                                teacherRoomUpdateRequestDto.VrLearningSessionId);
+                            break;
+                        }
+                }
+
+                // If successfully mapped, yield the result immediately
+                if (responseDto != null)
+                {
+                    yield return responseDto;
+                }
+            }
+        }
+        finally
+        {
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS));
+        }
     }
 
     public async Task<GetRoomStateResponseDto> GetRoomStateAsync(GetRoomStateRequestDto getRoomStateRequestDto)
@@ -127,6 +253,50 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         _logger.LogInformation("GetRoomStateAsync: Retrieved room state for VRLearningSessionId: {VRLearningSessionId}", getRoomStateRequestDto.VRLearningSessionId);
 
         return resultDto;
+    }
+
+    // ===============================
+    // === Group of publishing methods
+    // ===============================
+
+    public async Task PublishRoomCancelledAsync(string vrLearningSessionId, RoomCancelledDto dto)
+        => await PublishAsync(vrLearningSessionId, PubSubEvents.ROOM_CANCELLED, dto);
+
+    public async Task PublishRoomEndedAsync(string vrLearningSessionId, RoomEndedDto dto)
+        => await PublishAsync(vrLearningSessionId, PubSubEvents.ROOM_ENDED, dto);
+
+    public async Task PublishDeviceJoinedAsync(string vrLearningSessionId, DeviceJoinedDto dto)
+        => await PublishAsync(vrLearningSessionId, PubSubEvents.DEVICE_JOINED, dto);
+
+    public async Task PublishDeviceDisconnectedAsync(string vrLearningSessionId, DeviceDisconnectedDto dto)
+        => await PublishAsync(vrLearningSessionId, PubSubEvents.DEVICE_DISCONNECTED, dto);
+
+    public async Task PublishTaskUpdatedAsync(string vrLearningSessionId, TaskUpdatedDto dto)
+        => await PublishAsync(vrLearningSessionId, PubSubEvents.TASK_UPDATED, dto);
+
+    private async Task PublishAsync(string vrLearningSessionId, string eventType, object dto)
+    {
+        try
+        {
+            // 1. Send the payload json message to the Pub/Sub channel
+            string payloadJson = JsonSerializer.Serialize(dto, _jsonOptions);
+
+            ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
+
+            string redisEvent = vrLearningSessionId.ToRedisEventTypeMessage(eventType, payloadJson);
+
+            await subscriber.PublishAsync(
+                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS),
+                redisEvent);
+
+            _logger.LogInformation("Published event: {EventType} for Session: {SessionId} -> {Payload}",
+                eventType, vrLearningSessionId, payloadJson);
+        }
+        catch (Exception ex)
+        {
+            // UNDONE: design the exception handler better 
+            _logger.LogError(ex, "Failed to publish event {EventType} for session {SessionId}", eventType, vrLearningSessionId);
+        }
     }
 
 }

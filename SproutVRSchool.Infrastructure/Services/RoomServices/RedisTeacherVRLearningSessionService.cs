@@ -11,6 +11,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 using SproutVRSchool.Application.Exceptions.Resources;
+using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
@@ -190,7 +191,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 
         // Boardcasting the ENDSIGNAL message to all devices subscribed to the channel
         ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
-        string message = $"{vrLearningSessionId}:ENDSIGNAL:The teacher has cancelled the session.";
+        string message = $"{vrLearningSessionId}:{AppCts.Redis.PubSubEvents.END_SIGNAL}:The teacher has cancelled the session.";
         await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), message);
 
         return new CancelRoomResponseDto(
@@ -198,16 +199,11 @@ internal sealed class RedisTeacherVRLearningSessionService
         );
     }
 
-    /// <summary>
-    /// Send INFO or WARNING notification to all devices in the room using PUB/SUB
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     public async Task SendNotificationAsync(SendNotificationRequestDto request)
     {
         // Boardcasting the NOTIFY message to all devices subscribed to the channel
         ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
-        string message = $"{request.VRLearningSessionId}:{request.Severity}:{request.Text}";
+        string message = request.VRLearningSessionId.ToRedisEventTypeMessage(request.Severity.ToString(), request.Text);
 
         _logger.LogInformation("sending the message: {Message}", message);
 
