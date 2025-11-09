@@ -20,10 +20,11 @@ builder.Services.AddPresentation(builder.Configuration);
 WebApplication app = builder.Build();
 IWebHostEnvironment env = app.Services.GetRequiredService<IWebHostEnvironment>();
 IConfigurationSection miscConfigs = app.Configuration.GetSection("Miscs");
+bool IsDroppingDatabaseOnStartup = miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false;
 
-if (env.IsDevelopment())
+if (env.IsDevelopment() && IsDroppingDatabaseOnStartup)
 {
-    app.ApplyDatabaseDrop(miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false);
+    app.ApplyDatabaseDrop();
     app.ApplyDatabaseMigrations();
     await app.ApplySeedingDevelopment();
     app.MapGrpcReflectionService().AllowAnonymous();

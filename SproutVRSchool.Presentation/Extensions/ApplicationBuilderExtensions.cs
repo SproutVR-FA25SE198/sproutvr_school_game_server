@@ -23,12 +23,8 @@ internal static class ApplicationBuilderExtensions
     /// Apply the database drop. This is mainly for testing purposes.
     /// </summary>
     /// <param name="app"></param>
-    public static void ApplyDatabaseDrop(this IApplicationBuilder app, bool IsDroppingDatabaseOnStartup = false)
+    public static void ApplyDatabaseDrop(this IApplicationBuilder app)
     {
-        if (!IsDroppingDatabaseOnStartup)
-        {
-            return;
-        }
         using IServiceScope scope = app.ApplicationServices.CreateScope();
         SchoolServerDbContext dbContext = scope.ServiceProvider.GetRequiredService<SchoolServerDbContext>();
         dbContext.Database.EnsureDeleted();
