@@ -18,6 +18,7 @@ public sealed class GrpcTeacherVRLearningSessionService : TeacherSessionManageme
     // ===============================
     // === Constructors
     // ===============================
+
     public GrpcTeacherVRLearningSessionService(ITeacherVRLearningSessionService vrLearningSessionTeacherService)
     {
         _vrLearningSessionTeacherService = vrLearningSessionTeacherService;

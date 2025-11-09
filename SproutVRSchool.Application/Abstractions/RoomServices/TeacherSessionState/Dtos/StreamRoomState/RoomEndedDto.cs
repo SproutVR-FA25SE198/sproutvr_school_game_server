@@ -1,7 +1,10 @@
-﻿namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
+﻿using SproutVRSchool.Domain.Entities.VRLearningSessions;
+using SproutVRSchool.Domain.Models.VRLearningSession;
 
-public sealed record RoomEndedDto(
-    string EndedBy,
-    string Reason,
-    DateTime EndTimeAtUtc
-);
+namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
+
+public sealed class RoomEndedDto
+{
+    public string Reason { get; set; } = "Time's up";
+    public string RoomStatus { get; set; } = ModelVRLearningSessionStatus.Cancelled.ToString();
+}

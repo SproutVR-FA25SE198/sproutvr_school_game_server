@@ -4,6 +4,7 @@ using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
+using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
@@ -52,8 +53,8 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         IAsyncStreamReader<ClientToServerMessage> requestStream, IServerStreamWriter<ServerToClientMessage> responseStream, ServerCallContext context)
     {
         // Listening Background Task and Sending Background Task
-        Task listeningTask = ListenForClientMessagesAsync(requestStream, responseStream, context.CancellationToken);
-        Task sendingTask = SendServerMessagesAsync(requestStream, responseStream, context.CancellationToken);
+        Task listeningTask = ListenForVRDeviceRedisMessagesAsync(requestStream, responseStream, context.CancellationToken);
+        Task sendingTask = SendServerRedisMessagesToVRDeviceAsync(requestStream, responseStream, context.CancellationToken);
 
         await Task.WhenAll(listeningTask, sendingTask);
         _logger.LogInformation("VR device stream disconnected for VR Learning Session ID: {SessionId}", requestStream.Current.VrLearningSessionId);
@@ -69,7 +70,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     /// <param name="requestStream"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private async Task ListenForClientMessagesAsync(
+    private async Task ListenForVRDeviceRedisMessagesAsync(
         IAsyncStreamReader<ClientToServerMessage> requestStream,
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
@@ -91,7 +92,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                             // await to make sure Task Update in order
                             await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
 
-                            // when await finish, just fire-and-forget the method and moving on to the next message
+                            // when await finish, just fire-and-forget the method and moving on to the next redisMessage
                             _ = responseStream.WriteAsync(
                                 ServerToClientMessageFactory.CreateSuccessTaskUpdateConfirmation(message.TaskUpdate.VrTaskId),
                                 cancellationToken);
@@ -101,7 +102,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
                     case ClientToServerMessage.PayloadOneofCase.None:
                         {
-                            _logger.LogWarning("Received message with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
+                            _logger.LogWarning("Received redisMessage with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
                             _ = responseStream.WriteAsync(
                                 ServerToClientMessageFactory.CreateUpdateFailedTaskUpdateConfirmation(),
                                 cancellationToken);
@@ -111,7 +112,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing message from client stream.");
+                _logger.LogError(ex, "Error processing redisMessage from client stream.");
                 _ = responseStream.WriteAsync(
                     ServerToClientMessageFactory.CreateServerErrorTaskUpdateConfirmation(),
                     cancellationToken);
@@ -120,7 +121,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     }
 
 #pragma warning disable S1172 // Unused method parameters should be removed
-    private async Task SendServerMessagesAsync(
+    private async Task SendServerRedisMessagesToVRDeviceAsync(
         IAsyncStreamReader<ClientToServerMessage> requestStream,
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
@@ -131,54 +132,45 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
         await subscriber.SubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), (redisChannel, message) =>
         {
-            // When a message arrives from Redis, quickly write it to the in-memory queue.
+            // When a redisMessage arrives from Redis, quickly write it to the in-memory queue.
             channel.Writer.TryWrite(message!);
         });
 
         try
         {
-            // Get the message from in-memory channel
-            await foreach (string message in channel.Reader.ReadAllAsync(cancellationToken))
+            // Get the redisMessage from in-memory channel
+            await foreach (string redisMessage in channel.Reader.ReadAllAsync(cancellationToken))
             {
-                _logger.LogInformation("recived message: {Text}", message);
+                _logger.LogInformation("recived redisMessage: {Text}", redisMessage);
 
-                // If message null, do nothing
-                if (string.IsNullOrEmpty(message))
+                // If redisMessage null, do nothing
+                (string? identifier, string? eventType, string? message, bool isEventType) redisEvent = redisMessage.DeparseRedisEventMessage();
+
+                if (!redisEvent.isEventType)
                 {
                     continue;
                 }
 
-                // if not having vrLearningSessionId:eventType:text, continue
-                string[] parts = message.ToString().Split(":", 3);
-                if (parts.Length < 2)
+                switch (redisEvent.eventType)
                 {
-                    continue;
-                }
-
-                // UNDONE: convert eventType to AppCts
-                string eventType = parts[1]!.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
-                string text = parts[2];
-
-                switch (eventType)
-                {
-                    case "ENDSIGNAL":
+                    case AppCts.Redis.PubSubEvents.END_SIGNAL:
                         {
                             await responseStream.WriteAsync(
                                 ServerToClientMessageFactory.CreateEndSessionSignal(_dateTimeProvider.VietNamDateTimeNow),
                                 cancellationToken);
                             break;
                         }
-                    case "INFO":
+                    case AppCts.Redis.PubSubEvents.INFO:
                         {
                             await responseStream.WriteAsync(
-                                ServerToClientMessageFactory.CreateInfoNotification(text),
+                                ServerToClientMessageFactory.CreateInfoNotification(redisEvent.message!),
                                 cancellationToken);
                             break;
                         }
-                    case "WARNING":
+                    case AppCts.Redis.PubSubEvents.WARNING:
                         {
                             await responseStream.WriteAsync(
-                                ServerToClientMessageFactory.CreateWarningNotification(text),
+                                ServerToClientMessageFactory.CreateWarningNotification(redisEvent.message!),
                                 cancellationToken);
                             break;
                         }
