@@ -1,10 +1,10 @@
 ﻿[
   {
+    "Id": "11111111-1111-1111-1111-111111111111",
     "Name": "Hóa học",
     "Description": "Môn hóa học cho bậc trung học phổ thông, môn học này nghiên cứu về thành phần, cấu trúc, tính chất và sự thay đổi của vật chất.",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/master_subjects%2Fchemistry.png?alt=media",
-    "Status": "Active",
-    "Id": "11111111-1111-1111-1111-111111111111"
+    "Status": "Active"
   },
   {
     "Id": "22222222-2222-2222-2222-222222222222",
@@ -17,7 +17,7 @@
   },
   {
     "Id": "33333333-3333-3333-3333-333333333333",
-    "Name": "Hóa học",
+    "Name": "Thiên văn học",
     "Description": "Môn học về cấu trúc, tính chất và phản ứng của các chất",
     "ImageUrl": "https://example.com/images/chemistry.jpg",
     "Status": "Active",
