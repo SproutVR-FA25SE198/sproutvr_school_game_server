@@ -68,6 +68,7 @@ public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
         // add subsequent files to seed here
         _dataSeeder.AddRelativePath<MasterSubject>(AppCts.SeederFilePaths.MasterSubjectFilePath);
         _dataSeeder.AddRelativePath<Subject>(AppCts.SeederFilePaths.SubjectFilePath);
+        _dataSeeder.AddRelativePath<ActivityType>(AppCts.SeederFilePaths.ActivityTypeFilePath);
         _dataSeeder.AddRelativePath<VRDevice>(AppCts.SeederFilePaths.VRDeviceFilePath);
 
         // seeding all tables

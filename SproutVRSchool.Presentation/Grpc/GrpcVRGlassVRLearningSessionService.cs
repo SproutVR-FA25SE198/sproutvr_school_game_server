@@ -155,7 +155,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                     continue;
                 }
 
-                // UNDONE: Testing purpose
+                // UNDONE: convert eventType to AppCts
                 string eventType = parts[1]!.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
                 string text = parts[2];
 

@@ -110,14 +110,14 @@ public sealed class SASeedMapBundleCommandHandler : IRequestHandler<SASeedMapBun
         try
         {
             // Seed .json file data into the database
-            await _fileSeeder.SeedSingleFileAsync<MasterSubject>(Path.Combine(_tempExtractedPath, "MasterSubject.json"), dbContext.MasterSubjects);
-            await _fileSeeder.SeedSingleFileAsync<Subject>(Path.Combine(_tempExtractedPath, "Subject.json"), dbContext.Subjects);
-            await _fileSeeder.SeedSingleFileAsync<ActivityType>(Path.Combine(_tempExtractedPath, "ActivityType.json"), dbContext.ActivityTypes);
-            await _fileSeeder.SeedSingleFileAsync<Map>(Path.Combine(_tempExtractedPath, "Map.json"), dbContext.Maps);
-            await _fileSeeder.SeedSingleFileAsync<MapObject>(Path.Combine(_tempExtractedPath, "MapObject.json"), dbContext.MapObjects);
-            await _fileSeeder.SeedSingleFileAsync<TaskLocation>(Path.Combine(_tempExtractedPath, "TaskLocation.json"), dbContext.TaskLocations);
-            await _fileSeeder.SeedSingleFileAsync<ObjectActivityType>(Path.Combine(_tempExtractedPath, "ObjectActivityType.json"), dbContext.ObjectActivityTypes);
-            await _fileSeeder.SeedSingleFileAsync<ObjectLocation>(Path.Combine(_tempExtractedPath, "ObjectLocation.json"), dbContext.ObjectLocations);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<MasterSubject>(Path.Combine(_tempExtractedPath, "MasterSubject.json"), dbContext.MasterSubjects);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<Subject>(Path.Combine(_tempExtractedPath, "Subject.json"), dbContext.Subjects);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<ActivityType>(Path.Combine(_tempExtractedPath, "ActivityType.json"), dbContext.ActivityTypes);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<Map>(Path.Combine(_tempExtractedPath, "Map.json"), dbContext.Maps);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<MapObject>(Path.Combine(_tempExtractedPath, "MapObject.json"), dbContext.MapObjects);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<TaskLocation>(Path.Combine(_tempExtractedPath, "TaskLocation.json"), dbContext.TaskLocations);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<ObjectActivityType>(Path.Combine(_tempExtractedPath, "ObjectActivityType.json"), dbContext.ObjectActivityTypes);
+            await _fileSeeder.SeedSingleFileForMapBundleAsync<ObjectLocation>(Path.Combine(_tempExtractedPath, "ObjectLocation.json"), dbContext.ObjectLocations);
 
             // Save changes and commit transaction to DB
             await dbContext.SaveChangesAsync(cancellationToken);
