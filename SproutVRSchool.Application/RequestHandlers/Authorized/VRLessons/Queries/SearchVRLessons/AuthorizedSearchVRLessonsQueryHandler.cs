@@ -39,7 +39,9 @@ public sealed class AuthorizedSearchVRLessonsQueryHandler(
             Map = new AuthorizedVRLessonMapQueryResponseDto(
                 Id: vrLesson.Map.Id,
                 Name: vrLesson.Map.Name,
-                MapCode: vrLesson.Map.MapCode
+                MapCode: vrLesson.Map.MapCode,
+                ImageUrl: vrLesson.Map.ImageUrl,
+                PreviewUrl: vrLesson.Map.PreviewUrl
             )
         }).ToList();
 

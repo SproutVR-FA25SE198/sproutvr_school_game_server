@@ -25,5 +25,7 @@ public record AuthorizedVRLessonLessonQueryResponseDto(
 public record AuthorizedVRLessonMapQueryResponseDto(
     Guid Id,
     string Name,
-    string MapCode
+    string MapCode,
+    string ImageUrl,
+    string PreviewUrl
 );
