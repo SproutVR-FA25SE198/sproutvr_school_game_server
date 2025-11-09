@@ -12,12 +12,10 @@
   {
     "Id": "10000001-0000-0000-0000-000000000002",
     "MasterSubjectId": "11111111-1111-1111-1111-111111111111",
-    "Name": "Toán 11",
-    "Description": "Chương trình toán học lớp 11 - Lượng giác và Đại số nâng cao",
-    "ImageUrl": "https://example.com/images/math-11.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+    "Name": "Hóa 12",
+    "Description": "Chương trình Hóa học lớp 12 - Kết nối tri thức",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/subjects%2Fchemistry_12.jpg?alt=media",
+    "Status": "Active"
   },
   {
     "Id": "10000001-0000-0000-0000-000000000003",
@@ -75,16 +73,6 @@
     "Name": "Hóa 11",
     "Description": "Chương trình hóa học lớp 11 - Hóa học hữu cơ",
     "ImageUrl": "https://example.com/images/chemistry-11.jpg",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
-  },
-  {
-    "Id": "30000001-0000-0000-0000-000000000003",
-    "MasterSubjectId": "33333333-3333-3333-3333-333333333333",
-    "Name": "Hóa 12",
-    "Description": "Chương trình hóa học lớp 12 - Hóa học vô cơ và Điện hóa",
-    "ImageUrl": "https://example.com/images/chemistry-12.jpg",
     "Status": "Active",
     "CreatedAtUtc": "2024-01-01T00:00:00Z",
     "UpdatedAtUtc": "2024-01-01T00:00:00Z"

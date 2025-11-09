@@ -14,14 +14,12 @@
   {
     "Id": "a0000001-0000-0000-0000-000000000002",
     "SubjectId": "10000001-0000-0000-0000-000000000002",
-    "Name": "Lượng giác lớp 11",
-    "MapCode": "MAP-02",
-    "Description": "Bản đồ học tập về lượng giác và các hàm số lượng giác",
-    "ImageUrl": "https://example.com/images/map-trigonometry-11.jpg",
+    "MapCode": "map_lab_1",
+    "Name": "Phòng Lab Hóa",
+    "Description": "Chương 6 - Đại cương về kim loại",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fthumnails%2Fmap_lab_1_thumbnail.png?alt=media",
     "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
-    "Status": "Active",
-    "CreatedAtUtc": "2024-01-01T00:00:00Z",
-    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+    "Status": "Active"
   },
   {
     "Id": "a0000001-0000-0000-0000-000000000003",

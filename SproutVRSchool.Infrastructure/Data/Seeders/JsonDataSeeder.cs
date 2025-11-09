@@ -2,8 +2,12 @@
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain.Entities;
+using SproutVRSchool.Domain.Entities.ActivityTypes;
+using SproutVRSchool.Domain.Entities.MasterSubjects;
+using SproutVRSchool.Domain.Entities.Subjects;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 
@@ -122,8 +126,17 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task SeedSingleFileAsync<T>(string absoluteFilePath, DbSet<T> dbSet) where T : class
+    /// <summary>
+    /// Seed Single File, not a bulk seedings
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="absoluteFilePath"></param>
+    /// <param name="dbSet"></param>
+    /// <returns></returns>
+    /// <exception cref="SvrResourceNotFoundException"></exception>
+    public async Task SeedSingleFileForMapBundleAsync<T>(string absoluteFilePath, DbSet<T> dbSet) where T : class
     {
+        // 1. If not found, throw exception
         if (!File.Exists(absoluteFilePath))
         {
             throw new SvrResourceNotFoundException($"Seed file not found: {absoluteFilePath}");
@@ -139,13 +152,41 @@ public class JsonDataSeeder<TDbContext> : IDataSeeder
         };
 
         List<T>? entities = JsonConvert.DeserializeObject<List<T>>(jsonContent, settings);
+
+        Type t = typeof(T);
+
+        // 2. If file doens't contain data, throw exception
         if (entities is null || !entities.Any())
         {
-            throw new SvrResourceNotFoundException($"No data found in seed file: {absoluteFilePath}");
+            return;
+#pragma warning disable S125 // Sections of code should not be commented out
+            //throw new SvrResourceNotFoundException($"No data found in seed file: {absoluteFilePath}");
+#pragma warning restore S125 // Sections of code should not be commented out
         }
 
-        // Save change to the database
-        dbSet.AddRange(entities);
+        // 2. Exceptional case for MasterSubject, Subject, and Activity Type,
+        if (entities.Any() && (t == typeof(MasterSubject)
+                || t == typeof(Subject)
+                || t == typeof(ActivityType)))
+        {
+            foreach (T e in entities)
+            {
+                // If existing, don't seed it, else add it to the school db
+                Guid entityId = (e as BaseEntity)!.Id;
+                T? existingEntity = await dbSet.FindAsync(entityId);
+                if (existingEntity != null)
+                {
+                    continue;
+                }
+
+                _dbContext.Add<T>(e);
+            }
+        }
+        else if (entities.Any())
+        {
+            _dbContext.AddRange(entities);
+        }
+
         await _dbContext.SaveChangesAsync();
     }
 }

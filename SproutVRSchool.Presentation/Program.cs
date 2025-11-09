@@ -20,13 +20,18 @@ builder.Services.AddPresentation(builder.Configuration);
 WebApplication app = builder.Build();
 IWebHostEnvironment env = app.Services.GetRequiredService<IWebHostEnvironment>();
 IConfigurationSection miscConfigs = app.Configuration.GetSection("Miscs");
-bool IsDroppingDatabaseOnStartup = miscConfigs.GetValue<bool?>("IsDroppingDatabaseOnStartup") ?? false;
+bool IsDroppingDatabaseOnStartup = miscConfigs.GetValue<bool?>("IsSeedingDatabaseOnStartupDevelopment") ?? false;
 
-if (env.IsDevelopment() && IsDroppingDatabaseOnStartup)
+if (env.IsDevelopment())
 {
     app.ApplyDatabaseDrop();
     app.ApplyDatabaseMigrations();
-    await app.ApplySeedingDevelopment();
+
+    // only seed development data when the database is dropped
+    if (IsDroppingDatabaseOnStartup)
+    {
+        await app.ApplySeedingDevelopment();
+    }
     app.MapGrpcReflectionService().AllowAnonymous();
 }
 else if (env.IsProduction())
