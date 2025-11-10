@@ -3,5 +3,5 @@
 public enum UserAccountStatus
 {
     Active = 0,
-    Deactivated = 1
+    Disabled = 1
 }

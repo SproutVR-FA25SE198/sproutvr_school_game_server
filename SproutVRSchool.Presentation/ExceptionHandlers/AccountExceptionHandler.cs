@@ -50,6 +50,30 @@ internal sealed class AccountExceptionHandler(ILogger<AccountExceptionHandler> l
                 };
                 break;
 
+            // 400 - Invalid Account Type
+            case SvrInvalidAccountTypeStatusChangeException invalidAccountTypeException:
+                problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Invalid Account Type",
+                    Detail = invalidAccountTypeException.Message,
+                    Instance = httpContext.Request.Path,
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                };
+                break;
+
+            // 403 - Selft Status Change
+            case SvrSelfAccountStatusChangeException selfStatusChangeException:
+                problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status403Forbidden,
+                    Title = "Operation Not Allowed",
+                    Detail = selfStatusChangeException.Message,
+                    Instance = httpContext.Request.Path,
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
+                };
+                break;
+
             default:
                 return false;
         }

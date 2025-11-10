@@ -13,7 +13,42 @@ public class UserAccount : IdentityUser<Guid>
 
     public string GetFullName()
     {
-        return $"{FirstName} {LastName}";
+        if (string.IsNullOrWhiteSpace(FirstName) && string.IsNullOrWhiteSpace(LastName))
+        {
+            return string.Empty;
+        }
+        else if (string.IsNullOrWhiteSpace(FirstName))
+        {
+            return LastName;
+        }
+        else if (string.IsNullOrWhiteSpace(LastName))
+        {
+            return FirstName;
+        }
+        else
+        {
+            return $"{FirstName} {LastName}";
+        }
+    }
+
+    public static string GetFullName(string? firstName, string? lastName)
+    {
+        if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
+        {
+            return string.Empty;
+        }
+        else if (string.IsNullOrWhiteSpace(firstName))
+        {
+            return lastName;
+        }
+        else if (string.IsNullOrWhiteSpace(lastName))
+        {
+            return firstName;
+        }
+        else
+        {
+            return $"{firstName} {lastName}";
+        }
     }
 }
 

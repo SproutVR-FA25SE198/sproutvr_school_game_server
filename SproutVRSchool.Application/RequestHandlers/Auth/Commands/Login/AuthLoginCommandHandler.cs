@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using SproutVRSchool.Application.Abstractions.AccountServices;
@@ -33,14 +34,14 @@ public sealed class AuthLoginCommandHandler
 
         // 4. Get roles + lifetime
         IList<string> roles = await userManager.GetRolesAsync(user);
-        int tokenLifetimeMinutes = configuration.GetValue<int>("Jwt:TokenLifetimeMinutes");
+        int tokenLifetimeMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes");
 
         // 5. Generate token
-        (string token, DateTimeOffset expiredAtVietNam) = tokenService.GenerateToken(
+        (string token, DateTimeOffset expiredAt) = tokenService.GenerateToken(
             user,
             roles,
             TimeSpan.FromMinutes(tokenLifetimeMinutes));
 
-        return new AuthLoginCommandResponseDto(token, expiredAtVietNam);
+        return new AuthLoginCommandResponseDto(token, expiredAt);
     }
 }

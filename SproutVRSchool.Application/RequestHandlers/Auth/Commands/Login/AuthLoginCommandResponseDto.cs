@@ -2,5 +2,5 @@
 
 public sealed record AuthLoginCommandResponseDto(
     string AccessToken,
-    DateTimeOffset ExpiredAtVietNam
+    DateTimeOffset ExpiredAtUtc
 );

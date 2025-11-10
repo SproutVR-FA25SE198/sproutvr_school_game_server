@@ -48,7 +48,7 @@ public sealed class JwtTokenService(
         };
 
         // 5. Create the token
-        DateTimeOffset expiresAtVietnam = dateTimeProvider.VietNamDateTimeNow.Add(durationInMinutes);
+        DateTimeOffset expiresAtUtc = dateTimeProvider.UtcDateTimeNow.Add(durationInMinutes);
 
         var descriptor = new SecurityTokenDescriptor
         {
@@ -56,15 +56,15 @@ public sealed class JwtTokenService(
             Subject = new ClaimsIdentity(claims),
             Claims = claims.ToDictionary(c => c.Type, c => (object)c.Value),
             Audience = string.Join(",", audiences),
-            NotBefore = dateTimeProvider.VietNamDateTimeNow.UtcDateTime,
-            Expires = expiresAtVietnam.UtcDateTime,
+            NotBefore = dateTimeProvider.UtcDateTimeNow.UtcDateTime,
+            Expires = expiresAtUtc.UtcDateTime,
             SigningCredentials = creds
         };
 
         var handler = new JsonWebTokenHandler();
         string token = handler.CreateToken(descriptor);
 
-        return (token, expiresAtVietnam);
+        return (token, expiresAtUtc);
     }
 
     public async Task<ClaimsPrincipal?> ValidateTokenAsync(string token)

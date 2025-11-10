@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -551,7 +552,7 @@ public partial class IdentityMigration : Migration
                 ActivityTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                 VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
                 TaskNumber = table.Column<int>(type: "integer", nullable: false),
-                Description = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
+                TaskDescription = table.Column<string>(type: "text", maxLength: 1000, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
