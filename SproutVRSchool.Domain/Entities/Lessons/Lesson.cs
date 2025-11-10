@@ -79,4 +79,10 @@ public sealed class Lesson : BaseEntity
 
         UpdatedAtUtc = DateTimeOffset.UtcNow;
     }
+
+    public void UpdateStatus(LessonStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

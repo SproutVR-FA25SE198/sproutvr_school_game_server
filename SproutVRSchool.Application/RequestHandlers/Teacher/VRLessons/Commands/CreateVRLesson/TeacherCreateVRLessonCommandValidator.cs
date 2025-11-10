@@ -17,8 +17,8 @@ public sealed class TeacherCreateVRLessonCommandValidator : AbstractValidator<Te
             .MaximumLength(100).WithMessage("DeviceName must not exceed 100 characters.");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
+            .NotEmpty().WithMessage("TaskDescription is required.")
+            .MaximumLength(1000).WithMessage("TaskDescription must not exceed 1000 characters.");
 
         RuleFor(x => x.MaxDuration)
             .GreaterThan(TimeSpan.Zero).WithMessage("MaxDuration must be a positive time span.");
@@ -48,7 +48,7 @@ public sealed class CreateVRLessonTaskValidator : AbstractValidator<CreateVRLess
             .NotEmpty().WithMessage("TaskNumber is required.");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Task Description is required.")
-            .MaximumLength(255).WithMessage("Task Description must not exceed 255 characters.");
+            .NotEmpty().WithMessage("Task TaskDescription is required.")
+            .MaximumLength(255).WithMessage("Task TaskDescription must not exceed 255 characters.");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain.Entities.VRDevices;
 
@@ -33,7 +34,8 @@ public sealed class SAAssignVRDeviceStatusCommandHandler(
         return new SAAssignVRDeviceStatusCommandResponseDto(
             DeviceId: request.DeviceId,
             DeviceName: "Dummy Device",
-            Message: $"Status {request.Status} assigned successfully."
+            Message: $"Status {request.Status} assigned successfully.",
+            Status: new StatusDto(vrDevice.Status)
         );
     }
 }

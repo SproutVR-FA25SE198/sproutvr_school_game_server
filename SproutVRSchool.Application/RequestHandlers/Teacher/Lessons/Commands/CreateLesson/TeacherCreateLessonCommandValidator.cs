@@ -31,8 +31,8 @@ public sealed class TeacherCreateLessonCommandValidator : AbstractValidator<Teac
             .MaximumLength(100).WithMessage("Lesson DeviceName must not exceed 100 characters.");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
+            .NotEmpty().WithMessage("TaskDescription is required.")
+            .MaximumLength(1000).WithMessage("TaskDescription must not exceed 1000 characters.");
 
         When(x => x.ResourceFile != null, () =>
         {

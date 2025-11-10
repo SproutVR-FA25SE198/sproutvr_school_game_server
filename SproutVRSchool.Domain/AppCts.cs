@@ -46,9 +46,12 @@ public static class AppCts
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
         public const string NAMESPACE_VR_LEARNING_SESSIONS = "vr_learning_sessions";
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE = "vr_learning_sessions_active";
-        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS = "vr_learning_sessions_notify_events";
+
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE = "vr_learning_sessions_room_codes";
         public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS = "stream:vr_learning_sessions";
+
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR = "vr_learning_sessions_notify_events_vr";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP = "vr_learning_sessions_notify_events_desktop";
 
         public static class PubSubEvents
         {
@@ -57,9 +60,9 @@ public static class AppCts
             public const string DEVICE_JOINED = "DEVICEJOINED";
             public const string DEVICE_DISCONNECTED = "DEVICEDISCONNECTED";
             public const string TASK_UPDATED = "TASKUPDATED";
-            public const string END_SIGNAL = "ENDSIGNAL";     
-            public const string INFO = "INFO";                 
-            public const string WARNING = "WARNING";           
+            public const string END_SIGNAL = "ENDSIGNAL";
+            public const string INFO = "INFO";
+            public const string WARNING = "WARNING";
         }
     }
 

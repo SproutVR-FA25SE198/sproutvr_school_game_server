@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.AssignMapStatus;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.SeedMapBundle;
 using SproutVRSchool.Domain;
 
@@ -19,6 +20,7 @@ public class MapsController(IMediator mediator) : BaseApiController
     // === POSTs
     // ========================
 
+    // POST: api/v1/school-admin/maps/seed-bundle
     [HttpPost("seed-bundle")]
     public async Task<IActionResult> SeedMapBundle([FromBody] SASeedMapBundleCommand request)
     {
@@ -33,4 +35,16 @@ public class MapsController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
+
+    // PATCH: api/v1/school-admin/maps/{id}/assign-status
+    [HttpPatch("{id}/assign-status")]
+    public async Task<IActionResult> AssignStatus(
+    [FromRoute] Guid id,
+    [FromBody] SAAssignMapStatusCommand request,
+    CancellationToken cancellationToken)
+    {
+        request.MapId = id;
+        SAAssignMapStatusCommandResponseDto result = await mediator.Send(request, cancellationToken);
+        return Ok(result);
+    }
 }

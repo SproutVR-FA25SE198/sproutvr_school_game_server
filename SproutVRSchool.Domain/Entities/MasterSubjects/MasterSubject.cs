@@ -11,4 +11,10 @@ public sealed class MasterSubject : BaseEntity
 
     // navigation property
     public ICollection<Subject> Subjects { get; set; } = [];
+
+    public void UpdateStatus(MasterSubjectStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

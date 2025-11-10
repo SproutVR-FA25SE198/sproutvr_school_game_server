@@ -13,7 +13,7 @@ public sealed class VRTask : BaseEntity
     public Guid ActivityTypeId { get; set; }
     public Guid VRLessonId { get; set; }
     public int TaskNumber { get; set; }
-    public string Description { get; set; }
+    public string TaskDescription { get; set; }
 
     // navigation properties
     public TaskLocation TaskLocation { get; set; }
@@ -42,7 +42,7 @@ public sealed class VRTask : BaseEntity
             ActivityTypeId = activityTypeId,
             VRLessonId = vrLessonId,
             TaskNumber = taskNumber,
-            Description = description,
+            TaskDescription = description,
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow
         };

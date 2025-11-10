@@ -59,7 +59,7 @@ public sealed class AuthorizedGetVRTaskByIdQueryHandler(
             ActivityType = activityTypeDto,
             VRLesson = vrLessonDto,
             TaskNumber = vrTask.TaskNumber,
-            Description = vrTask.Description,
+            Description = vrTask.TaskDescription,
             CreatedAtUtc = vrTask.CreatedAtUtc,
             // Calculate CreatedAtVietNam time
             CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(vrTask.CreatedAtUtc)
