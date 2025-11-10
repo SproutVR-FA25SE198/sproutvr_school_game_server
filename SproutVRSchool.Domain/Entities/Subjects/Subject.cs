@@ -16,4 +16,10 @@ public sealed class Subject : BaseEntity
     public MasterSubject MasterSubject { get; set; }
     public ICollection<Lesson> Lessons { get; set; }
     public ICollection<Map> Maps { get; set; } = [];
+
+    public void UpdateStatus(SubjectStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

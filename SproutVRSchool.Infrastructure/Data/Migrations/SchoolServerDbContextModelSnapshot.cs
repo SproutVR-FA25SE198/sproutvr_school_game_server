@@ -288,7 +288,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -379,7 +379,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -434,7 +434,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -524,7 +524,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -785,7 +785,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -840,7 +840,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");

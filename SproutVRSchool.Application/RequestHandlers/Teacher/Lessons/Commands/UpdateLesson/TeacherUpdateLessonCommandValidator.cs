@@ -27,9 +27,9 @@ public sealed class TeacherUpdateLessonCommandValidator : AbstractValidator<Teac
             .When(x => x.Name != null); // Apply these rules ONLY if DeviceName is not null.
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description cannot be set to an empty value.")
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.")
-            .When(x => x.Description != null); // Apply these rules ONLY if Description is not null.
+            .NotEmpty().WithMessage("TaskDescription cannot be set to an empty value.")
+            .MaximumLength(1000).WithMessage("TaskDescription must not exceed 1000 characters.")
+            .When(x => x.Description != null); // Apply these rules ONLY if TaskDescription is not null.
 
         When(x => x.ResourceFile != null, () =>
         {

@@ -78,7 +78,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
 
         // 2. Subscribe to Redis Pub/Sub channel
         await subscriber.SubscribeAsync(
-         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS),
+         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP),
          (redisChannel, message) =>
          {
              if (!channel.Writer.TryWrite(message))
@@ -185,7 +185,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         }
         finally
         {
-            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS));
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP));
         }
     }
 
@@ -286,7 +286,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
             string redisEvent = vrLearningSessionId.ToRedisEventTypeMessage(eventType, payloadJson);
 
             await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS),
+                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP),
                 redisEvent);
 
             _logger.LogInformation("Published event: {EventType} for Session: {SessionId} -> {Payload}",

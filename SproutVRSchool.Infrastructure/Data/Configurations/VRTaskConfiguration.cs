@@ -30,7 +30,7 @@ internal sealed class VRTaskConfiguration : BaseEntityConfiguration<VRTask>
         builder.Property(vrt => vrt.TaskNumber)
             .IsRequired();
 
-        builder.Property(vrt => vrt.Description)
+        builder.Property(vrt => vrt.TaskDescription)
             .HasColumnType("text")
             .HasMaxLength(1000);
 

@@ -44,7 +44,7 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
                     LocationCode = task.TaskLocation.LocationCode,
                     VrTaskId = task.Id.ToString(),
                     TaskNumber = task.TaskNumber,
-                    TaskDescription = task.Description,
+                    TaskDescription = task.TaskDescription,
                     MapObject = new PresetMapObjectDto
                     {
                         ObjectCode = task.MapObject.ObjectCode,

@@ -18,4 +18,10 @@ public sealed class Map : BaseEntity
     public Subject Subject { get; set; }
     public ICollection<TaskLocation> TaskLocations { get; set; } = [];
     public ICollection<MapObject> MapObjects { get; set; } = [];
+
+    public void UpdateStatus(MapStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

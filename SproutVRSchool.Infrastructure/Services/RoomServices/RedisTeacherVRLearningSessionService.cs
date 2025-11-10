@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Google.Protobuf;
+using Grpc.Net.Client.Configuration;
 using Microsoft.Extensions.Logging;
 using NRedisStack.RedisStackCommands;
 using Polly;
@@ -10,6 +12,8 @@ using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Application.Specifications;
@@ -27,9 +31,10 @@ internal sealed class RedisTeacherVRLearningSessionService
     private readonly IDatabase _database;
     private readonly ICodeGeneratorService _codeGenerator;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly ITeacherVRLearningSessionStateService _teacherVRLearningSessionStateService;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ResiliencePipelineProvider<string> _pipelineProvider;
+    private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
     private readonly ILogger<RedisTeacherVRLearningSessionService> _logger;
 
     // ===============================
@@ -39,6 +44,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     public RedisTeacherVRLearningSessionService(
         ICodeGeneratorService codeGenerator,
         IConnectionMultiplexer connectionMultiplexer,
+        ITeacherVRLearningSessionStateService teacherVRLearningSessionStateService,
         IDateTimeProvider dateTimeProvider,
         IUnitOfWork unitOfWork,
         ResiliencePipelineProvider<string> resiliencePipelineProvider,
@@ -48,7 +54,8 @@ internal sealed class RedisTeacherVRLearningSessionService
         _codeGenerator = codeGenerator;
         _dateTimeProvider = dateTimeProvider;
         _unitOfWork = unitOfWork;
-        _pipelineProvider = resiliencePipelineProvider;
+        _teacherVRLearningSessionStateService = teacherVRLearningSessionStateService;
+        _resiliencePipelineProvider = resiliencePipelineProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
         _logger = logger;
@@ -91,7 +98,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     {
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{request.LearningSessionId}";
         string roomCode = string.Empty;
-        ResiliencePipeline<bool> retryPipeline = _pipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
+        ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
 
         // 1. Get vr lesson info for duration and task lists
         VRLesson vrLesson = await _unitOfWork.Repository<VRLesson>().GetEntityByIdAsync(Guid.Parse(request.VrLessonId));
@@ -167,6 +174,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
     {
+        // 1. Get vr learning session key
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
 
         if (!await _database.KeyExistsAsync(sessionKey))
@@ -176,6 +184,7 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Message: $"Redis with ID '{vrLearningSessionId}' not found. Canceled Failed.");
         }
 
+        // 2. Create a transaction to update the status and remove from active set
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
@@ -184,16 +193,26 @@ internal sealed class RedisTeacherVRLearningSessionService
         if (!await transaction.ExecuteAsync())
         {
             // UNDONE: Improve the error handling and retry mechanism
-            // UNDONE: Store to the DB
             return new CancelRoomResponseDto(
                 Message: "Cancellation failed. Please try again");
         }
 
-        // Boardcasting the ENDSIGNAL message to all devices subscribed to the channel
+        // 3. Publish to VR Devices on ENDSIGNAL event
+        // Boardcasting the ENDSIGNAL endsignalMessage to all devices subscribed to the channel
+        // UNDONE: create a seperate method for sending end signal
         ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
-        string message = $"{vrLearningSessionId}:{AppCts.Redis.PubSubEvents.END_SIGNAL}:The teacher has cancelled the session.";
-        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), message);
+        string endsignalMessage = $"{vrLearningSessionId}:{AppCts.Redis.PubSubEvents.END_SIGNAL}:The teacher has cancelled the session.";
+        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR), endsignalMessage);
 
+        // 4. Publish to Desktop App Room State on ROOMCANCELLED event
+        await _teacherVRLearningSessionStateService.PublishRoomCancelledAsync(
+            vrLearningSessionId,
+            new RoomCancelledDto()
+        );
+
+        // 5. Save the entire room state into the Physical DB for record keeping
+
+        // 6. Return success message back to the teacher
         return new CancelRoomResponseDto(
             Message: "Cancelled VR Learning Redis Successfull"
         );
@@ -201,12 +220,12 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task SendNotificationAsync(SendNotificationRequestDto request)
     {
-        // Boardcasting the NOTIFY message to all devices subscribed to the channel
+        // Boardcasting the NOTIFY endsignalMessage to all devices subscribed to the channel
         ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
         string message = request.VRLearningSessionId.ToRedisEventTypeMessage(request.Severity.ToString(), request.Text);
 
-        _logger.LogInformation("sending the message: {Message}", message);
+        _logger.LogInformation("sending the endsignalMessage: {Message}", message);
 
-        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS), message);
+        await subscriber.PublishAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR), message);
     }
 }

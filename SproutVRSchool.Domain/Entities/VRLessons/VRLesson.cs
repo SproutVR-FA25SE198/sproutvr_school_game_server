@@ -62,6 +62,12 @@ public sealed class VRLesson : BaseEntity
         PresetJsonRelativeFilePath = presetJsonRelativeFilePath;
         UpdatedAtUtc = DateTime.UtcNow;
     }
+
+    public void UpdateStatus(VRLessonStatus status)
+    {
+        Status = status;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }
 
 

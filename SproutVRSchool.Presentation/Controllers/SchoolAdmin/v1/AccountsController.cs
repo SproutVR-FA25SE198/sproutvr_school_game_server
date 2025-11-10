@@ -26,7 +26,6 @@ public sealed class AccountsController(IMediator mediator) : BaseApiController
         return Ok(response);
     }
 
-
     // ========================
     // === PUTs
     // ========================

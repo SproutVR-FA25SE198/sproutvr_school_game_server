@@ -1,59 +1,59 @@
 ﻿[
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 1",
+    "Name": "Bên trái bàn 1",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_1.png?alt=media",
     "LocationCode": "map_lab_1_loc_1",
     "Id": "c0000001-0000-0000-0000-000000000004"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 1",
+    "Name": "Bên phải bàn 1",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_2.png?alt=media",
     "LocationCode": "map_lab_1_loc_2",
     "Id": "c0000001-0000-0000-0000-000000000005"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 2",
+    "Name": "Bên trái bàn 2",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_3.png?alt=media",
     "LocationCode": "map_lab_1_loc_3",
     "Id": "c0000001-0000-0000-0000-000000000006"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 2",
+    "Name": "Bên phải bàn 2",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_4.png?alt=media",
     "LocationCode": "map_lab_1_loc_4",
     "Id": "c0000001-0000-0000-0000-000000000007"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 3",
+    "Name": "Bên trái bàn 3",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_5.png?alt=media",
     "LocationCode": "map_lab_1_loc_5",
     "Id": "c0000001-0000-0000-0000-000000000008"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 3",
+    "Name": "Bên phải bàn 3",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_6.png?alt=media",
     "LocationCode": "map_lab_1_loc_6",
     "Id": "c0000001-0000-0000-0000-000000000009"
   },
   {
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 4",
+    "Name": "Bên trái bàn 4",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_7.png?alt=media",
     "LocationCode": "map_lab_1_loc_7",
     "Id": "c0000001-0000-0000-0000-000000000010"
   },
   {
-    "Id": "c0000001-0000-0000-0000-000000000011",
     "MapId": "a0000001-0000-0000-0000-000000000002",
-    "Name": "Bàn 4",
+    "Name": "Bên phải bàn 4",
     "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_8.png?alt=media",
-    "LocationCode": "map_lab_1_loc_8"
+    "LocationCode": "map_lab_1_loc_8",
+    "Id": "c0000001-0000-0000-0000-000000000011"
   },
   {
     "Id": "c0000001-0000-0000-0000-000000000012",
