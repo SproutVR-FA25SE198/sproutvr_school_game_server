@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251105110546_IdentityMigration")]
+    [Migration("20251110094338_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -291,7 +291,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -382,7 +382,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -437,7 +437,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -527,7 +527,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -788,7 +788,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
@@ -843,13 +843,13 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
+                    b.Property<Guid>("MapObjectId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("text");
-
-                    b.Property<Guid>("MapObjectId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TaskLocationId")
                         .HasColumnType("uuid");

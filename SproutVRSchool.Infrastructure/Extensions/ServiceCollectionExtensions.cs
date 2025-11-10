@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -144,15 +145,22 @@ public static partial class ServiceCollectionExtensions
                         Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
                     };
 
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     context.Response.ContentType = "application/json";
-
                     await context.Response.WriteAsJsonAsync(problemDetails);
                 }
             };
         });
 
         service.AddScoped<ITokenService, JwtTokenService>();
+        service.AddScoped<ICurrentLoggedInUserAccountService, CurrentLoggedInUserAccountService>();
+        service.AddHttpContextAccessor();
+
+        // Add ClaimsPrincipal injection
+        service.AddScoped(provider =>
+        {
+            HttpContext? httpContext = provider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+            return httpContext?.User ?? new ClaimsPrincipal();
+        });
     }
 
     /*
