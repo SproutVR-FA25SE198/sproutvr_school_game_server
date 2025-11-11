@@ -31,14 +31,14 @@ public sealed class AccountsController(IMediator mediator) : BaseApiController
         return Ok(response);
     }
 
-    // GET: api/v1/authorized/accounts/teachers/{teacherId}
-    [HttpGet("{teacherId}")]
-    public async Task<IActionResult> GetTeacherAccountById(
-        [FromRoute] Guid teacherId,
+    // GET: api/v1/authorized/accounts/:id
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAccountById(
+        [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var query = new AuthorizedGetTeacherAccountByIdQuery { TeacherId = teacherId };
-        AuthorizedGetTeacherAccountByIdQueryResponseDto response =
+        var query = new AuthorizedGetAccountByIdQuery { Id = id };
+        AuthorizedGetAccountByIdQueryResponseDto response =
             await mediator.Send(query, cancellationToken);
         return Ok(response);
     }
