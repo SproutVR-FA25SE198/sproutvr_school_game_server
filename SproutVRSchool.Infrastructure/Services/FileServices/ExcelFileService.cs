@@ -38,7 +38,8 @@ public class ExcelFileService(
             string lastName = worksheet.Cells[row, 2].Text?.Trim() ?? string.Empty;
             string username = worksheet.Cells[row, 3].Text?.Trim() ?? string.Empty;
             string email = worksheet.Cells[row, 4].Text?.Trim() ?? string.Empty;
-            string defaultPassword = worksheet.Cells[row, 5].Text?.Trim() ?? string.Empty;
+            string dateOfBirth = worksheet.Cells[row, 5].Text?.Trim() ?? string.Empty;
+            string defaultPassword = worksheet.Cells[row, 6].Text?.Trim() ?? string.Empty;
 
             // Must have Email
             if (string.IsNullOrWhiteSpace(email))
@@ -54,6 +55,7 @@ public class ExcelFileService(
                 continue;
             }
 
+            // Must have default password
             if (string.IsNullOrWhiteSpace(defaultPassword))
             {
                 excelFileService.LogWarning("Skipping row {Row} due to missing password.", row);
@@ -65,6 +67,7 @@ public class ExcelFileService(
                 LastName: lastName,
                 UserName: username,
                 Email: email,
+                DateOfBirth: dateOfBirth,
                 DefaultPassword: defaultPassword);
 
             result.Add(teacherAccount);

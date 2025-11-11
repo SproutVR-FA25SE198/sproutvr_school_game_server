@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Application.Abstractions.Clock;
+using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Exceptions.Accounts;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
@@ -42,7 +43,6 @@ public sealed class AuthGetCurrentUserCommandHandler(
         IReadOnlyList<string> roles = currentUser.Roles;
         string email = user.Email ?? string.Empty;
         string fullName = user.GetFullName();
-        string status = user.Status.ToString();
         string? organizationId = null;
         DateOnly? dateOfBirth = user.DateOfBirth;
         DateTimeOffset joinedAtUtc = user.CreatedAtUtc;
@@ -54,17 +54,18 @@ public sealed class AuthGetCurrentUserCommandHandler(
             organizationId = (user as Domain.Entities.Identities.SchoolAdmin)?.OrganizationId.ToString();
         }
 
-        return new AuthGetCurrentUserCommandResponseDto(
-            user.Id,
-            email,
-            fullName,
-            status,
-            roles,
-            organizationId,
-            dateOfBirth,
-            joinedAtUtc,
-            joinedAtVietNam
-        );
+        return new AuthGetCurrentUserCommandResponseDto
+        {
+            UserId = user.Id,
+            Email = email,
+            FullName = fullName,
+            Status = new StatusDto(user.Status),
+            Roles = roles,
+            DateOfBirth = dateOfBirth,
+            JoinedAtUtc = joinedAtUtc,
+            JoinedAtVietNam = joinedAtVietNam,
+            OrganizationId = organizationId
+        };
     }
 }
 

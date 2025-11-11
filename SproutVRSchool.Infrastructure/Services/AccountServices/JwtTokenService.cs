@@ -32,9 +32,6 @@ public sealed class JwtTokenService(
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        // 3. Add Role Claims
-        roles.Add("User");
-
         // 4. Add Claims
         var claims = new List<Claim>
         {

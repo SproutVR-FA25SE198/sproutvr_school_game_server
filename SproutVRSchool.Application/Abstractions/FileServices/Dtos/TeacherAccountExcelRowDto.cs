@@ -5,4 +5,5 @@ public sealed record TeacherAccountExcelRowDto(
     string LastName,
     string Email,
     string UserName,
+    string DateOfBirth,
     string DefaultPassword);

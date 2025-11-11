@@ -1,19 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Domain.Entities.Identities;
 
 namespace SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
 
-public sealed record AuthGetCurrentUserCommandResponseDto(
-    Guid UserId,
-    string Email,
-    string FullName,
-    string Status,
-    IReadOnlyList<string> Roles,
+public sealed record AuthGetCurrentUserCommandResponseDto
+{
+    public Guid UserId { get; init; }
 
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    string? OrganizationId,
+    public string Email { get; init; } = string.Empty;
 
-    DateOnly? DateOfBirth,
-    DateTimeOffset JoinedAtUtc,
-    DateTimeOffset JoinedAtVietNam
-);
+    public string FullName { get; init; } = string.Empty;
+
+    public StatusDto Status { get; init; }
+
+    public IReadOnlyList<string> Roles { get; init; } = Array.Empty<string>();
+
+    public DateOnly? DateOfBirth { get; init; }
+
+    public DateTimeOffset JoinedAtUtc { get; init; }
+
+    public DateTimeOffset JoinedAtVietNam { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? OrganizationId { get; init; } = null;
+}
+
+
+
 
