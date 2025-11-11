@@ -84,6 +84,9 @@ public sealed class SASeedMapBundleCommandHandler : IRequestHandler<SASeedMapBun
         return new SASeedMapBundleCommandResponseDto($"Successfully seeded map bundle with ID '{request.MapId}'.");
     }
 
+    /// <summary>
+    /// Cleanup the temp extracted folder after the download
+    /// </summary>
     private void CleanUp()
     {
         // delete zip file path

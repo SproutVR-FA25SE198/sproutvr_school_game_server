@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Auth.Commands.Login;
 using SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
+using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.SearchAccounts;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.VRLearningSessions;
@@ -30,6 +33,15 @@ public sealed class AuthController(IMediator mediator) : BaseApiController
     {
         var request = new AuthGetCurrentUserCommand();
         AuthGetCurrentUserCommandResponseDto response = await mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+
+    // GET: api/v1/school-admin/accounts
+    [HttpGet]
+    public async Task<IActionResult> GetAccounts([FromQuery] AuthorizedSearchAccountsQueryParams queryParams, CancellationToken cancellationToken)
+    {
+        var request = new AuthorizedSearchAccountsQuery(queryParams);
+        GetListResultResponseDto<AuthorizedSearchAccountsQueryResponseDto> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 

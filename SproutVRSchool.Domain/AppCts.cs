@@ -189,5 +189,17 @@ public static class AppCts
             public const string TASK_NUMBER_ASC = "taskNumberAsc";
             public const string TASK_NUMBER_DESC = "taskNumberDesc";
         }
+
+        public static class UserAccounts
+        {
+            public const string FIRST_NAME_ASC = "firstNameAsc";
+            public const string FIRST_NAME_DESC = "firstNameDesc";
+            public const string LAST_NAME_ASC = "lastNameAsc";
+            public const string LAST_NAME_DESC = "lastNameDesc";
+            public const string EMAIL_ASC = "emailAsc";
+            public const string EMAIL_DESC = "emailDesc";
+            public const string STATUS_ASC = "statusAsc";
+            public const string STATUS_DESC = "statusDesc";
+        }
     }
 }
