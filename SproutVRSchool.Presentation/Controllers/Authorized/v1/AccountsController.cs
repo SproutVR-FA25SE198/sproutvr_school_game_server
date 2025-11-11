@@ -2,14 +2,13 @@
 using Asp.Versioning;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.Exceptions.Resources;
+using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.GetTeacherAccountById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.SearchAccounts;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.ImportAccountsFromExcel;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Presentation.Controllers.Auth.v1;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
@@ -32,6 +31,18 @@ public sealed class AccountsController(IMediator mediator) : BaseApiController
         return Ok(response);
     }
 
+    // GET: api/v1/authorized/accounts/teachers/{teacherId}
+    [HttpGet("{teacherId}")]
+    public async Task<IActionResult> GetTeacherAccountById(
+        [FromRoute] Guid teacherId,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetTeacherAccountByIdQuery { TeacherId = teacherId };
+        AuthorizedGetTeacherAccountByIdQueryResponseDto response =
+            await mediator.Send(query, cancellationToken);
+        return Ok(response);
+    }
+
     // ========================
     // === POSTs
     // ========================
@@ -44,5 +55,3 @@ public sealed class AccountsController(IMediator mediator) : BaseApiController
     // === PATCHs
     // ========================
 }
-
-

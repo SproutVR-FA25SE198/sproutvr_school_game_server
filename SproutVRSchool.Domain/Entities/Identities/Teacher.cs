@@ -9,6 +9,7 @@ public sealed class Teacher : UserAccount
     // navigation properties
     public ICollection<Lesson> Lessons { get; set; } = [];
     public ICollection<VRLearningSession> VRLearningSessions { get; set; } = [];
+
     public static Teacher Create(string username, string email, string firstName, string lastName, string dateOfBirth)
     {
         return new Teacher()
