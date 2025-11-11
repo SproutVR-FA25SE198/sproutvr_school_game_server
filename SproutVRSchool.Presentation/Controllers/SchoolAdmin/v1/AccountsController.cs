@@ -1,14 +1,11 @@
 ﻿using System.Security.Claims;
 using Asp.Versioning;
-using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.Exceptions.Resources;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.AssignAccountStatus;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.ImportAccountsFromExcel;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Presentation.Controllers.Auth.v1;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
@@ -40,6 +37,16 @@ public sealed class AccountsController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
+
+    // PATCH: api/v1/school-admin/accounts/{id}/assign-status
+    [HttpPatch("{id}/assign-status")]
+    public async Task<IActionResult> AssignStatus(
+        [FromRoute] Guid id,
+        [FromBody] SAAssignAccountStatusCommand request,
+        CancellationToken cancellationToken)
+    {
+        request.UserId = id;
+        SAAssignAccountStatusCommandResponseDto result = await mediator.Send(request, cancellationToken);
+        return Ok(result);
+    }
 }
-
-
