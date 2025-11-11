@@ -8,6 +8,7 @@ public record AuthorizedGetVRTaskByIdQueryResponseDto
     public AuthorizedGetVRTaskByIdQueryActivityTypeResponseDto ActivityType { get; init; }
     public AuthorizedGetVRTaskByIdQueryVRLessonResponseDto VRLesson { get; init; }
     public int TaskNumber { get; init; }
+    public string? Question { get; init; }
     public string Description { get; init; }
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; } // Included as requested

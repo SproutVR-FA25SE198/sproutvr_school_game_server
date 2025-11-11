@@ -13,6 +13,7 @@ public sealed class VRTask : BaseEntity
     public Guid ActivityTypeId { get; set; }
     public Guid VRLessonId { get; set; }
     public int TaskNumber { get; set; }
+    public string? Question { get; set; }
     public string TaskDescription { get; set; }
 
     // navigation properties
@@ -32,6 +33,7 @@ public sealed class VRTask : BaseEntity
         Guid activityTypeId,
         Guid vrLessonId,
         int taskNumber,
+        string? question,
         string description)
     {
         var newVRTask = new VRTask
@@ -41,6 +43,7 @@ public sealed class VRTask : BaseEntity
             MapObjectId = mapObjectId,
             ActivityTypeId = activityTypeId,
             VRLessonId = vrLessonId,
+            Question = question,
             TaskNumber = taskNumber,
             TaskDescription = description,
             CreatedAtUtc = DateTimeOffset.UtcNow,
@@ -50,4 +53,9 @@ public sealed class VRTask : BaseEntity
         return newVRTask;
     }
 
+    public void SetQuestion(string question)
+    {
+        Question = question;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

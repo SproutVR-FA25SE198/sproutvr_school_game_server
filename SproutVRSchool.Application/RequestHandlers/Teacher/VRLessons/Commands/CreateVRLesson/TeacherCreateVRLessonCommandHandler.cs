@@ -30,6 +30,7 @@ public sealed class TeacherCreateVRLessonCommandHandler(
                 taskDto.ActivityTypeId,
                 newVRLesson.Id,
                 taskDto.TaskNumber,
+                question: taskDto.Question,
                 taskDto.Description);
             uow.Repository<VRTask>().Add(newVRTask);
         }

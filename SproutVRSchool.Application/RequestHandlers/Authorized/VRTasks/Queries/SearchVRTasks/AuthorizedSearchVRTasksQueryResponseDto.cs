@@ -10,8 +10,8 @@ public record AuthorizedSearchVRTasksQueryResponseDto
     public AuthorizedSearchVRTasksQueryActivityTypeResponseDto ActivityType { get; init; }
     public AuthorizedSearchVRTasksQueryVRLessonResponseDto VRLesson { get; init; }
     public int TaskNumber { get; init; }
+    public string? Question { get; init; }
     public string Description { get; init; }
-    public StatusDto Status { get; init; }
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }

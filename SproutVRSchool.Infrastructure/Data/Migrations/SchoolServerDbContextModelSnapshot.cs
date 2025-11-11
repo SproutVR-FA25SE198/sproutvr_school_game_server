@@ -843,6 +843,10 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("MapObjectId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Question")
+                        .HasMaxLength(500)
+                        .HasColumnType("text");
+
                     b.Property<string>("TaskDescription")
                         .IsRequired()
                         .HasMaxLength(1000)

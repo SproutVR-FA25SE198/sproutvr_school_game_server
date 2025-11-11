@@ -15,5 +15,6 @@ public record CreateVRLessonTaskRequestDto(
     Guid MapObjectId,
     Guid ActivityTypeId,
     int TaskNumber,
+    string? Question,
     string Description
 );

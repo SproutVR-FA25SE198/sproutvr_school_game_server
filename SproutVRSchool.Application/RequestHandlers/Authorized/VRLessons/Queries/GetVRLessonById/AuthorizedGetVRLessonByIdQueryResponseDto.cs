@@ -32,7 +32,8 @@ public record AuthorizedGetVRLessonByIdQueryTaskResponseDto
     public AuthorizedGetVRLessonByIdQueryMapObjectResponseDto MapObject { get; init; }
     public AuthorizedGetVRLessonByIdQueryActivityTypeResponseDto ActivityType { get; init; }
     public int TaskNumber { get; init; }
-    public string Description { get; init; }
+    public string TaskDescription { get; init; }
+    public string? Question { get; init; }
 }
 
 public class AuthorizedGetVRLessonByIdQueryActivityTypeResponseDto
