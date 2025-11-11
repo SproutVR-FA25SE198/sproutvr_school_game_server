@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251110221210_IdentityMigration")]
+    [Migration("20251111123750_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -845,6 +845,10 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("MapObjectId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Question")
+                        .HasMaxLength(500)
+                        .HasColumnType("text");
 
                     b.Property<string>("TaskDescription")
                         .IsRequired()

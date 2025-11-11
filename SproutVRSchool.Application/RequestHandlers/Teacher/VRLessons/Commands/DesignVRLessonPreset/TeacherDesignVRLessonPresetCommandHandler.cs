@@ -9,6 +9,7 @@ using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Specifications;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLessons;
+using SproutVRSchool.Domain.Entities.VRTasks;
 
 namespace SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
 
@@ -30,7 +31,23 @@ public sealed class TeacherDesignVRLessonPresetCommandHandler(
             throw new SvrResourceNotFoundException($"VR Lesson with ID {request.VRLessonId} was not found.");
         }
 
-        // 3. Construct the preset object
+        // 3. Assign back the Question for Quiz VR Tasks
+        foreach (VRTask vrtask in vrLesson.VRTasks)
+        {
+            // if the request has config for this task, assign back the question for quiz vrtask
+            if (vrtask.ActivityType.ActivityCode.Equals("quiz", StringComparison.OrdinalIgnoreCase))
+            {
+                // if having question, assign
+                DesignVRLessonPresetTaskConfigRequestDto? configDto = request.TaskConfigs.FirstOrDefault(tc => tc.VRTaskId == vrtask.Id);
+                if (configDto != null && !string.IsNullOrWhiteSpace(configDto.Question))
+                {
+                    vrtask.SetQuestion(configDto.Question);
+                    uow.Repository<VRTask>().Update(vrtask);
+                }
+            }
+        }
+
+        // 4. Construct the preset object
         var presetFileObject = new PresetFileDto
         {
             Duration = vrLesson.MaxDuration.TotalSeconds,

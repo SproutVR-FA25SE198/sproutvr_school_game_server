@@ -59,9 +59,9 @@ public sealed class AuthorizedGetVRTaskByIdQueryHandler(
             ActivityType = activityTypeDto,
             VRLesson = vrLessonDto,
             TaskNumber = vrTask.TaskNumber,
+            Question = vrTask.Question,
             Description = vrTask.TaskDescription,
             CreatedAtUtc = vrTask.CreatedAtUtc,
-            // Calculate CreatedAtVietNam time
             CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(vrTask.CreatedAtUtc)
         };
     }

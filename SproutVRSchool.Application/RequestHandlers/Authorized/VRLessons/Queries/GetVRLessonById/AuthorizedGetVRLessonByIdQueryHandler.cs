@@ -55,7 +55,8 @@ public sealed class AuthorizedGetVRLessonByIdQueryHandler(
             {
                 Id = task.Id,
                 TaskNumber = task.TaskNumber,
-                Description = task.TaskDescription,
+                Question = task.Question,
+                TaskDescription = task.TaskDescription,
 
                 // Map nested task relations
                 TaskLocation = new AuthorizedGetVRLessonByIdQueryTaskLocationResponseDto

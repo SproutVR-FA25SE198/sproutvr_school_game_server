@@ -22,7 +22,8 @@ public sealed class VRTasksSpecification : BaseSpecification<VRTask>
 
     public VRTasksSpecification(AuthorizedSearchVRTasksQueryParams searchVRTasksParam)
         : base(x =>
-            // Filters for all GUID foreign keys
+            // some task have question, some are not
+            (string.IsNullOrEmpty(searchVRTasksParam.Question) || (!string.IsNullOrEmpty(x.Question) && x.Question.Contains(searchVRTasksParam.Question))) &&
             (!searchVRTasksParam.VRLessonId.HasValue || x.VRLessonId == searchVRTasksParam.VRLessonId) &&
             (!searchVRTasksParam.TaskLocationId.HasValue || x.TaskLocationId == searchVRTasksParam.TaskLocationId) &&
             (!searchVRTasksParam.MapObjectId.HasValue || x.MapObjectId == searchVRTasksParam.MapObjectId) &&

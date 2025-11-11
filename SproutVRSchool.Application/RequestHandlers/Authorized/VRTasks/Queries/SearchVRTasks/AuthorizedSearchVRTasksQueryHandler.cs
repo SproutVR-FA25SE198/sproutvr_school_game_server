@@ -24,6 +24,7 @@ public sealed class AuthorizedSearchVRTasksQueryHandler(
             Id = task.Id,
             TaskNumber = task.TaskNumber,
             Description = task.TaskDescription,
+            Question = task.Question,
             CreatedAtUtc = task.CreatedAtUtc,
             CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(task.CreatedAtUtc),
 
