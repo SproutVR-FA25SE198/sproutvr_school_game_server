@@ -101,35 +101,13 @@ public static partial class ServiceCollectionExtensions
 
             options.Events = new JwtBearerEvents
             {
-                // Authentication failed
-                OnAuthenticationFailed = async context =>
-                {
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    context.Response.ContentType = "application/json";
-
-                    string detailMessage = context.Exception switch
-                    {
-                        SecurityTokenExpiredException => "The token has expired.",
-                        _ => "Authentication failed due to an invalid token."
-                    };
-
-                    var problemDetails = new ProblemDetails
-                    {
-                        Status = StatusCodes.Status401Unauthorized,
-                        Title = "Unauthorized Access",
-                        Detail = detailMessage,
-                        Instance = context.Request.Path,
-                        Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
-                    };
-
-                    await context.Response.WriteAsJsonAsync(problemDetails);
-                },
-
-                // Changling when unauthorized access
+                // Handlling both invalid token and expired token
                 OnChallenge = async context =>
                 {
                     // Skip the default challenge's logic.
                     context.HandleResponse();
+
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
                     var problemDetails = new ProblemDetails
                     {

@@ -125,6 +125,7 @@ public class IdentityDbContextSeeder(
         // 3. Create new teacher entity
         var teacher = Teacher.Create(username: account.UserName,
                                      email: account.Email,
+                                     dateOfBirth: account.DateOfBirth,
                                      firstName: account.FirstName,
                                      lastName: account.LastName);
 
@@ -169,7 +170,7 @@ public class IdentityDbContextSeeder(
             IdentityResult result1 = await userManager.CreateAsync(teacherUser1, teacher1Password);
             if (result1.Succeeded)
             {
-                await userManager.AddToRoleAsync(teacherUser1, "Teacher");
+                await userManager.AddToRoleAsync(teacherUser1, AppCts.Db.ROLE_TEACHER);
             }
         }
 
