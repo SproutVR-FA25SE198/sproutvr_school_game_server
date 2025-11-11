@@ -8,13 +8,13 @@ using SproutVRSchool.Domain.Entities.Identities;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.GetTeacherAccountById;
 
-public sealed class AuthorizedGetTeacherAccountByIdQueryHandler(
+public sealed class AuthorizedGetAccountByIdQueryHandler(
     UserManager<UserAccount> userManager
     )
-    : IRequestHandler<AuthorizedGetTeacherAccountByIdQuery, AuthorizedGetTeacherAccountByIdQueryResponseDto>
+    : IRequestHandler<AuthorizedGetAccountByIdQuery, AuthorizedGetAccountByIdQueryResponseDto>
 {
-    public async Task<AuthorizedGetTeacherAccountByIdQueryResponseDto> Handle(
-        AuthorizedGetTeacherAccountByIdQuery request,
+    public async Task<AuthorizedGetAccountByIdQueryResponseDto> Handle(
+        AuthorizedGetAccountByIdQuery request,
         CancellationToken cancellationToken)
     {
         // 1. Get teacher by ID, and include Lessons, VRLearningSessions
@@ -23,17 +23,17 @@ public sealed class AuthorizedGetTeacherAccountByIdQueryHandler(
             .AsNoTracking()
             .Include(t => t.Lessons)
             .Include(t => t.VRLearningSessions)
-            .FirstOrDefaultAsync(t => t.Id == request.TeacherId, cancellationToken)
+            .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken)
             ?? throw new SvrResourceNotFoundException(
-                $"Teacher with ID {request.TeacherId} not found."
+                $"Teacher with ID {request.Id} not found."
             );
 
         // 2. Get roles
         IList<string> roles = await userManager.GetRolesAsync(teacher);
 
         // 3. Get lessons and VR learning sessions
-        ReadOnlyCollection<AuthorizedGetTeacherAccountByIdLessonResponseDto> lessonDtos = teacher.Lessons
-            .Select(lesson => new AuthorizedGetTeacherAccountByIdLessonResponseDto(
+        ReadOnlyCollection<AuthorizedGetAccountByIdLessonResponseDto> lessonDtos = teacher.Lessons
+            .Select(lesson => new AuthorizedGetAccountByIdLessonResponseDto(
                 lesson.Id,
                 lesson.Name,
                 lesson.Status.ToString()
@@ -41,8 +41,8 @@ public sealed class AuthorizedGetTeacherAccountByIdQueryHandler(
             .ToList()
             .AsReadOnly();
 
-        ReadOnlyCollection<AuthorizedGetTeacherAccountByIdVRLearningSessionResponseDto> sessionDtos = teacher.VRLearningSessions
-            .Select(session => new AuthorizedGetTeacherAccountByIdVRLearningSessionResponseDto(
+        ReadOnlyCollection<AuthorizedGetAccountByIdVRLearningSessionResponseDto> sessionDtos = teacher.VRLearningSessions
+            .Select(session => new AuthorizedGetAccountByIdVRLearningSessionResponseDto(
                 session.Id,
                 session.ClassName,
                 session.CreatedAtUtc
@@ -50,7 +50,7 @@ public sealed class AuthorizedGetTeacherAccountByIdQueryHandler(
             .ToList()
             .AsReadOnly();
 
-        return new AuthorizedGetTeacherAccountByIdQueryResponseDto(
+        return new AuthorizedGetAccountByIdQueryResponseDto(
             TeacherId: teacher.Id,
             Email: teacher.Email ?? string.Empty,
             FullName: teacher.GetFullName(),
