@@ -57,6 +57,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
     // === Methods
     // ===============================
+
     public async Task<CreateRoomResponseDto> CreateRoomAsync(CreateRoomRequestDto request)
     {
         // 1. Get essential variables
