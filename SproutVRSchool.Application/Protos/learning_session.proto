@@ -107,7 +107,8 @@ message TaskUpdated {
   string vr_task_id = 2;               
   bool is_completed = 3;               
   bool is_correct = 4;       
-  string task_updated_status = 5;    // "Success" or "UpdateFailed"
+  string completion_time_at_vietnam = 5;
+  string task_updated_status = 6;    // "Success" or "UpdateFailed"
 }
 
 // ================================================================

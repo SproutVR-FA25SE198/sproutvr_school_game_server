@@ -1,4 +1,5 @@
-﻿using LearningSession.V1;
+﻿using System.Globalization;
+using LearningSession.V1;
 
 namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 
@@ -70,7 +71,8 @@ public class TeacherRoomUpdateResponseDto
                 VrTaskId = dto.TaskUpdated.VrTaskId,
                 IsCompleted = dto.TaskUpdated.IsCompleted,
                 IsCorrect = dto.TaskUpdated.IsCorrect,
-                TaskUpdatedStatus = dto.TaskUpdated.Status
+                TaskUpdatedStatus = dto.TaskUpdated.Status,
+                CompletionTimeAtVietnam = dto.TaskUpdated.CompletionTimeAtVietNam.ToString("o", CultureInfo.InvariantCulture)
             };
         }
 
