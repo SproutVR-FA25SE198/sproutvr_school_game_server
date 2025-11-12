@@ -65,9 +65,8 @@ internal sealed class RoomValidator : IVRLearningSessionValidator
         }
 
         // 5. Device already connected
-        // - At the Desktop, it shows 
         if (vrLearningSession.Devices.TryGetValue(deviceSerialNumber, out ModelVRDevice? existingModelVRDevice)
-            && existingModelVRDevice.Status == ModelVRDeviceStatus.Connected)
+            && existingModelVRDevice.IsAlreadyJoined)
         {
             return ValidationResultDto.AlreayJoined;
         }

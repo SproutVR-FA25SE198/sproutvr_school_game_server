@@ -41,7 +41,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         IServerPublishingService serverPublishingService,
-    IUnitOfWork unitOfWork,
+        IUnitOfWork unitOfWork,
         ResiliencePipelineProvider<string> resiliencePipelineProvider
         )
     {
@@ -125,6 +125,7 @@ internal sealed class RedisTeacherVRLearningSessionService
                 VrDeviceSerialNumber = el.VrDeviceSerialNumber,
                 StudentName = el.StudentName,
                 Status = ModelVRDeviceStatus.Disconnected,
+                IsAlreadyJoined = false,
                 Tasks = new ConcurrentDictionary<string, ModelTaskProgress>(taskTemplate)
             });
 

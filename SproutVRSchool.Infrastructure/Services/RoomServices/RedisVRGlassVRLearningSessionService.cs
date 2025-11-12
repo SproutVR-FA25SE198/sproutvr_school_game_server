@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Polly;
+using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
@@ -25,6 +27,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
     private readonly ILocalStorageService _localStorageService;
     private readonly IVRLearningSessionValidator _validator;
     private readonly IServerPublishingService _serverPublishingService;
+    private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
 
     // ===============================
     // === Constructors
@@ -35,12 +38,14 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
         IServerPublishingService serverPublishingService,
+        ResiliencePipelineProvider<string> resiliencePipelineProvider,
         IVRLearningSessionValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
         _serverPublishingService = serverPublishingService;
         _dateTimeProvider = dateTimeProvider;
         _localStorageService = localStorageService;
+        _resiliencePipelineProvider = resiliencePipelineProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _validator = validator;
     }
@@ -72,6 +77,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
 
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.Status", JsonSerializer.Serialize(ModelVRDeviceStatus.Connected, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.JoinedAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow, _jsonOptions));
+        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{deviceRedisPath}.IsAlreadyJoined", JsonSerializer.Serialize(true, _jsonOptions));
 
         if (!await transaction.ExecuteAsync())
         {
@@ -112,5 +118,41 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         // more performance for streaming cuz of the fire-and-forget nature
         // but also maintain the correct order of the function due to await the PublishTaskUpdateToStreamAsync
         return _database.StreamAddAsync(streamKey, eventPayload);
+    }
+
+    public async Task SetDeviceStatusDisconnectedAsync(string vrLearningSessionId, string vrDeviceSerialNumber)
+    {
+        // 1. Using poly incase setting failed
+        ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
+        bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
+        {
+
+            // 1. Retrieve the device path
+            string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
+            string deviceRedisPath = $"$.Devices['{vrDeviceSerialNumber}']";
+
+            // 2. Update Status to Disconnected
+            ITransaction transaction = _database.CreateTransaction();
+            _ = transaction.ExecuteAsync("JSON.SET",
+                sessionKey,
+                $"{deviceRedisPath}.Status",
+                JsonSerializer.Serialize(ModelVRDeviceStatus.Disconnected, _jsonOptions));
+
+            return await transaction.ExecuteAsync();
+        });
+
+        // UNDONE: set interceptor here
+        if (!isSuccess)
+        {
+            throw new Exception($"Failed to set device serial {vrDeviceSerialNumber} to Disconnected");
+        }
+
+        // 2. If success, then publish to the desktop channel as well
+        await _serverPublishingService.PublishDeviceDisconnectedAsync(
+            vrLearningSessionId,
+            new DeviceDisconnectedDto
+            {
+                VrDeviceSerialNumber = vrDeviceSerialNumber,
+            });
     }
 }

@@ -7,6 +7,8 @@ public interface IVRGlassVRLearningSessionService
     Task<JoinRoomResponseDto> JoinRoomAsync(JoinRoomRequestDto joinRoomRequestDto);
 
     Task PublishTaskUpdateToStreamAsync(PublishTaskUpdateRequestDto publishTaskUpdateRequestDto);
+
+    Task SetDeviceStatusDisconnectedAsync(string vrLearningSessionId, string vrDeviceSerialNumber);
 }
 
 

@@ -3,7 +3,6 @@ using Grpc.Core;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
-using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Application.Extensions;
@@ -19,8 +18,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     // === Fields
     // ===============================
 
-    private readonly IVRGlassVRLearningSessionService _vrLearningSessionWithVRGlassService;
-    private readonly IServerPublishingService _serverPublishingService;
+    private readonly IVRGlassVRLearningSessionService _vrGlassVRLearningSessionService;
     private readonly IDatabase _database;
     private readonly ILogger<GrpcVRGlassVRLearningSessionService> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -34,11 +32,10 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         IServerPublishingService serverPublishingService,
-        IVRGlassVRLearningSessionService vrLearningSessionWithVRGlassService)
+        IVRGlassVRLearningSessionService vrGlassVRLearningSessionService)
     {
-        _vrLearningSessionWithVRGlassService = vrLearningSessionWithVRGlassService;
+        _vrGlassVRLearningSessionService = vrGlassVRLearningSessionService;
         _logger = logger;
-        _serverPublishingService = serverPublishingService;
         _dateTimeProvider = dateTimeProvider;
         _database = connectionMultiplexer.GetDatabase();
     }
@@ -50,7 +47,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     public override async Task<JoinRoomResponse> JoinRoom(JoinRoomRequest request, ServerCallContext context)
     {
         var joinRoomRequestDto = JoinRoomRequestDto.MapFromGrpcRequest(request);
-        JoinRoomResponseDto resultDto = await _vrLearningSessionWithVRGlassService.JoinRoomAsync(joinRoomRequestDto);
+        JoinRoomResponseDto resultDto = await _vrGlassVRLearningSessionService.JoinRoomAsync(joinRoomRequestDto);
         return JoinRoomResponseDto.MapToGrpcResponse(resultDto);
     }
 
@@ -94,10 +91,8 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                     vrLearningSessionId,
                     deviceSerialNumber);
 
-                await _serverPublishingService.PublishDeviceDisconnectedAsync(vrLearningSessionId, new DeviceDisconnectedDto()
-                {
-                    VrDeviceSerialNumber = deviceSerialNumber
-                });
+                // Handle set disconnected to device suddenly end the stream
+                await _vrGlassVRLearningSessionService.SetDeviceStatusDisconnectedAsync(vrLearningSessionId, deviceSerialNumber);
 
                 _logger.LogWarning("Invalid VR Learning Session ID or Device Serial Number in the initial message. Disconnecting stream.");
             }
@@ -149,7 +144,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                                 message.VrDeviceSerialNumber);
 
                             // Publish Task Updated to the Redis Stream
-                            await _vrLearningSessionWithVRGlassService.PublishTaskUpdateToStreamAsync(dto);
+                            await _vrGlassVRLearningSessionService.PublishTaskUpdateToStreamAsync(dto);
 
                             // when await finish, just fire-and-forget the method and moving on to the next redisMessage
                             _ = responseStream.WriteAsync(
