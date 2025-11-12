@@ -1,8 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.GetLessonById;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.SearchLessons;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 using SproutVRSchool.Domain;
 

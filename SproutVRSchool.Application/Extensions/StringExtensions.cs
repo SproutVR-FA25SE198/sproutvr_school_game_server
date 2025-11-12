@@ -1,7 +1,4 @@
-﻿using Google.Protobuf;
-using Microsoft.Extensions.Primitives;
-
-namespace SproutVRSchool.Application.Extensions;
+﻿namespace SproutVRSchool.Application.Extensions;
 
 public static class StringExtensions
 {

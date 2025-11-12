@@ -1,9 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Subjects.Queries.GetSubjectById;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Subjects.Queries.SearchSubjects;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Subjects.Commands.AssignSubjectStatus;
 using SproutVRSchool.Domain;
 

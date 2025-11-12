@@ -4,7 +4,6 @@ using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
-using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
@@ -36,7 +35,6 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
         IServerPublishingService serverPublishingService,
-        ITeacherVRLearningSessionStateService teacherVRLearningSessionStateService,
         IVRLearningSessionValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();

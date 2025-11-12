@@ -6,6 +6,5 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionSta
 public sealed class DeviceDisconnectedDto
 {
     public string VrDeviceSerialNumber { get; set; } = default!;
-    public string StudentName { get; set; } = default!;
     public string ConnectionStatus { get; set; } = ModelVRDeviceStatus.Disconnected.ToString();
 }

@@ -1,20 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Auth.Commands.Login;
 using SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.SearchAccounts;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.Lessons;
-using SproutVRSchool.Domain.Entities.VRLearningSessions;
-using SproutVRSchool.Infrastructure.Data;
 
 namespace SproutVRSchool.Presentation.Controllers.Auth.v1;
 

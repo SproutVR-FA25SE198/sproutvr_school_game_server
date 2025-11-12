@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Domain.Entities.Identities;

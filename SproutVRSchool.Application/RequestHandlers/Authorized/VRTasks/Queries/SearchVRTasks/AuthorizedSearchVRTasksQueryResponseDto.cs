@@ -1,6 +1,4 @@
-﻿using SproutVRSchool.Application.Commons.Responses;
-
-namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRTasks.Queries.SearchVRTasks;
+﻿namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRTasks.Queries.SearchVRTasks;
 
 public record AuthorizedSearchVRTasksQueryResponseDto
 {
