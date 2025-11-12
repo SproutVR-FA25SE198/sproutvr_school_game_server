@@ -15,11 +15,11 @@ public sealed class AuthorizedGetVRLessonByIdQueryHandler(
     public async Task<AuthorizedGetVRLessonByIdQueryResponseDto> Handle(AuthorizedGetVRLessonByIdQuery request, CancellationToken cancellationToken)
     {
         // 1. Create the specification
-        var spec = new VRLessonsSpecification(request.id);
+        var spec = new VRLessonsSpecification(request.Id);
 
         // 2. Fetch the VRLesson using the specification
         VRLesson vrLesson = await uow.Repository<VRLesson>().GetEntityBySpec(spec)
-            ?? throw new SvrResourceNotFoundException($"VRLesson with ID {request.id} not found.");
+            ?? throw new SvrResourceNotFoundException($"VRLesson with ID {request.Id} not found.");
 
         // 3. Map the entity to the response DTO
         return new AuthorizedGetVRLessonByIdQueryResponseDto

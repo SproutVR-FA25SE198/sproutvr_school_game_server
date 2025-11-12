@@ -213,7 +213,6 @@ internal sealed class RedisTeacherVRLearningSessionStateService
             ?? throw new Exception("Lesson not found");
 
         // 4. Map to DTO
-
         var resultDto = new GetRoomStateResponseDto
         {
             VRLearningSessionId = jsonObject.VRLearningSessionId,
@@ -283,6 +282,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
 
             ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
 
+            // 2. Create Redis event message
             string redisEvent = vrLearningSessionId.ToRedisEventTypeMessage(eventType, payloadJson);
 
             await subscriber.PublishAsync(

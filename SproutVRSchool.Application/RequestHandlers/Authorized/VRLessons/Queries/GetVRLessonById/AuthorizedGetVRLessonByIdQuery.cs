@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 
-public record AuthorizedGetVRLessonByIdQuery(Guid id)
+public record AuthorizedGetVRLessonByIdQuery(Guid Id)
     : IRequest<AuthorizedGetVRLessonByIdQueryResponseDto>
 {
 }

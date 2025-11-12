@@ -51,7 +51,6 @@ public class TeacherRoomUpdateResponseDto
             response.DeviceJoined = new DeviceJoined
             {
                 VrDeviceSerialNumber = dto.DeviceJoined.VrDeviceSerialNumber,
-                StudentName = dto.DeviceJoined.StudentName,
                 ConnectionStatus = dto.DeviceJoined.ConnectionStatus
             };
         }
@@ -60,7 +59,6 @@ public class TeacherRoomUpdateResponseDto
             response.DeviceDisconnected = new DeviceDisconnected
             {
                 VrDeviceSerialNumber = dto.DeviceDisconnected.VrDeviceSerialNumber,
-                StudentName = dto.DeviceDisconnected.StudentName,
                 ConnectionStatus = dto.DeviceDisconnected.ConnectionStatus
             };
         }

@@ -94,13 +94,11 @@ message RoomEnded {
 
 message DeviceJoined {
   string vr_device_serial_number = 1;   // Unique device serial
-  string student_name = 2;              // Student using the device
-  string connection_status = 3;         // "Connected"
+  string connection_status = 2;         // "Connected"
 }
 
 message DeviceDisconnected {
   string vr_device_serial_number = 1;
-  string student_name = 2;              
   string connection_status = 3;         // "Disconnected"
 }
 
