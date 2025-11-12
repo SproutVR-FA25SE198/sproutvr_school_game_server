@@ -197,6 +197,8 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
         string taskPath = $"$.Devices['{messageDict["VRDeviceSerialNumber"]}'].Tasks['{messageDict["VRTaskId"]}']";
 
+        DateTimeOffset utcNow = _dateTimeProvider.UtcDateTimeNow;
+
         // 3. Update the task status in a transaction
         bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
         {
@@ -208,7 +210,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.Status", JsonSerializer.Serialize(ModelTaskProgressStatus.Completed, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCorrect", JsonSerializer.Serialize(isCorrect));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCompleted", JsonSerializer.Serialize(isCompleted));
-            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.CompletionTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.CompletionTimeAtUtc", JsonSerializer.Serialize(utcNow));
 
             return await transaction.ExecuteAsync();
         });
@@ -226,7 +228,8 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
                 IsCorrect = messageDict["IsCorrect"].ToBoolean(),
                 VrDeviceSerialNumber = messageDict["VRDeviceSerialNumber"],
                 VrTaskId = messageDict["VRTaskId"],
-                Status = ModelTaskProgressStatus.Completed.ToString()
+                Status = ModelTaskProgressStatus.Completed.ToString(),
+                CompletionTimeAtVietNam = _dateTimeProvider.ConvertToVietNamTime(utcNow)
             });
         }
 

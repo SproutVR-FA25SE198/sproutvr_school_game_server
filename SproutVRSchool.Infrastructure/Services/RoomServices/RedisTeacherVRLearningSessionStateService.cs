@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Channels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
@@ -28,6 +29,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
     private readonly IDatabase _database;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly ILogger<RedisTeacherVRLearningSessionStateService> _logger;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUnitOfWork _uow;
     private readonly UserManager<UserAccount> _userManager;
 
@@ -38,11 +40,13 @@ internal sealed class RedisTeacherVRLearningSessionStateService
     public RedisTeacherVRLearningSessionStateService(
         IConnectionMultiplexer connectionMultiplexer,
         IUnitOfWork uow,
+        IDateTimeProvider dateTimeProvider,
         UserManager<UserAccount> userManager,
         ILogger<RedisTeacherVRLearningSessionStateService> logger
         )
     {
         _database = connectionMultiplexer.GetDatabase();
+        _dateTimeProvider = dateTimeProvider;
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -239,6 +243,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
                     IsCompleted = task.IsCompleted,
                     IsCorrect = task.IsCorrect,
                     Status = task.Status.ToString(),
+                    CompletionTimeAtVietnam = _dateTimeProvider.ConvertToVietNamTime(task.CompletionTimeAtUtc)
                 }).ToList()
             }).ToList()
         };

@@ -8,5 +8,6 @@ public sealed class TaskUpdatedDto
     public string VrTaskId { get; set; } = default!;
     public bool IsCompleted { get; set; }
     public bool IsCorrect { get; set; }
+    public DateTimeOffset CompletionTimeAtVietNam { get; set; }
     public string Status { get; set; } = ModelTaskProgressStatus.Uncompleted.ToString();
 }
