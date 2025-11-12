@@ -159,8 +159,8 @@ message ActivateRoomResponse {
 }
 
 message AssignedDevice {
-    string vr_device_serial_number = 1;
-    string student_name = 2;
+  string vr_device_serial_number = 1;
+  string student_name = 2;
 }
 
 // ------------------------ JoinRoom ------------------------

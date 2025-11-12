@@ -101,7 +101,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         try
         {
             IDatabase db = _redis.GetDatabase();
-            string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS}:{sessionId}";
+            string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{sessionId}";
             string groupName = "session-processors";
             string consumerName = $"processor-{Guid.NewGuid()}";
 

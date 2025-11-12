@@ -48,10 +48,10 @@ public static class AppCts
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE = "vr_learning_sessions_active";
 
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE = "vr_learning_sessions_room_codes";
-        public const string NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS = "stream:vr_learning_sessions";
 
-        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR = "vr_learning_sessions_notify_events_vr";
-        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP = "vr_learning_sessions_notify_events_desktop";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS = "stream:vr_learning_sessions";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR_CHANNEL = "vr_learning_sessions_notify_events_vr";
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL = "vr_learning_sessions_notify_events_desktop";
 
         public static class PubSubEvents
         {

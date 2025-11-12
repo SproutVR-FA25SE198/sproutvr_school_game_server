@@ -10,11 +10,6 @@ public interface ITeacherVRLearningSessionService
 
     Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId);
 
-    /// <summary>
-    /// Send INFO or WARNING notification to all devices in the room using PUB/SUB
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     Task SendNotificationAsync(SendNotificationRequestDto request);
 }
 

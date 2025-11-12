@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
@@ -24,7 +25,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILocalStorageService _localStorageService;
     private readonly IVRLearningSessionValidator _validator;
-    private readonly ITeacherVRLearningSessionStateService _teacherVRLearningSessionStateService;
+    private readonly IServerPublishingService _serverPublishingService;
 
     // ===============================
     // === Constructors
@@ -34,11 +35,12 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
+        IServerPublishingService serverPublishingService,
         ITeacherVRLearningSessionStateService teacherVRLearningSessionStateService,
         IVRLearningSessionValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
-        _teacherVRLearningSessionStateService = teacherVRLearningSessionStateService;
+        _serverPublishingService = serverPublishingService;
         _dateTimeProvider = dateTimeProvider;
         _localStorageService = localStorageService;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
@@ -82,8 +84,8 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         string fileContent = await _localStorageService.LoadFileContentAsync(vrLearningSession.PresetJsonRelativeFilePath!);
         validation.JoinRoomResponseDto!.PresetJsonContent = fileContent;
 
-        // 5. Publish DeviceJoined event to the Desktop App
-        await _teacherVRLearningSessionStateService.PublishDeviceJoinedAsync(
+        // 5. Publish DEVICEJOINED event to the Desktop App cjannel
+        await _serverPublishingService.PublishDeviceJoinedAsync(
             vrLearningSession.VRLearningSessionId,
             new DeviceJoinedDto()
             {
@@ -96,7 +98,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
 
     public Task PublishTaskUpdateToStreamAsync(PublishTaskUpdateRequestDto publishTaskUpdateRequestDto)
     {
-        string streamKey = $"{AppCts.Redis.NAMESPACE_STREAM_EVENT_VR_LEARNING_SESSIONS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
+        string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
 
         var eventPayload = new NameValueEntry[]
         {
