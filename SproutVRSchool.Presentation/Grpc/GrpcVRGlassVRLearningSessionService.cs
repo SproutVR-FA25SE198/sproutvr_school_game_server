@@ -54,10 +54,15 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     public override async Task StreamSessionState(
         IAsyncStreamReader<ClientToServerMessage> requestStream, IServerStreamWriter<ServerToClientMessage> responseStream, ServerCallContext context)
     {
+        // 1. Get essential information taskupdate send to the server
+        // - cannot start until getting the vrlearningSessionId and deviceSerialNumber
+        // - only handle event correspond with the vrLearningSessionId and deviceSerialNumber
         string vrLearningSessionId = null;
         string deviceSerialNumber = null;
 
+
         // Get the information on the first message, but not skip it since it contains important data.
+        var vrLearningSessionIdGate = new TaskCompletionSource<bool>(false);
         Action<ClientToServerMessage> onFirstMessage = (message) =>
         {
             vrLearningSessionId = message.VrLearningSessionId;
@@ -66,15 +71,22 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                 "VR device stream connected. SessionId: {SessionId}, SerialNumber: {SerialNumber}",
                 vrLearningSessionId,
                 deviceSerialNumber);
+
+
+            vrLearningSessionIdGate.TrySetResult(true);
         };
 
         try
         {
-            // Listening Background Task and Sending Background Task
+            // 2. Listening Background Task and Sending Background Task
             Task listeningTask = ListenForVRDeviceRedisMessagesAsync(requestStream, responseStream, onFirstMessage, context.CancellationToken);
-            Task sendingTask = SendServerRedisMessagesToVRDeviceAsync(responseStream, context.CancellationToken);
 
-            // When all tasks complete, log disconnection
+            // 3. Main thread will stop right here until getting the vrLearningSessionId from the first message
+            await vrLearningSessionIdGate.Task;
+
+            Task sendingTask = SendServerRedisMessagesToVRDeviceAsync(responseStream, vrLearningSessionId!, context.CancellationToken);
+
+            // 4. When all tasks complete, log disconnection
             await Task.WhenAll(listeningTask, sendingTask);
         }
         catch (Exception ex)
@@ -176,6 +188,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
     private async Task SendServerRedisMessagesToVRDeviceAsync(
         IServerStreamWriter<ServerToClientMessage> responseStream,
+        string vrLearningSessionId,
         CancellationToken cancellationToken)
 
     {
@@ -198,8 +211,16 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                 // If redisMessage null, do nothing
                 (string? identifier, string? eventType, string? message, bool isEventType) redisEvent = redisMessage.DeparseRedisEventMessage();
 
+                // If not the event type, then continue, does not handle that event
                 if (!redisEvent.isEventType)
                 {
+                    continue;
+                }
+
+                // Only handle messages for the current VR Learning Session ID
+                if (!string.Equals(redisEvent.identifier, vrLearningSessionId, StringComparison.OrdinalIgnoreCase))
+                {
+                    // This message is for a different session, so we ignore it.
                     continue;
                 }
 
@@ -232,6 +253,10 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         catch (OperationCanceledException ex)
         {
             _logger.LogInformation(ex, "VR device stream disconnected for VR Learning Session ID");
+        }
+        finally
+        {
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR_CHANNEL));
         }
     }
 }
