@@ -1,12 +1,9 @@
-﻿using System.Security.Claims;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.AssignAccountStatus;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Accounts.Commands.ImportAccountsFromExcel;
-using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Presentation.Controllers.Auth.v1;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
 

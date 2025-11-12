@@ -1,5 +1,4 @@
-﻿using SproutVRSchool.Domain.Entities.VRLearningSessions;
-using SproutVRSchool.Domain.Models.VRLearningSession;
+﻿using SproutVRSchool.Domain.Models.VRLearningSession;
 
 namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 

@@ -2,7 +2,8 @@
 using Grpc.Core;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
-using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Application.Extensions;
@@ -19,6 +20,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     // ===============================
 
     private readonly IVRGlassVRLearningSessionService _vrLearningSessionWithVRGlassService;
+    private readonly IServerPublishingService _serverPublishingService;
     private readonly IDatabase _database;
     private readonly ILogger<GrpcVRGlassVRLearningSessionService> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -31,10 +33,12 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         ILogger<GrpcVRGlassVRLearningSessionService> logger,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
+        IServerPublishingService serverPublishingService,
         IVRGlassVRLearningSessionService vrLearningSessionWithVRGlassService)
     {
         _vrLearningSessionWithVRGlassService = vrLearningSessionWithVRGlassService;
         _logger = logger;
+        _serverPublishingService = serverPublishingService;
         _dateTimeProvider = dateTimeProvider;
         _database = connectionMultiplexer.GetDatabase();
     }
@@ -53,12 +57,55 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     public override async Task StreamSessionState(
         IAsyncStreamReader<ClientToServerMessage> requestStream, IServerStreamWriter<ServerToClientMessage> responseStream, ServerCallContext context)
     {
-        // Listening Background Task and Sending Background Task
-        Task listeningTask = ListenForVRDeviceRedisMessagesAsync(requestStream, responseStream, context.CancellationToken);
-        Task sendingTask = SendServerRedisMessagesToVRDeviceAsync(requestStream, responseStream, context.CancellationToken);
+        string vrLearningSessionId = null;
+        string deviceSerialNumber = null;
 
-        await Task.WhenAll(listeningTask, sendingTask);
-        _logger.LogInformation("VR device stream disconnected for VR Learning Session ID: {SessionId}", requestStream.Current.VrLearningSessionId);
+        // Get the information on the first message, but not skip it since it contains important data.
+        Action<ClientToServerMessage> onFirstMessage = (message) =>
+        {
+            vrLearningSessionId = message.VrLearningSessionId;
+            deviceSerialNumber = message.VrDeviceSerialNumber;
+            _logger.LogInformation(
+                "VR device stream connected. SessionId: {SessionId}, SerialNumber: {SerialNumber}",
+                vrLearningSessionId,
+                deviceSerialNumber);
+        };
+
+        try
+        {
+            // Listening Background Task and Sending Background Task
+            Task listeningTask = ListenForVRDeviceRedisMessagesAsync(requestStream, responseStream, onFirstMessage, context.CancellationToken);
+            Task sendingTask = SendServerRedisMessagesToVRDeviceAsync(responseStream, context.CancellationToken);
+
+            // When all tasks complete, log disconnection
+            await Task.WhenAll(listeningTask, sendingTask);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Stream failed for SessionId: {SessionId}, SerialNumber: {SerialNumber}", vrLearningSessionId, deviceSerialNumber);
+        }
+        finally
+        {
+            // Publish to the Desktop Channel for the disconnected
+            if (!string.IsNullOrEmpty(vrLearningSessionId) && !string.IsNullOrEmpty(deviceSerialNumber))
+            {
+                _logger.LogInformation(
+                    "VR device stream disconnected. SessionId: {SessionId}, SerialNumber: {SerialNumber}",
+                    vrLearningSessionId,
+                    deviceSerialNumber);
+
+                await _serverPublishingService.PublishDeviceDisconnectedAsync(vrLearningSessionId, new DeviceDisconnectedDto()
+                {
+                    VrDeviceSerialNumber = deviceSerialNumber
+                });
+
+                _logger.LogWarning("Invalid VR Learning Session ID or Device Serial Number in the initial message. Disconnecting stream.");
+            }
+            else
+            {
+                _logger.LogWarning("VR device stream ended without sending any identifying info.");
+            }
+        }
     }
 
     // =================================
@@ -74,10 +121,21 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
     private async Task ListenForVRDeviceRedisMessagesAsync(
         IAsyncStreamReader<ClientToServerMessage> requestStream,
         IServerStreamWriter<ServerToClientMessage> responseStream,
+        Action<ClientToServerMessage> onFirstMessage,
         CancellationToken cancellationToken)
     {
+        bool isFirstMessage = true;
+
         await foreach (ClientToServerMessage? message in requestStream.ReadAllAsync(cancellationToken))
         {
+            // Get the information on the first message
+            if (isFirstMessage)
+            {
+                onFirstMessage(message);
+                isFirstMessage = false;
+            }
+
+            // Listening messages from VR device
             try
             {
                 switch (message.PayloadCase)
@@ -121,9 +179,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         }
     }
 
-#pragma warning disable S1172 // Unused method parameters should be removed
     private async Task SendServerRedisMessagesToVRDeviceAsync(
-        IAsyncStreamReader<ClientToServerMessage> requestStream,
         IServerStreamWriter<ServerToClientMessage> responseStream,
         CancellationToken cancellationToken)
 

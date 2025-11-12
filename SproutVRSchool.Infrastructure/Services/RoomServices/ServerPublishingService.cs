@@ -7,7 +7,7 @@ using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
 public class ServerPublishingService : IServerPublishingService
 {

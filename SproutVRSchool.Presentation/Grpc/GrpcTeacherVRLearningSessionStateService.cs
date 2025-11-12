@@ -3,7 +3,6 @@ using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
-using SproutVRSchool.Domain.Entities.VRLearningSessions;
 
 namespace SproutVRSchool.Presentation.Grpc;
 

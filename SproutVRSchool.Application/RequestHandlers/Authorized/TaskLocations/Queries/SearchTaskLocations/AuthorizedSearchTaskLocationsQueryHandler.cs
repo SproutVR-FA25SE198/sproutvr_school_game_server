@@ -3,7 +3,6 @@ using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.Specifications;
-using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.TaskLocations.Queries.SearchTaskLocations;

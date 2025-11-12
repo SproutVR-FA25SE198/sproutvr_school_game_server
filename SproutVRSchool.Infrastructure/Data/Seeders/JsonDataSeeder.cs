@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
-using SproutVRSchool.Application.Exceptions.ContentSeedings;
 using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Domain.Entities;
 using SproutVRSchool.Domain.Entities.ActivityTypes;

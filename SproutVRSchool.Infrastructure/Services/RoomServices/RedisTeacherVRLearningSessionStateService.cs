@@ -2,11 +2,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Channels;
-using LearningSession.V1;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
@@ -15,12 +12,9 @@ using SproutVRSchool.Application.Exceptions.Resources;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.Identities;
-using SproutVRSchool.Domain.Entities.Lessons;
-using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Entities.VRLessons;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
-using static SproutVRSchool.Domain.AppCts.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 

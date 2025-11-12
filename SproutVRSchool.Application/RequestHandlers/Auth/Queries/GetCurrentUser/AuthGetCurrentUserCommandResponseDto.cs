@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using SproutVRSchool.Application.Commons.Responses;
-using SproutVRSchool.Domain.Entities.Identities;
 
 namespace SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
 
