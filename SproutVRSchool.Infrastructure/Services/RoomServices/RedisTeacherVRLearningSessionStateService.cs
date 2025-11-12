@@ -78,7 +78,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
 
         // 2. Subscribe to Redis Pub/Sub channel
         await subscriber.SubscribeAsync(
-         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP),
+         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL),
          (redisChannel, message) =>
          {
              if (!channel.Writer.TryWrite(message))
@@ -185,7 +185,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         }
         finally
         {
-            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP));
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL));
         }
     }
 
@@ -253,50 +253,4 @@ internal sealed class RedisTeacherVRLearningSessionStateService
 
         return resultDto;
     }
-
-    // ===============================
-    // === Group of publishing methods
-    // ===============================
-
-    public async Task PublishRoomCancelledAsync(string vrLearningSessionId, RoomCancelledDto dto)
-        => await PublishAsync(vrLearningSessionId, PubSubEvents.ROOM_CANCELLED, dto);
-
-    public async Task PublishRoomEndedAsync(string vrLearningSessionId, RoomEndedDto dto)
-        => await PublishAsync(vrLearningSessionId, PubSubEvents.ROOM_ENDED, dto);
-
-    public async Task PublishDeviceJoinedAsync(string vrLearningSessionId, DeviceJoinedDto dto)
-        => await PublishAsync(vrLearningSessionId, PubSubEvents.DEVICE_JOINED, dto);
-
-    public async Task PublishDeviceDisconnectedAsync(string vrLearningSessionId, DeviceDisconnectedDto dto)
-        => await PublishAsync(vrLearningSessionId, PubSubEvents.DEVICE_DISCONNECTED, dto);
-
-    public async Task PublishTaskUpdatedAsync(string vrLearningSessionId, TaskUpdatedDto dto)
-        => await PublishAsync(vrLearningSessionId, PubSubEvents.TASK_UPDATED, dto);
-
-    private async Task PublishAsync(string vrLearningSessionId, string eventType, object dto)
-    {
-        try
-        {
-            // 1. Send the payload json message to the Pub/Sub channel
-            string payloadJson = JsonSerializer.Serialize(dto, _jsonOptions);
-
-            ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
-
-            // 2. Create Redis event message
-            string redisEvent = vrLearningSessionId.ToRedisEventTypeMessage(eventType, payloadJson);
-
-            await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP),
-                redisEvent);
-
-            _logger.LogInformation("Published event: {EventType} for Session: {SessionId} -> {Payload}",
-                eventType, vrLearningSessionId, payloadJson);
-        }
-        catch (Exception ex)
-        {
-            // UNDONE: design the exception handler better 
-            _logger.LogError(ex, "Failed to publish event {EventType} for session {SessionId}", eventType, vrLearningSessionId);
-        }
-    }
-
 }
