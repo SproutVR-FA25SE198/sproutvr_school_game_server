@@ -1,6 +1,7 @@
 ﻿using System.Threading.Channels;
 using Grpc.Core;
 using LearningSession.V1;
+using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
@@ -31,7 +32,6 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         ILogger<GrpcVRGlassVRLearningSessionService> logger,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
-        IServerPublishingService serverPublishingService,
         IVRGlassVRLearningSessionService vrGlassVRLearningSessionService)
     {
         _vrGlassVRLearningSessionService = vrGlassVRLearningSessionService;
@@ -155,7 +155,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                                 message.VrLearningSessionId,
                                 message.VrDeviceSerialNumber);
 
-                            // Publish Task Updated to the Redis Stream
+                            // Publish TASKUPDATED event to the Redis Stream for processing updation later
                             await _vrGlassVRLearningSessionService.PublishTaskUpdateToStreamAsync(dto);
 
                             // when await finish, just fire-and-forget the method and moving on to the next redisMessage

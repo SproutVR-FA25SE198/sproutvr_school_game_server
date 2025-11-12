@@ -1,12 +1,19 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
+using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Models.VRLearningSession;
+using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;
@@ -19,7 +26,9 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
 
     private readonly ILogger<ConsumerTaskUpdateBackgroundService> _logger;
     private readonly IConnectionMultiplexer _redis;
+    private readonly IServiceProvider _serviceProvider;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ConcurrentDictionary<string, CancellationTokenSource> _activeVrLearningSessionsTasks;
 
@@ -29,12 +38,16 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
 
     public ConsumerTaskUpdateBackgroundService(
         ILogger<ConsumerTaskUpdateBackgroundService> logger,
+        IServiceProvider serviceProvider,
+         ResiliencePipelineProvider<string> resiliencePipelineProvider,
         IDateTimeProvider dateTimeProvider,
         IConnectionMultiplexer redis)
     {
         _logger = logger;
         _redis = redis;
         _dateTimeProvider = dateTimeProvider;
+        _serviceProvider = serviceProvider;
+        _resiliencePipelineProvider = resiliencePipelineProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _activeVrLearningSessionsTasks = new ConcurrentDictionary<string, CancellationTokenSource>();
     }
@@ -42,7 +55,6 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     // ===============================
     // === Methods
     // ===============================
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("ConsumerTaskUpdateBackgroundService is starting.");
@@ -93,15 +105,15 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     /// <summary>
     /// This is the task that 1 worker thread is assigned at to handle resolving event stream
     /// </summary>
-    /// <param name="sessionId"></param>
+    /// <param name="vrLearningSessionId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private async Task ProcessStreamForSessionAsync(string sessionId, CancellationToken cancellationToken)
+    private async Task ProcessStreamForSessionAsync(string vrLearningSessionId, CancellationToken cancellationToken)
     {
         try
         {
             IDatabase db = _redis.GetDatabase();
-            string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{sessionId}";
+            string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
             string groupName = "session-processors";
             string consumerName = $"processor-{Guid.NewGuid()}";
 
@@ -140,11 +152,11 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
                         // 3. Check the event type and delegate to the appropriate handler.
                         if (messageDict.TryGetValue("EventType", out string? eventType) && eventType == "TaskUpdate")
                         {
-                            bool success = await HandleTaskUpdateEventAsync(db, sessionId, messageDict);
+                            bool success = await HandleTaskUpdateEventAsync(db, vrLearningSessionId, messageDict);
 
-                            // acknowledge it so that it's gonna remove from the stream
                             if (success)
                             {
+                                // 4. acknowledge it so that it's gonna remove from the Redis Stream pending list
                                 await db.StreamAcknowledgeAsync(streamKey, groupName, message.Id);
                             }
                         }
@@ -163,27 +175,61 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "CRITICAL ERROR in ProcessStreamForSessionAsync for session {SessionId}. The task has crashed.", sessionId);
+            _logger.LogError(ex, "CRITICAL ERROR in ProcessStreamForSessionAsync for session {SessionId}. The task has crashed.", vrLearningSessionId);
         }
 
-        _logger.LogInformation("Chef: Stopping processor task for session: {SessionId}", sessionId);
+        _logger.LogInformation("Chef: Stopping processor task for session: {SessionId}", vrLearningSessionId);
     }
 
-    private async Task<bool> HandleTaskUpdateEventAsync(IDatabase db, string sessionId, Dictionary<string, string> messageDict)
+    /// <summary>
+    /// Methods to update to the redis state directly
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="vrLearningSessionId"></param>
+    /// <param name="messageDict"></param>
+    /// <returns></returns>
+    private async Task<bool> HandleTaskUpdateEventAsync(IDatabase db, string vrLearningSessionId, Dictionary<string, string> messageDict)
     {
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{sessionId}";
+        // 1. Create polly for retry on transaction
+        ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
+
+        // 2. Get Task information
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
         string taskPath = $"$.Devices['{messageDict["VRDeviceSerialNumber"]}'].Tasks['{messageDict["VRTaskId"]}']";
 
-        // true/false in the JSON Document for readiablilty
-        bool isCorrect = messageDict["IsCorrect"].ToBoolean();
-        bool isCompleted = messageDict["IsCompleted"].ToBoolean();
+        // 3. Update the task status in a transaction
+        bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
+        {
+            // true/false in the JSON Document for readiablilty
+            bool isCorrect = messageDict["IsCorrect"].ToBoolean();
+            bool isCompleted = messageDict["IsCompleted"].ToBoolean();
 
-        ITransaction transaction = db.CreateTransaction();
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.Status", JsonSerializer.Serialize(ModelTaskProgressStatus.Completed, _jsonOptions));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCorrect", JsonSerializer.Serialize(isCorrect));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCompleted", JsonSerializer.Serialize(isCompleted));
-        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.CompletionTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
+            ITransaction transaction = db.CreateTransaction();
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.Status", JsonSerializer.Serialize(ModelTaskProgressStatus.Completed, _jsonOptions));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCorrect", JsonSerializer.Serialize(isCorrect));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.IsCompleted", JsonSerializer.Serialize(isCompleted));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, $"{taskPath}.CompletionTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
 
-        return await transaction.ExecuteAsync();
+            return await transaction.ExecuteAsync();
+        });
+
+        // 4. Publish TASKUPDATED event to the desktop app channel
+        // - Since the IServerPublishingService is a scoped service, we need to create a scope here
+        if (isSuccess)
+        {
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            IServerPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IServerPublishingService>();
+
+            await _serverPublishingService.PublishTaskUpdatedAsync(vrLearningSessionId, new TaskUpdatedDto()
+            {
+                IsCompleted = messageDict["IsCompleted"].ToBoolean(),
+                IsCorrect = messageDict["IsCorrect"].ToBoolean(),
+                VrDeviceSerialNumber = messageDict["VRDeviceSerialNumber"],
+                VrTaskId = messageDict["VRTaskId"],
+                Status = ModelTaskProgressStatus.Completed.ToString()
+            });
+        }
+
+        return isSuccess;
     }
 }
