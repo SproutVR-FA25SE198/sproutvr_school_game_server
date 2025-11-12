@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Domain;
@@ -22,6 +24,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILocalStorageService _localStorageService;
     private readonly IVRLearningSessionValidator _validator;
+    private readonly ITeacherVRLearningSessionStateService _teacherVRLearningSessionStateService;
 
     // ===============================
     // === Constructors
@@ -31,9 +34,11 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
+        ITeacherVRLearningSessionStateService teacherVRLearningSessionStateService,
         IVRLearningSessionValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
+        _teacherVRLearningSessionStateService = teacherVRLearningSessionStateService;
         _dateTimeProvider = dateTimeProvider;
         _localStorageService = localStorageService;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
@@ -76,6 +81,15 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         // 4. Stringtify the PresetJsonUrl and added
         string fileContent = await _localStorageService.LoadFileContentAsync(vrLearningSession.PresetJsonRelativeFilePath!);
         validation.JoinRoomResponseDto!.PresetJsonContent = fileContent;
+
+        // 5. Publish DeviceJoined event to the Desktop App
+        await _teacherVRLearningSessionStateService.PublishDeviceJoinedAsync(
+            vrLearningSession.VRLearningSessionId,
+            new DeviceJoinedDto()
+            {
+                VrDeviceSerialNumber = joinRoomRequestDto.VrDeviceSerialNumber,
+            }
+        );
 
         return validation.JoinRoomResponseDto!;
     }

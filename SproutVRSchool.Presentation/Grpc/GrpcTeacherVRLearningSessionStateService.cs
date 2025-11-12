@@ -13,7 +13,7 @@ public class GrpcTeacherVRLearningSessionStateService(
     )
     : TeacherSessionRealTimeStateManagement.TeacherSessionRealTimeStateManagementBase
 {
-    // chuyển sang từ màn hình tạo phòng --> qua màn hình monitor
+    // Move from creating a game room to game room monitor
     public override async Task<GetRoomStateResponse> GetRoomState(GetRoomStateRequest request, ServerCallContext context)
     {
         var requestDto = GetRoomStateRequestDto.MapFromGrpcRequest(request);

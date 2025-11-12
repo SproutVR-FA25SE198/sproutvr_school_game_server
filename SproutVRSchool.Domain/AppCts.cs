@@ -60,6 +60,7 @@ public static class AppCts
             public const string DEVICE_JOINED = "DEVICEJOINED";
             public const string DEVICE_DISCONNECTED = "DEVICEDISCONNECTED";
             public const string TASK_UPDATED = "TASKUPDATED";
+
             public const string END_SIGNAL = "ENDSIGNAL";
             public const string INFO = "INFO";
             public const string WARNING = "WARNING";

@@ -110,7 +110,8 @@ internal sealed class RedisTeacherVRLearningSessionService
         }
 
         // 2. Get the list tasks related to the VRLesson from repositories
-        // Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
+        // - Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
+        // - Get the list of initial device as well
         (IReadOnlyList<VRTask> Data, int Count) vrTasks = await _unitOfWork.Repository<VRTask>()
             .ListAsync(new VRTasksSpecification(new ActivateRoomParams(vrLesson.Id)));
 
