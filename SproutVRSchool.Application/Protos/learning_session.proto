@@ -32,9 +32,10 @@ message GetRoomStateResponse {
   VRLessonInfo vrlesson = 3;
   string class_name = 4;
   string room_code = 5;
-  int32 duration_in_seconds = 6;
-  string status = 7;
-  repeated DeviceInfo devices = 8;
+  int32 room_duration_in_seconds = 6;
+  int32 game_duration_in_seconds = 7;
+  string status = 8;
+  repeated DeviceInfo devices = 9;
 }
 
 message TeacherInfo {
@@ -151,8 +152,8 @@ message CreateRoomResponse {
 message ActivateRoomRequest {
   string vr_learning_session_id = 1;
   string vr_lesson_id = 2;
-  google.protobuf.Timestamp start_time_at_utc = 3;
-  repeated AssignedDevice assigned_device_serials = 4;  // list of device allowed to join
+  int32 room_duration_in_minutes = 3;
+  repeated AssignedDevice assigned_device_serials = 4; // list of device allowed to join
 }
 
 message ActivateRoomResponse {

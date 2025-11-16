@@ -5,7 +5,7 @@ namespace SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dt
 public record ActivateRoomRequestDto(
     string LearningSessionId,
     string VrLessonId,
-    DateTimeOffset StartTimeUtc,
+    int RoomDurationInMinutes,
     IEnumerable<AssignedDeviceRequestDto> AssignedDeviceSerials)
 {
     public static ActivateRoomRequestDto MapFromGrpcRequest(ActivateRoomRequest activateRoomRequest)
@@ -13,8 +13,8 @@ public record ActivateRoomRequestDto(
         return new ActivateRoomRequestDto(
             activateRoomRequest.VrLearningSessionId,
             activateRoomRequest.VrLessonId,
-            activateRoomRequest.StartTimeAtUtc.ToDateTimeOffset(),
+            activateRoomRequest.RoomDurationInMinutes,
             activateRoomRequest.AssignedDeviceSerials.Select(e => AssignedDeviceRequestDto.MapFromGrpcRequest(e))
-            );
+        );
     }
 }

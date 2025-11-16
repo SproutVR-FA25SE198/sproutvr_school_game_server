@@ -18,4 +18,13 @@ public interface IDateTimeProvider
     /// <param name="dateTime"></param>
     /// <returns></returns>
     string ConvertToVietNamTime(DateTimeOffset? dateTime);
+
+    /// <summary>
+    /// Convert minutes to seconds unit
+    /// </summary>
+    /// <param name="minutes"></param>
+    /// <returns></returns>
+    int ConvertMinutesToSeconds(int minutes);
+
+
 }

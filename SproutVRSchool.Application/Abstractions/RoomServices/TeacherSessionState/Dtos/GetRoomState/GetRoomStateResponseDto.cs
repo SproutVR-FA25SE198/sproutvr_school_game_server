@@ -15,7 +15,8 @@ public sealed class GetRoomStateResponseDto
 
     public string ClassName { get; init; } = default!;
     public string RoomCode { get; init; } = default!;
-    public int DurationInSeconds { get; init; }
+    public int GameDurationInSeconds { get; init; }
+    public int RoomDurationInSeconds { get; init; }
     public string Status { get; init; } = default!;
 
     public IReadOnlyList<DeviceInfoDto> Devices { get; init; } = new List<DeviceInfoDto>();
@@ -29,8 +30,9 @@ public sealed class GetRoomStateResponseDto
         return new GetRoomStateResponse
         {
             VrLearningSessionId = dto.VRLearningSessionId,
+            GameDurationInSeconds = dto.GameDurationInSeconds,
+            RoomDurationInSeconds = dto.RoomDurationInSeconds,
             ClassName = dto.ClassName,
-            DurationInSeconds = dto.DurationInSeconds,
             RoomCode = dto.RoomCode,
             Vrlesson = new VRLessonInfo
             {
