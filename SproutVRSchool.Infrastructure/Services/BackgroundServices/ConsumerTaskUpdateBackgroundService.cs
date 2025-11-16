@@ -112,6 +112,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     {
         try
         {
+            // 1. Create the consumer group
             IDatabase db = _redis.GetDatabase();
             string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
             string groupName = "session-processors";
@@ -124,7 +125,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             }
             catch (RedisServerException ex) when (ex.Message.Contains("already exists"))
             {
-                // If the group already exists, that's fine. We just log it and continue.
+                // If the group already exists, that's fine. We just log it and continue processing it
                 _logger.LogInformation(ex, "Consumer group '{GroupName}' already exists for stream '{StreamKey}'.", groupName, streamKey);
             }
 
@@ -178,7 +179,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             _logger.LogError(ex, "CRITICAL ERROR in ProcessStreamForSessionAsync for session {SessionId}. The task has crashed.", vrLearningSessionId);
         }
 
-        _logger.LogInformation("Chef: Stopping processor task for session: {SessionId}", vrLearningSessionId);
+        _logger.LogInformation("TaskUpdated Consumer Event: Stopping processor task for session: {SessionId}", vrLearningSessionId);
     }
 
     /// <summary>

@@ -157,7 +157,9 @@ message ActivateRoomRequest {
 }
 
 message ActivateRoomResponse {
-  string room_code = 1;                                 // The join code is generated and returned here.
+  string room_code = 1;                 // The join code is generated and returned here.
+  string start_time_at_utc = 2;         
+  string end_time_at_utc = 3;           
 }
 
 message AssignedDevice {
