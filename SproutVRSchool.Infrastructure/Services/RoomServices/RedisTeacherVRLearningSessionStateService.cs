@@ -229,7 +229,8 @@ internal sealed class RedisTeacherVRLearningSessionStateService
             },
 
             ClassName = jsonObject.ClassName,
-            DurationInSeconds = jsonObject.DurationInSeconds ?? 0,
+            RoomDurationInSeconds = jsonObject.RoomDurationInSeconds ?? 0,
+            GameDurationInSeconds = jsonObject.GameDurationInSeconds ?? 0,
             RoomCode = jsonObject.RoomCode ?? string.Empty,
             Status = jsonObject.Status.ToString(),
             Devices = jsonObject.Devices.Values.Select(device => new DeviceInfoDto

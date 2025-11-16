@@ -11,8 +11,6 @@ internal sealed class DateTimeProvider : IDateTimeProvider
 
     private readonly TimeZoneInfo VietNamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
 
-
-
     // ============================
     // === Methods
     // ============================
@@ -38,4 +36,13 @@ internal sealed class DateTimeProvider : IDateTimeProvider
 
     public DateTimeOffset VietNamDateTimeNow => TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, VietNamTimeZone);
 
+    public int ConvertMinutesToSeconds(int minutes)
+    {
+        if (minutes <= 0)
+        {
+            return 0;
+        }
+
+        return minutes * 60;
+    }
 }

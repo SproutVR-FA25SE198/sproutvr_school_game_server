@@ -130,6 +130,9 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Tasks = new ConcurrentDictionary<string, ModelTaskProgress>(taskTemplate)
             });
 
+        DateTimeOffset startTimeNowAtUtc = _dateTimeProvider.UtcDateTimeNow;
+        DateTimeOffset endTimeNowAtUtc = startTimeNowAtUtc.AddMinutes(request.RoomDurationInMinutes);
+
         // 3. Retry execute the activate if failed due to room code conflict
         bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
         {
@@ -152,14 +155,21 @@ internal sealed class RedisTeacherVRLearningSessionService
             // Set params to the room to Activate the room
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
-            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(request.StartTimeUtc));
-            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.DurationInSeconds", vrLesson.MaxDuration.TotalSeconds);
+
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomDurationInSeconds", _dateTimeProvider.ConvertMinutesToSeconds(request.RoomDurationInMinutes));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.GameDurationInSeconds", vrLesson.MaxDuration.TotalSeconds);
+
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.StartTimeAtUtc", JsonSerializer.Serialize(startTimeNowAtUtc, _jsonOptions));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(endTimeNowAtUtc, _jsonOptions));
+
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Devices", JsonSerializer.Serialize(initialDevices, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.PresetJsonRelativeFilePath", JsonSerializer.Serialize(vrLesson.PresetJsonRelativeFilePath, _jsonOptions));
 
             return await transaction.ExecuteAsync();
         });
 
+        // UNDONE:
+        // - Handle validation on interceptor
         if (!isSuccess)
         {
             throw new Exception("Failed to activate session. Please try again.");
@@ -181,6 +191,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         }
 
         // 2. Create a transaction to update the status and remove from active set
+        // 3. Reset the preset end room to the utc datetime now
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
