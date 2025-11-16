@@ -25,6 +25,4 @@ public interface IDateTimeProvider
     /// <param name="minutes"></param>
     /// <returns></returns>
     int ConvertMinutesToSeconds(int minutes);
-
-
 }

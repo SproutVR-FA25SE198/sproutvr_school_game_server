@@ -106,6 +106,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         // 2. Get the list tasks related to the VRLesson from repositories
         // - Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
         // - Get the list of initial device as well
+        // - Calculate the start time and end time beforehand 
         (IReadOnlyList<VRTask> Data, int Count) vrTasks = await _unitOfWork.Repository<VRTask>()
             .ListAsync(new VRTasksSpecification(new ActivateRoomParams(vrLesson.Id)));
 
@@ -154,7 +155,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 
             // Set params to the room to Activate the room
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
-            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode));
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode, _jsonOptions));
 
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomDurationInSeconds", _dateTimeProvider.ConvertMinutesToSeconds(request.RoomDurationInMinutes));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.GameDurationInSeconds", vrLesson.MaxDuration.TotalSeconds);
@@ -175,7 +176,11 @@ internal sealed class RedisTeacherVRLearningSessionService
             throw new Exception("Failed to activate session. Please try again.");
         }
 
-        return new ActivateRoomResponseDto(roomCode);
+        return new ActivateRoomResponseDto(
+            startTimeNowAtUtc,
+            endTimeNowAtUtc,
+            roomCode
+            );
     }
 
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
@@ -190,8 +195,8 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Message: $"Redis with ID '{vrLearningSessionId}' not found. Canceled Failed.");
         }
 
-        // 2. Create a transaction to update the status and remove from active set
-        // 3. Reset the preset end room to the utc datetime now
+        // 2. Remove from active vr learning session set
+        // 3. Reset the end room to the utc datetime now, update status
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
@@ -204,20 +209,20 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Message: "Cancellation failed. Please try again");
         }
 
-        // 3. Publish to VR Devices ENDSIGNAL event on VR Device Channel
+        // 4. Publish to VR Devices ENDSIGNAL event on VR Device Channel
         await _serverPublishingService.PublishEndSessionAsync(
             vrLearningSessionId,
             "The teacher has cancelled the session.");
 
-        // 4. Publish to Desktop App Room State ROOMCANCELLED event on Desktop Channel
+        // 5. Publish to Desktop App Room State ROOMCANCELLED event on Desktop Channel
         await _serverPublishingService.PublishRoomCancelledAsync(
             vrLearningSessionId,
             new RoomCancelledDto()
         );
 
-        // 5. Save the entire room state into the Physical DB for record keeping
+        // 6. Save the entire room state into the Physical DB for record keeping
 
-        // 6. Return success message back to the teacher
+        // 7. Return success message back to the teacher
         return new CancelRoomResponseDto(
             Message: "Cancelled VR Learning Redis Successfull"
         );
