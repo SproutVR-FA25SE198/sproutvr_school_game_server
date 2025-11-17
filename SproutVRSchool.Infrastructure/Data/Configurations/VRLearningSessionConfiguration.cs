@@ -28,13 +28,13 @@ internal sealed class VRLearningSessionConfiguration : BaseEntityConfiguration<V
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(vrls => vrls.StartTime)
+        builder.Property(vrls => vrls.StartTimeAtUtc)
             .IsRequired();
 
-        builder.Property(vrls => vrls.EndTime)
+        builder.Property(vrls => vrls.EndTimeAtUtc)
             .IsRequired();
 
-        builder.Property(vrls => vrls.Duration)
+        builder.Property(vrls => vrls.DurationInMinutes)
             .IsRequired();
 
         builder.Property(vrls => vrls.Status)

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -514,9 +515,9 @@ public partial class IdentityMigration : Migration
                 VRLessonId = table.Column<Guid>(type: "uuid", nullable: false),
                 TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
                 ClassName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                EndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                StartTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                EndTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                DurationInMinutes = table.Column<int>(type: "integer", nullable: false),
                 Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")

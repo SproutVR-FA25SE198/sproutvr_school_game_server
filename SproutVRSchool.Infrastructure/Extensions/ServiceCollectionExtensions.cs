@@ -272,5 +272,6 @@ public static partial class ServiceCollectionExtensions
     private static void AddBackgroundService(this IServiceCollection service)
     {
         service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
+        service.AddHostedService<RoomExpiryBackgroundService>();
     }
 }

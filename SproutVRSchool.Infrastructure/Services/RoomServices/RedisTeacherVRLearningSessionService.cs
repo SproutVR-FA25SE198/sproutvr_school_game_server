@@ -157,6 +157,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomCode", JsonSerializer.Serialize(roomCode, _jsonOptions));
 
+            _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomDurationInMinutes", request.RoomDurationInMinutes);
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.RoomDurationInSeconds", _dateTimeProvider.ConvertMinutesToSeconds(request.RoomDurationInMinutes));
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.GameDurationInSeconds", vrLesson.MaxDuration.TotalSeconds);
 
@@ -180,7 +181,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             startTimeNowAtUtc,
             endTimeNowAtUtc,
             roomCode
-            );
+        );
     }
 
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
@@ -200,7 +201,10 @@ internal sealed class RedisTeacherVRLearningSessionService
         ITransaction transaction = _database.CreateTransaction();
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
-        _ = transaction.SetRemoveAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, vrLearningSessionId);
+        _ = transaction.SetMoveAsync(
+            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE,
+            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE,
+            vrLearningSessionId);
 
         if (!await transaction.ExecuteAsync())
         {
@@ -220,9 +224,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             new RoomCancelledDto()
         );
 
-        // 6. Save the entire room state into the Physical DB for record keeping
-
-        // 7. Return success message back to the teacher
+        // 6. Return success message back to the teacher
         return new CancelRoomResponseDto(
             Message: "Cancelled VR Learning Redis Successfull"
         );
