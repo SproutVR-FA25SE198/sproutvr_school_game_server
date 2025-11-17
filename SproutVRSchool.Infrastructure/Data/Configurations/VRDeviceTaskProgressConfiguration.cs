@@ -39,7 +39,8 @@ internal sealed class VRDeviceTaskProgressConfiguration : BaseEntityConfiguratio
             .HasDefaultValue(false);
 
         builder.Property(vrtp => vrtp.CompletionTimeAtUtc)
-            .IsRequired();
+            .IsRequired(false)
+            .HasDefaultValue(null);
 
         // Relationships
         builder.HasOne(vrtp => vrtp.VRDevice)

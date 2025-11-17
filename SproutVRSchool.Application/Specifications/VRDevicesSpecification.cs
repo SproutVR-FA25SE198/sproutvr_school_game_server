@@ -75,4 +75,13 @@ public sealed class VRDevicesSpecification : BaseSpecification<VRDevice>
         : base(x => x.Name == deviceName && x.SerialNumber == serialNumber)
     {
     }
+
+    /// <summary>
+    /// Find VRDevice by serial number
+    /// </summary>
+    /// <param name="serialNumber"></param>
+    public VRDevicesSpecification(string serialNumber) 
+        : base(x => x.SerialNumber == serialNumber)
+    {
+    }
 }
