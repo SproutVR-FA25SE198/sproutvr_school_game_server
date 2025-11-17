@@ -7,6 +7,7 @@ public class ModelVRLearningSession
     public string TeacherId { get; set; }
     public string ClassName { get; set; }
     public string? RoomCode { get; set; }
+    public int? RoomDurationInMinutes { get; set; }
     public int? RoomDurationInSeconds { get; set; }
     public int? GameDurationInSeconds { get; set; }
     public DateTimeOffset? StartTimeAtUtc { get; set; }

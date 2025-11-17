@@ -44,9 +44,11 @@ public static class AppCts
         public const int MAX_VR_DEVICE = 30;
         public const int CODE_DURATION_IN_MINUTES = 2;
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
+        public const int INACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
+
         public const string NAMESPACE_VR_LEARNING_SESSIONS = "vr_learning_sessions";
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE = "vr_learning_sessions_active";
-
+        public const string NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE = "vr_learning_sessions_inactive";
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE = "vr_learning_sessions_room_codes";
 
         public const string NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS = "stream:vr_learning_sessions";
