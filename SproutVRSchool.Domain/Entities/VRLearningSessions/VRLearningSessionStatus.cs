@@ -2,8 +2,6 @@
 
 public enum VRLearningSessionStatus
 {
-    Pending,
-    Active,
     Completed,
     Cancelled,
 }

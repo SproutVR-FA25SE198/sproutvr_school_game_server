@@ -18,7 +18,7 @@ public record AuthorizedGetVRDeviceQueryTasksResponseDto(
     Guid TaskId,
     bool IsCompleted,
     bool IsCorrect,
-    DateTimeOffset CompletionTimeUtc);
+    DateTimeOffset? CompletionTimeUtc);
 
 public record AuthorizedGetVRDeviceQuerySessionSummariesResponseDto(
     Guid Id,

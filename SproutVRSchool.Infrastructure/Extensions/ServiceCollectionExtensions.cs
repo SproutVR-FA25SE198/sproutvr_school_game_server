@@ -252,13 +252,10 @@ public static partial class ServiceCollectionExtensions
 
         string? contentRootPath = configuration.GetValue<string>("FileLocalStorageSettings:ContentRootPath");
 
-        service.AddSingleton<LocalStorageService>(sp =>
-            new LocalStorageService(contentRootPath!));
+        service.AddSingleton<LocalStorageService>(sp => new LocalStorageService(contentRootPath!));
         service.AddSingleton<ILocalStorageService>(sp => sp.GetRequiredService<LocalStorageService>());
         service.AddSingleton<IPathService>(sp => sp.GetRequiredService<LocalStorageService>());
-
         service.AddTransient<IFileValidationService, FileValidationService>();
-
         service.AddTransient<IExcelFileService, ExcelFileService>();
 
         // Excel File EPPlus Service
@@ -273,5 +270,6 @@ public static partial class ServiceCollectionExtensions
     {
         service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
         service.AddHostedService<RoomExpiryBackgroundService>();
+        service.AddHostedService<RoomSavedIntoDatabaseBackgroundService>();
     }
 }

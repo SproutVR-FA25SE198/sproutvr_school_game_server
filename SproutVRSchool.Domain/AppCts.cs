@@ -45,6 +45,7 @@ public static class AppCts
         public const int CODE_DURATION_IN_MINUTES = 2;
         public const int ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
         public const int INACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS = 5000;
+        public const int SAVE_ROOM_INTO_DB_SCAN_INTERVAL_IN_MILSECONDS = 5000;
 
         public const string NAMESPACE_VR_LEARNING_SESSIONS = "vr_learning_sessions";
         public const string NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE = "vr_learning_sessions_active";

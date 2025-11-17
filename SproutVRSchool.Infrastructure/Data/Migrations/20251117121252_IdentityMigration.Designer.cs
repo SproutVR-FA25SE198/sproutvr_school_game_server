@@ -12,7 +12,7 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    [Migration("20251116161213_IdentityMigration")]
+    [Migration("20251117121252_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -643,7 +643,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("CompletionTimeAtUtc")
+                    b.Property<DateTimeOffset?>("CompletionTimeAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("CreatedAtUtc")

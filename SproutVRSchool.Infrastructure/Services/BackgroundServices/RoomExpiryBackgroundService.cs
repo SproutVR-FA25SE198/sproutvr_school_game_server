@@ -9,8 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NRedisStack.RedisStackCommands;
+using Polly;
+using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
@@ -30,6 +34,7 @@ public class RoomExpiryBackgroundService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private readonly IDatabase _database;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
 
     // ===============================
@@ -39,11 +44,13 @@ public class RoomExpiryBackgroundService : BackgroundService
     public RoomExpiryBackgroundService(
         ILogger<RoomExpiryBackgroundService> logger,
         IServiceProvider serviceProvider,
+        ResiliencePipelineProvider<string> resiliencePipelineProvider,
         IDateTimeProvider dateTimeProvider,
         IConnectionMultiplexer connectionMultiplexer)
     {
         _logger = logger;
         _dateTimeProvider = dateTimeProvider;
+        _resiliencePipelineProvider = resiliencePipelineProvider;
         _serviceProvider = serviceProvider;
         _jsonOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         _database = connectionMultiplexer.GetDatabase();
@@ -62,10 +69,10 @@ public class RoomExpiryBackgroundService : BackgroundService
             // 1. Check for every 5s
             await Task.Delay(AppCts.Redis.INACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS, stoppingToken);
 
-            // 2. Iterate over all member in the active lists
             using IServiceScope scope = _serviceProvider.CreateScope();
             RedisValue[] activeSessionIds = await _database.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE);
 
+            // 2. Iterate over all member in the active lists
             foreach (RedisValue vrLearningSessionId in activeSessionIds)
             {
                 string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
@@ -93,14 +100,36 @@ public class RoomExpiryBackgroundService : BackgroundService
                     _logger.LogInformation("Session {VrLearningSessionId} has expired. Moving to inactive queue.", vrLearningSessionId);
 
                     // 4. Set the status to Completed and move to the inactive list
-                    ITransaction transaction = _database.CreateTransaction();
-                    _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Completed, _jsonOptions));
-                    _ = transaction.SetMoveAsync(
-                        AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE,
-                        AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE,
-                        vrLearningSessionId
-                    );
-                    await transaction.ExecuteAsync();
+                    ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
+
+                    bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
+                    {
+                        ITransaction transaction = _database.CreateTransaction();
+                        _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Completed, _jsonOptions));
+                        _ = transaction.SetMoveAsync(
+                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE,
+                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE,
+                            vrLearningSessionId
+                        );
+                        return await transaction.ExecuteAsync();
+                    }, stoppingToken);
+
+                    // 5. Is success, then publishing events to Desktop and VRDevices
+                    if (isSuccess)
+                    {
+                        IServerPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IServerPublishingService>();
+
+                        // 5.1. Publish to VR Devices ENDSIGNAL event on VR Device Channel
+                        await _serverPublishingService.PublishEndSessionAsync(
+                            vrLearningSessionId!,
+                            "The teacher has cancelled the session.");
+
+                        // 5.2. Publish to Desktop App Room State ROOMENDED event on Desktop Channel
+                        await _serverPublishingService.PublishRoomEndedAsync(
+                            vrLearningSessionId!,
+                            new RoomEndedDto()
+                        );
+                    }
                 }
             }
         }

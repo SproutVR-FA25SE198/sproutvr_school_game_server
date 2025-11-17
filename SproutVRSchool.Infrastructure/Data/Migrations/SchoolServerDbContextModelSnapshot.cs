@@ -640,7 +640,7 @@ namespace SproutVRSchool.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("CompletionTimeAtUtc")
+                    b.Property<DateTimeOffset?>("CompletionTimeAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("CreatedAtUtc")

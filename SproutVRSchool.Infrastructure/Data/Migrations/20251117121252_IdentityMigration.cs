@@ -633,7 +633,7 @@ public partial class IdentityMigration : Migration
                 StudentName = table.Column<string>(type: "citext", maxLength: 100, nullable: false),
                 IsCompleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                 IsCorrect = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                CompletionTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                CompletionTimeAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'"),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'UTC'")
             },
