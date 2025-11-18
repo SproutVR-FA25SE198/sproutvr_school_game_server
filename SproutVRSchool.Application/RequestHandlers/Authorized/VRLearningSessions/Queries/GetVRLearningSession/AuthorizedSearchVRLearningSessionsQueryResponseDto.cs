@@ -16,6 +16,7 @@ public record AuthorizedGetVRLearningSessionQueryResponseDto(
     DateTimeOffset CreatedAtUtc,
     DateTimeOffset CreatedAtVietNam
 );
+
 public record AuthorizedGetVRLearningSessionLessonResponseDto(
     Guid Id,
     string Name

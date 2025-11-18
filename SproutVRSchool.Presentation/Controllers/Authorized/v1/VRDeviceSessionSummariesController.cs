@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRDeviceSessionSummaries.Queries.GetVRDeviceSessionSummary;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRDeviceSessionSummaries.Queries.SearchVRDeviceSessionSummaries;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRLearningSessions.Queries.GetVRLearningSession;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
@@ -25,6 +27,19 @@ public class VRDeviceSessionSummariesController(IMediator mediator) : BaseApiCon
         return Ok(result);
     }
 
+    // GET: api/v1/authorized/vr-device-session-summaries/{vrLearningSessionId}/devices/{vrDeviceId}
+    [HttpGet("{vrLearningSessionId}/devices/{vrDeviceId}")]
+    public async Task<IActionResult> GetVRLearningSessionSummary(
+        [FromRoute] Guid vrLearningSessionId,
+        [FromRoute] Guid vrDeviceId,
+        CancellationToken cancellationToken)
+    {
+        var query = new AuthorizedGetVRDeviceSessionSummaryQuery(vrLearningSessionId, vrDeviceId);
+        AuthorizedGetVRDeviceSessionSummaryQueryResponseDto result = await mediator.Send(query, cancellationToken);
+
+        return Ok(result);
+    }
+
     // ========================
     // === POSTs
     // ========================
@@ -41,5 +56,3 @@ public class VRDeviceSessionSummariesController(IMediator mediator) : BaseApiCon
     // === DELETEs
     // ========================
 }
-
-

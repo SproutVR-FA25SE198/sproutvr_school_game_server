@@ -1,4 +1,5 @@
-﻿using SproutVRSchool.Application.RequestHandlers.Authorized.VRDeviceSessionSummaries.Queries.SearchVRDeviceSessionSummaries;
+﻿using Microsoft.EntityFrameworkCore;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRDeviceSessionSummaries.Queries.SearchVRDeviceSessionSummaries;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
 
@@ -49,5 +50,18 @@ public sealed class VRDeviceSessionSummariesSpecification : BaseSpecification<VR
 
         AddInclude(x => x.VRDevice);
         AddInclude(x => x.VRLearningSession);
+    }
+
+    /// <summary>
+    /// Constructor for retrieving the summary of the specific device on the vr learning session
+    /// </summary>
+    /// <param name="vrDeviceId"></param>
+    /// <param name="vrLearningSessionId"></param>
+    public VRDeviceSessionSummariesSpecification(Guid vrLearningSessionId, Guid vrDeviceId)
+        : base(x => x.VRDeviceId == vrDeviceId && x.VRLearningSessionId == vrLearningSessionId)
+    {
+        AddInclude(x => x.VRLearningSession);
+        AddInclude(x => x.VRDevice);
+        AddThenInclude(x => x.Include(a => a.VRLearningSession).ThenInclude(b => b.VRDeviceTaskProgresses));
     }
 }
