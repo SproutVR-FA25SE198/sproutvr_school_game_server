@@ -205,5 +205,17 @@ public static class AppCts
             public const string STATUS_ASC = "statusAsc";
             public const string STATUS_DESC = "statusDesc";
         }
+
+        public static class VRLearningSessions
+        {
+            public const string CLASS_NAME_ASC = "classNameAsc";
+            public const string CLASS_NAME_DESC = "classNameDesc";
+        }
+
+        public static class VRDeviceSessionSummary
+        {
+            public const string NO_TASK_COMPLETED_ASC = "noTaskCompletedAsc";
+            public const string NO_TASK_COMPLETED_DESC = "noTaskCompletedDesc";
+        }
     }
 }
