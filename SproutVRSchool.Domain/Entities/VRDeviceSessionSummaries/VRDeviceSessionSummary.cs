@@ -1,7 +1,6 @@
 ﻿using SproutVRSchool.Domain.Entities.VRDevices;
 using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Models.VRLearningSession;
-using static SproutVRSchool.Domain.AppCts.SortingKeys;
 
 namespace SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
 

@@ -11,9 +11,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
-using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Models.VRLearningSession;
-using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;

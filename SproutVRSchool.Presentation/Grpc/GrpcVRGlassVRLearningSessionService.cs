@@ -1,9 +1,7 @@
 ﻿using System.Threading.Channels;
 using Grpc.Core;
 using LearningSession.V1;
-using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
-using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Application.Extensions;

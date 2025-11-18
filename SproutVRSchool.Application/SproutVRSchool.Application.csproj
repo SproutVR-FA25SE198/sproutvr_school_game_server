@@ -20,8 +20,9 @@
 
 	<ItemGroup>
 	  <Folder Include="RequestHandlers\Authorized\MasterSubjects\Commands\" />
+	  <Folder Include="RequestHandlers\Authorized\VRDeviceSessionSummaries\Commands\" />
 	  <Folder Include="RequestHandlers\Authorized\VRDevices\Commands\" />
-	  <Folder Include="RequestHandlers\Guest\" />
+	  <Folder Include="RequestHandlers\Authorized\VRLearningSessions\Commands\" />
 	</ItemGroup>
 
 </Project>

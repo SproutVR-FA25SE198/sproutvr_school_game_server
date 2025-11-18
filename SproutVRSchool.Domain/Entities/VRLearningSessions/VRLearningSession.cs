@@ -8,6 +8,10 @@ namespace SproutVRSchool.Domain.Entities.VRLearningSessions;
 
 public sealed class VRLearningSession : BaseEntity
 {
+    // ===============================
+    // === Fields
+    // ===============================
+
     public Guid VRLessonId { get; set; }
     public Guid TeacherId { get; set; }
     public string ClassName { get; set; }
@@ -21,6 +25,10 @@ public sealed class VRLearningSession : BaseEntity
     public Teacher Teacher { get; set; }
     public ICollection<VRDeviceTaskProgress> VRDeviceTaskProgresses { get; set; } = [];
     public ICollection<VRDeviceSessionSummary> VRDeviceSessionSummaries { get; set; } = [];
+
+    // ===============================
+    // === Methods
+    // ===============================
 
     /// <summary>
     /// A function to create a vr learning session

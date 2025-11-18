@@ -80,7 +80,7 @@ public sealed class VRDevicesSpecification : BaseSpecification<VRDevice>
     /// Find VRDevice by serial number
     /// </summary>
     /// <param name="serialNumber"></param>
-    public VRDevicesSpecification(string serialNumber) 
+    public VRDevicesSpecification(string serialNumber)
         : base(x => x.SerialNumber == serialNumber)
     {
     }
