@@ -71,7 +71,13 @@ public sealed class VRLearningSession : BaseEntity
             StartTimeAtUtc = modelVRLearningSession.StartTimeAtUtc.Value,
             EndTimeAtUtc = modelVRLearningSession.EndTimeAtUtc.Value,
             DurationInMinutes = modelVRLearningSession.RoomDurationInMinutes.Value,
-            Status = (VRLearningSessionStatus)modelVRLearningSession.Status,
+
+            // Because 2 models are different type here
+            // so the convertion is not conducted before, the problem here is to use Enum.Parse to see if the value integer is matching or not
+            // with other model
+            //Status = (VRLearningSessionStatus)modelVRLearningSession.Status, --> (VRLearningSessionStatus)1
+
+            Status = Enum.Parse<VRLearningSessionStatus>(modelVRLearningSession.Status.ToString()),
             CreatedAtUtc = currentDateUtcNow,
             UpdatedAtUtc = currentDateUtcNow
         };
