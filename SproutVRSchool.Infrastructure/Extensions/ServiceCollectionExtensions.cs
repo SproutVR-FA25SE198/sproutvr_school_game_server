@@ -27,6 +27,7 @@ using SproutVRSchool.Infrastructure.Data;
 using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.Repositories;
 using SproutVRSchool.Infrastructure.Services.AccountServices;
+using SproutVRSchool.Infrastructure.Services.AIServices;
 using SproutVRSchool.Infrastructure.Services.BackgroundServices;
 using SproutVRSchool.Infrastructure.Services.Clock;
 using SproutVRSchool.Infrastructure.Services.FileServices;
@@ -52,6 +53,8 @@ public static partial class ServiceCollectionExtensions
         service.AddRedisStack(configuration);
 
         service.AddVRLearningSessionService();
+
+        service.AddAIService();
 
         service.AddBackgroundService();
 
@@ -226,6 +229,15 @@ public static partial class ServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Related to AI service
+    /// </summary>
+    /// <param name="service"></param>
+    private static void AddAIService(this IServiceCollection service)
+    {
+        service.AddScoped<BigQuerySyncService>();
+    }
+
+    /// <summary>
     /// Using Redis Stream and Redis Modules
     /// </summary>
     /// <param name="service"></param>
@@ -271,5 +283,6 @@ public static partial class ServiceCollectionExtensions
         service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
         service.AddHostedService<RoomExpiryBackgroundService>();
         service.AddHostedService<RoomSavedIntoDatabaseBackgroundService>();
+        service.AddHostedService<BigQueryWorker>();
     }
 }
