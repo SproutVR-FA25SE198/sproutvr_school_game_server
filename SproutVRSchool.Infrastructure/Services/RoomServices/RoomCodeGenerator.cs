@@ -4,7 +4,7 @@ using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
-public class CodeGenerator : ICodeGeneratorService
+public class RoomCodeGenerator : IRoomCodeGeneratorService
 {
     private readonly string _chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
 

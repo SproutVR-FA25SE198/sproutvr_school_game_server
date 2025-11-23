@@ -9,23 +9,23 @@ using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
-public class ServerPublishingService : IServerPublishingService
+public class RoomPublishingService : IRoomPublishingService
 {
     // ===============================
     // === Fields
     // ===============================
 
     private readonly IDatabase _database;
-    private readonly ILogger<ServerPublishingService> _logger;
+    private readonly ILogger<RoomPublishingService> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
 
     // ===============================
     // === Constructor
     // ===============================
 
-    public ServerPublishingService(
+    public RoomPublishingService(
         IConnectionMultiplexer connectionMultiplexer,
-        ILogger<ServerPublishingService> logger)
+        ILogger<RoomPublishingService> logger)
     {
         _database = connectionMultiplexer.GetDatabase();
         _logger = logger;

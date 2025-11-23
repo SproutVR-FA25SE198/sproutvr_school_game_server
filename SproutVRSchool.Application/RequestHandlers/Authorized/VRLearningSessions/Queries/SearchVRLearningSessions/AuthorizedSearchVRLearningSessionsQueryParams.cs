@@ -9,7 +9,6 @@ public sealed class AuthorizedSearchVRLearningSessionsQueryParams : BaseGetListP
     public Guid? VRLessonId { get; set; }
     public Guid? TeacherId { get; set; }
     public VRLearningSessionStatus? VrLearningSessionStatus { get; set; }
-
     public string? SortBy { get; set; } = string.Empty;
 }
 

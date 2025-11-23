@@ -30,8 +30,11 @@ public sealed class AuthorizedGetVRLearningSessionQueryHandler(
         var progresses = session.VRDeviceTaskProgresses
             .Select(p => new AuthorizedGetVRLearningSessionTaskProgressResponseDto(
                 p.Id,
-                p.VRDeviceId,
-                p.VRTaskId,
+                new AuthorizedGetVRLearningSessionVRTaskResponseDto(
+                    p.VRTaskId,
+                    p.VRTask.TaskNumber,
+                    p.VRTask.TaskDescription
+                ),
                 p.StudentName,
                 p.IsCompleted,
                 p.IsCorrect,
@@ -42,6 +45,8 @@ public sealed class AuthorizedGetVRLearningSessionQueryHandler(
         var summaries = session.VRDeviceSessionSummaries
             .Select(s => new AuthorizedGetVRLearningSessionSummaryResponseDto(
                 s.Id,
+                new AuthorizedGetVRLearningSessionVRDeviceResponseDto(s.VRDeviceId, s.VRDevice.Name),
+                s.VRLearningSessionId,
                 s.StudentName,
                 s.NoTasksCompleted
             )).ToList();

@@ -11,9 +11,5 @@ public interface ITeacherVRLearningSessionService
     Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId);
 
     Task SendNotificationAsync(SendNotificationRequestDto request);
-
 }
-
-
-
 

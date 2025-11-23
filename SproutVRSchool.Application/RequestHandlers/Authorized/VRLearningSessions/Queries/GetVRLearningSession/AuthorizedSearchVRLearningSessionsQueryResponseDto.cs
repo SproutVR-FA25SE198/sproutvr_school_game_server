@@ -29,8 +29,7 @@ public record AuthorizedGetVRLearningSessionTeacherResponseDto(
 
 public record AuthorizedGetVRLearningSessionTaskProgressResponseDto(
     Guid Id,
-    Guid VRDeviceId,
-    Guid VRTaskId,
+    AuthorizedGetVRLearningSessionVRTaskResponseDto VRTask,
     string StudentName,
     bool IsCompleted,
     bool IsCorrect,
@@ -39,6 +38,19 @@ public record AuthorizedGetVRLearningSessionTaskProgressResponseDto(
 
 public record AuthorizedGetVRLearningSessionSummaryResponseDto(
     Guid Id,
+    AuthorizedGetVRLearningSessionVRDeviceResponseDto VRDevice,
+    Guid VRLearningSessionId,
     string StudentName,
     int NoTasksCompleted
+);
+
+public record AuthorizedGetVRLearningSessionVRTaskResponseDto(
+    Guid VRTaskId,
+    int TaskNumber,
+    string TaskDescription
+);
+
+public record AuthorizedGetVRLearningSessionVRDeviceResponseDto(
+    Guid VRDeviceId,
+    string DeviceName
 );

@@ -25,8 +25,8 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILocalStorageService _localStorageService;
-    private readonly IVRLearningSessionValidator _validator;
-    private readonly IServerPublishingService _serverPublishingService;
+    private readonly IRoomValidator _validator;
+    private readonly IRoomPublishingService _serverPublishingService;
     private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
 
     // ===============================
@@ -37,9 +37,9 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
-        IServerPublishingService serverPublishingService,
+        IRoomPublishingService serverPublishingService,
         ResiliencePipelineProvider<string> resiliencePipelineProvider,
-        IVRLearningSessionValidator validator)
+        IRoomValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
         _serverPublishingService = serverPublishingService;

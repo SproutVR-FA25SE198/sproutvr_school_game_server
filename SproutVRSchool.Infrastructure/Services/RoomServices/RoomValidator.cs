@@ -8,7 +8,7 @@ using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Services.RoomServices;
 
-internal sealed class RoomValidator : IVRLearningSessionValidator
+internal sealed class RoomValidator : IRoomValidator
 {
     // ===============================
     // === Fields
