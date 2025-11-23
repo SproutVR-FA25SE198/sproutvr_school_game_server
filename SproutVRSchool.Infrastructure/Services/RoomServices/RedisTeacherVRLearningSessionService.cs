@@ -80,7 +80,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         };
 
         // 3. Prefix for grouping keys
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSesison.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSesison.VRLearningSessionId}";
         string jsonPayLoad = JsonSerializer.Serialize(vrLearningSesison, _jsonOptions);
 
         // 4. Set into the redis db
@@ -90,7 +90,7 @@ internal sealed class RedisTeacherVRLearningSessionService
 
     public async Task<ActivateRoomResponseDto> ActivateRoomAsync(ActivateRoomRequestDto request)
     {
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{request.LearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{request.LearningSessionId}";
         string roomCode = string.Empty;
         ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
 
@@ -138,7 +138,7 @@ internal sealed class RedisTeacherVRLearningSessionService
         bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
         {
             roomCode = _codeGenerator.GenerateCode();
-            string roomCodeKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODE}:{roomCode}";
+            string roomCodeKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ROOM_CODES}:{roomCode}";
 
             ITransaction transaction = _database.CreateTransaction();
 
@@ -151,7 +151,7 @@ internal sealed class RedisTeacherVRLearningSessionService
                 When.NotExists);
 
             // Set into the active lists, but must be in the tranasction
-            _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE, request.LearningSessionId);
+            _ = transaction.SetAddAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE_IDS, request.LearningSessionId);
 
             // Set params to the room to Activate the room
             _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Active, _jsonOptions));
@@ -187,7 +187,7 @@ internal sealed class RedisTeacherVRLearningSessionService
     public async Task<CancelRoomResponseDto> CancelRoomAsync(string vrLearningSessionId)
     {
         // 1. Get vr learning session key
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSessionId}";
 
         if (!await _database.KeyExistsAsync(sessionKey))
         {
@@ -202,8 +202,8 @@ internal sealed class RedisTeacherVRLearningSessionService
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Cancelled, _jsonOptions));
         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.EndTimeAtUtc", JsonSerializer.Serialize(_dateTimeProvider.UtcDateTimeNow));
         _ = transaction.SetMoveAsync(
-            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE,
-            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE,
+            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE_IDS,
+            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE_IDS,
             vrLearningSessionId);
 
         if (!await transaction.ExecuteAsync())

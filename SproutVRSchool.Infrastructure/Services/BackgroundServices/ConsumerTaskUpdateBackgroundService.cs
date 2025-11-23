@@ -25,9 +25,9 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     private readonly ILogger<ConsumerTaskUpdateBackgroundService> _logger;
     private readonly IDatabase _database;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
-    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ConcurrentDictionary<string, CancellationTokenSource> _activeVrLearningSessionsTasks;
 
     // ===============================
@@ -61,7 +61,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             try
             {
                 // 1. Get the list of all active vr_learning_session_id from the group of streams
-                string?[] activeSessionIds = (await _database.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE)).ToStringArray();
+                string?[] activeSessionIds = (await _database.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE_IDS)).ToStringArray();
 
                 // 2. Assign each Worker Thread to handle individual VrLearningSession's Stream, avoid blocking main thread
                 foreach (string sessionId in activeSessionIds)
@@ -109,7 +109,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         try
         {
             // 1. Create the consumer group
-            string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
+            string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAMS_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
             string groupName = "session-processors";
             string consumerName = $"processor-{Guid.NewGuid()}";
 
@@ -190,7 +190,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         ResiliencePipeline<bool> retryPipeline = _resiliencePipelineProvider.GetPipeline<bool>(AppCts.RetryKeys.REDIS_TRANSACTION_KEY);
 
         // 2. Get Task information
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSessionId}";
         string taskPath = $"$.Devices['{messageDict["VRDeviceSerialNumber"]}'].Tasks['{messageDict["VRTaskId"]}']";
 
         DateTimeOffset utcNow = _dateTimeProvider.UtcDateTimeNow;

@@ -76,7 +76,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
 
         // 2. Subscribe to Redis Pub/Sub channel
         await subscriber.SubscribeAsync(
-         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL),
+         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP),
          (redisChannel, message) =>
          {
              if (!channel.Writer.TryWrite(message))
@@ -183,14 +183,14 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         }
         finally
         {
-            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL));
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP));
         }
     }
 
     public async Task<GetRoomStateResponseDto> GetRoomStateAsync(GetRoomStateRequestDto getRoomStateRequestDto)
     {
         // 1. Get Key 
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{getRoomStateRequestDto.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{getRoomStateRequestDto.VRLearningSessionId}";
         RedisResult redisJson = await _database.ExecuteAsync("JSON.GET", sessionKey);
 
         // 2. If not found, then throw not found exception

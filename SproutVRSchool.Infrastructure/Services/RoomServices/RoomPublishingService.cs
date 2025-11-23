@@ -91,7 +91,7 @@ public class RoomPublishingService : IRoomPublishingService
 
             // 4. Publish to the Desktop channel
             await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_DESKTOP_CHANNEL),
+                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP),
                 redisEvent);
 
             _logger.LogInformation("Published to Desktop Channel: {Event}", redisEvent);
@@ -117,7 +117,7 @@ public class RoomPublishingService : IRoomPublishingService
 
             // 3. Publish to the VR channel
             await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_NOTIFY_EVENTS_TO_VR_CHANNEL),
+                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR),
                 redisEvent);
 
             _logger.LogInformation("Published to VR Channel: {Event}", redisEvent);

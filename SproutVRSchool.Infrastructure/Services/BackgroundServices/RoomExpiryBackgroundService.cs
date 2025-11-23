@@ -64,12 +64,12 @@ public class RoomExpiryBackgroundService : BackgroundService
             await Task.Delay(AppCts.Redis.INACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS, stoppingToken);
 
             using IServiceScope scope = _serviceProvider.CreateScope();
-            RedisValue[] activeSessionIds = await _database.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE);
+            RedisValue[] activeSessionIds = await _database.SetMembersAsync(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE_IDS);
 
             // 2. Iterate over all member in the active lists
             foreach (RedisValue vrLearningSessionId in activeSessionIds)
             {
-                string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
+                string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSessionId}";
                 RedisResult sessionJson = await _database.JSON().GetAsync(sessionKey);
 
                 // If the object is null then just continue processing next active id
@@ -101,8 +101,8 @@ public class RoomExpiryBackgroundService : BackgroundService
                         ITransaction transaction = _database.CreateTransaction();
                         _ = transaction.ExecuteAsync("JSON.SET", sessionKey, "$.Status", JsonSerializer.Serialize(ModelVRLearningSessionStatus.Completed, _jsonOptions));
                         _ = transaction.SetMoveAsync(
-                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE,
-                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE,
+                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_ACTIVE_IDS,
+                            AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_INACTIVE_IDS,
                             vrLearningSessionId
                         );
                         return await transaction.ExecuteAsync();

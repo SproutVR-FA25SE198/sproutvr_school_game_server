@@ -13,10 +13,10 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
-COPY ["SproutVRSchool.Infrastructure/SproutVRSchool.Infrastructure.csproj", "SproutVRSchool.Infrastructure/"]
-COPY ["SproutVRSchool.Presentation/SproutVRSchool.Presentation.csproj", "SproutVRSchool.Presentation/"]
-COPY ["SproutVRSchool.Application/SproutVRSchool.Application.csproj", "SproutVRSchool.Application/"]
 COPY ["SproutVRSchool.Domain/SproutVRSchool.Domain.csproj", "SproutVRSchool.Domain/"]
+COPY ["SproutVRSchool.Infrastructure/SproutVRSchool.Infrastructure.csproj", "SproutVRSchool.Infrastructure/"]
+COPY ["SproutVRSchool.Application/SproutVRSchool.Application.csproj", "SproutVRSchool.Application/"]
+COPY ["SproutVRSchool.Presentation/SproutVRSchool.Presentation.csproj", "SproutVRSchool.Presentation/"]
 
 RUN dotnet restore "./SproutVRSchool.Presentation/SproutVRSchool.Presentation.csproj"
 COPY . .
