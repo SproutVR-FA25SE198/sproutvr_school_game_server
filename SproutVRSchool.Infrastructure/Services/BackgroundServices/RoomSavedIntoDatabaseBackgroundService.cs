@@ -158,8 +158,8 @@ public class RoomSavedIntoDatabaseBackgroundService : BackgroundService
             uow.Repository<VRLearningSession>().Add(newVrLearningSession);
 
             // 4. Save into VR Device Session Summary
-            // - Only add into the database for those device is connected, don't add disconnected device
-            IEnumerable<ModelVRDevice> connectedDevices = modelVRLearningSession.Devices.Values.Where(d => d.Status == ModelVRDeviceStatus.Connected);
+            // - Only add into the database for those device is connected or even disconnected but already joined the room
+            IEnumerable<ModelVRDevice> connectedDevices = modelVRLearningSession.Devices.Values.Where(d => d.IsAlreadyJoined);
 
             foreach (ModelVRDevice modelVrDevice in connectedDevices)
             {
