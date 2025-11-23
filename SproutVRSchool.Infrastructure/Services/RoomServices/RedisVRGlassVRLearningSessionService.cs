@@ -69,7 +69,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
 
         // Reuse the vr learning session object from the validator, if all passing
         ModelVRLearningSession vrLearningSession = validation.ModelVRLearningSession!;
-        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSession.VRLearningSessionId}";
+        string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSession.VRLearningSessionId}";
 
         // 3. Update parallely the device info after passing all validation and connecting to the server
         ITransaction transaction = _database.CreateTransaction();
@@ -102,7 +102,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
 
     public Task PublishTaskUpdateToStreamAsync(PublishTaskUpdateRequestDto publishTaskUpdateRequestDto)
     {
-        string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAM_TASK_UPDATED_EVENTS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
+        string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAMS_TASK_UPDATED_EVENTS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
 
         var eventPayload = new NameValueEntry[]
         {
@@ -128,7 +128,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         {
 
             // 1. Retrieve the device path
-            string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS}:{vrLearningSessionId}";
+            string sessionKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STATE}:{vrLearningSessionId}";
             string deviceRedisPath = $"$.Devices['{vrDeviceSerialNumber}']";
 
             // 2. Update Status to Disconnected
