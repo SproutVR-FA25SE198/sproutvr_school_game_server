@@ -74,6 +74,7 @@ public class IdentityDbContextSeeder(
     {
         string? adminUserName = configuration["SeedingSettings:DefaultAdminUser:UserName"];
         string? adminPassword = configuration["SeedingSettings:DefaultAdminUser:Password"] ?? "000000";
+        string? adminOrganizationId = configuration["SeedingSettings:DefaultAdminUser:OrganizationId"];
 
         if (string.IsNullOrEmpty(adminUserName) || await userManager.FindByEmailAsync(adminUserName) != null)
         {
@@ -87,6 +88,7 @@ public class IdentityDbContextSeeder(
             Email = adminUserName,
             FirstName = "Râu",
             LastName = "Vũ Thị",
+            OrganizationId = Guid.Parse(adminOrganizationId!),
             Status = UserAccountStatus.Active,
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow
