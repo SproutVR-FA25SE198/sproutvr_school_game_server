@@ -25,9 +25,9 @@ internal sealed class RedisTeacherVRLearningSessionService
     : ITeacherVRLearningSessionService
 {
     private readonly IDatabase _database;
-    private readonly ICodeGeneratorService _codeGenerator;
+    private readonly IRoomCodeGeneratorService _codeGenerator;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IServerPublishingService _serverPublishingService;
+    private readonly IRoomPublishingService _serverPublishingService;
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
@@ -37,10 +37,10 @@ internal sealed class RedisTeacherVRLearningSessionService
     // ===============================
 
     public RedisTeacherVRLearningSessionService(
-        ICodeGeneratorService codeGenerator,
+        IRoomCodeGeneratorService codeGenerator,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
-        IServerPublishingService serverPublishingService,
+        IRoomPublishingService serverPublishingService,
         IUnitOfWork unitOfWork,
         ResiliencePipelineProvider<string> resiliencePipelineProvider
         )

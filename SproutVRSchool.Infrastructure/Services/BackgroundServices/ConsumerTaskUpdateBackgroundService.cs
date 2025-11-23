@@ -74,7 +74,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
                     }
                 }
 
-                // 3. Stop Worker Thread for VrLearningSession that are no longer active
+                // 3. Stop Worker k for VrLearningSession that are no longer active
                 var stoppedVrLearningSessions = _activeVrLearningSessionsTasks.Keys.Except(activeSessionIds).ToList();
                 foreach (string stoppedId in stoppedVrLearningSessions)
                 {
@@ -216,7 +216,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
         if (isSuccess)
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
-            IServerPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IServerPublishingService>();
+            IRoomPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IRoomPublishingService>();
 
             await _serverPublishingService.PublishTaskUpdatedAsync(vrLearningSessionId, new TaskUpdatedDto()
             {

@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
 
-public interface IServerPublishingService
+public interface IRoomPublishingService
 {
     // ===============================
     // === Desktop Notifications 

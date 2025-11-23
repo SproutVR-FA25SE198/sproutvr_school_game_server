@@ -1,4 +1,5 @@
-﻿using SproutVRSchool.Application.RequestHandlers.Authorized.VRLearningSessions.Queries.SearchVRLearningSessions;
+﻿using Microsoft.EntityFrameworkCore;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRLearningSessions.Queries.SearchVRLearningSessions;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.VRLearningSessions;
 
@@ -67,7 +68,11 @@ internal sealed class VRLearningSessionsSpecification : BaseSpecification<VRLear
         // Specification to get a single item by ID, with its relations
         AddInclude(x => x.VRLesson);
         AddInclude(x => x.Teacher);
+
         AddInclude(x => x.VRDeviceSessionSummaries);
+        AddThenInclude(x => x.Include(a => a.VRDeviceSessionSummaries).ThenInclude(b => b.VRDevice));
+
         AddInclude(x => x.VRDeviceTaskProgresses);
+        AddThenInclude(x => x.Include(a => a.VRDeviceTaskProgresses).ThenInclude(b => b.VRTask));
     }
 }

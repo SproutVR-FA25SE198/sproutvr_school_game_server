@@ -111,7 +111,7 @@ public class RoomExpiryBackgroundService : BackgroundService
                     // 5. Is success, then publishing events to Desktop and VRDevices
                     if (isSuccess)
                     {
-                        IServerPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IServerPublishingService>();
+                        IRoomPublishingService _serverPublishingService = scope.ServiceProvider.GetRequiredService<IRoomPublishingService>();
 
                         // 5.1. Publish to VR Devices ENDSIGNAL event on VR Device Channel
                         await _serverPublishingService.PublishEndSessionAsync(

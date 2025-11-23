@@ -220,9 +220,9 @@ public static partial class ServiceCollectionExtensions
         service.AddScoped<ITeacherVRLearningSessionStateService, RedisTeacherVRLearningSessionStateService>();
         service.AddScoped<ITeacherVRLearningSessionService, RedisTeacherVRLearningSessionService>();
         service.AddScoped<IVRGlassVRLearningSessionService, RedisVRGlassVRLearningSessionService>();
-        service.AddScoped<IServerPublishingService, ServerPublishingService>();
-        service.AddScoped<IVRLearningSessionValidator, RoomValidator>();
-        service.AddSingleton<ICodeGeneratorService, CodeGenerator>();
+        service.AddScoped<IRoomPublishingService, RoomPublishingService>();
+        service.AddScoped<IRoomValidator, RoomValidator>();
+        service.AddSingleton<IRoomCodeGeneratorService, RoomCodeGenerator>();
     }
 
     /// <summary>
