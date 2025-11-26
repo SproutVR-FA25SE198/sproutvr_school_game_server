@@ -12,6 +12,7 @@ using SproutVRSchool.Domain.Entities.MasterSubjects;
 using SproutVRSchool.Domain.Entities.ObjectActivityTypes;
 using SproutVRSchool.Domain.Entities.ObjectLocations;
 using SproutVRSchool.Domain.Entities.Subjects;
+using SproutVRSchool.Domain.Entities.SystemSettings;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 using SproutVRSchool.Domain.Entities.VRDevices;
 using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
@@ -44,6 +45,7 @@ public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserA
     public DbSet<VRLearningSession> VRLearningSessions { get; set; }
     public DbSet<VRLesson> VRLessons { get; set; }
     public DbSet<VRTask> VRTasks { get; set; }
+    public DbSet<SystemSetting> SystemSettings { get; set; }
 
     // Identity
     public DbSet<UserAccount> UserAccounts { get; set; }
