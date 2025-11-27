@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SproutVRSchool.Application.Abstractions.AIServices;
 using SproutVRSchool.Domain.Entities;
 using SproutVRSchool.Domain.Entities.Identities;
 using SproutVRSchool.Domain.Entities.Lessons;
@@ -18,38 +19,57 @@ using SproutVRSchool.Infrastructure.Data;
 
 namespace SproutVRSchool.Infrastructure.Services.AIServices;
 
-#pragma warning disable CS8601 // Possible null reference assignment.
-#pragma warning disable CA2254 // Template should be a static expression
-#pragma warning disable S2629 // Logging templates should be constant
-#pragma warning disable S2325 // Methods and properties that don't access instance data should be static
-public class BigQuerySyncService
+public class BigQuerySyncService : IBigQuerySyncService
 {
+    // =================================
+    // === Fields
+    // =================================
+
     private readonly BigQueryClient _client;
     private readonly string _datasetId;
+    private string? _cachedOrgId;
+    private readonly string _projectId;
     private readonly UserManager<UserAccount> _userManager;
     private readonly ILogger<BigQuerySyncService> _logger;
-    private string _cachedOrgId;
     private readonly SchoolServerDbContext _dbContext;
+
+    // =================================
+    // === Constructors
+    // =================================
 
     public BigQuerySyncService(IConfiguration config, UserManager<UserAccount> userManager, ILogger<BigQuerySyncService> logger, SchoolServerDbContext dbContext)
     {
         _userManager = userManager;
         _logger = logger;
         _dbContext = dbContext;
+        _projectId = config["BigQuery:ProjectId"] ?? string.Empty;
+        _datasetId = config["BigQuery:DatasetId"] ?? string.Empty;
+        _client = CreateBigQueryClient(config["BigQuery:CredentialsPath"] ?? string.Empty);
+    }
 
-        string projectId = config["BigQuery:ProjectId"];
-        
-        _datasetId = config["BigQuery:DatasetId"];
+    // =================================
+    // === Methods
+    // =================================
 
-        if (!string.IsNullOrEmpty(config["BigQuery:CredentialsPath"]))
+    private BigQueryClient CreateBigQueryClient(string credentialspath)
+    {
+        try
         {
-            var credential = GoogleCredential.FromFile(config["BigQuery:CredentialsPath"]);
-            _client = BigQueryClient.Create(projectId, credential);
+            if (!string.IsNullOrEmpty(credentialspath))
+            {
+                var credential = GoogleCredential.FromFile(credentialspath);
+                return BigQueryClient.Create(_projectId, credential);
+            }
+            else
+            {
+                return BigQueryClient.Create(_projectId);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _client = BigQueryClient.Create(projectId);
+            _logger.LogError(ex, "Problem getting the key. Please add Google Credential.");
         }
+        return null;
     }
 
     private async Task<string> GetOrganizationIdAsync()
@@ -60,7 +80,6 @@ public class BigQuerySyncService
         }
 
         SchoolAdmin? admin = await _userManager.Users.OfType<SchoolAdmin>().FirstOrDefaultAsync();
-        
 
         if (admin == null)
         {
@@ -80,10 +99,14 @@ public class BigQuerySyncService
     {
         try
         {
+            if (_client == null)
+            {
+                return;
+            }
+
             string currentOrgId = await GetOrganizationIdAsync();
 
-            string syncStartMessage = $"--- BẮT ĐẦU SYNC CHO TRƯỜNG: {currentOrgId} ---";
-            _logger.LogInformation(syncStartMessage);
+            _logger.LogInformation("--- BẮT ĐẦU SYNC CHO TRƯỜNG: {CurrentOrgId} ---", currentOrgId);
 
             await SyncTableAsync<Lesson, LessonBqModel>("Lessons", "Lessons", currentOrgId,
                 e => new LessonBqModel { Id = e.Id.ToString(), Name = e.Name, Status = e.Status.ToString(), CreatedAtUtc = e.CreatedAtUtc, Description = e.Description, ResourceRelativeFilePath = e.ResourceRelativeFilePath, SubjectId = e.SubjectId.ToString(), SubjectName = e.Subject.Name, TeacherId = e.TeacherId.ToString(), UpdatedAtUtc = e.UpdatedAtUtc, OrganizationId = currentOrgId });
@@ -100,15 +123,15 @@ public class BigQuerySyncService
             await SyncTableAsync<VRDeviceTaskProgress, VRDeviceTaskProgressBqModel>("VRDeviceTaskProgresses", "VRDeviceTaskProgresses", currentOrgId,
                 e => new VRDeviceTaskProgressBqModel { Id = e.Id.ToString(), StudentName = e.StudentName, IsCompleted = e.IsCompleted, IsCorrect = e.IsCorrect, CreatedAtUtc = e.CreatedAtUtc, CompletionTimeAtUtc = e.CompletionTimeAtUtc, UpdatedAtUtc = e.UpdatedAtUtc, OrganizationId = currentOrgId, VRDeviceId = e.VRDeviceId.ToString(), VRLearningSessionId = e.VRLearningSessionId.ToString(), VRTaskId = e.VRTaskId.ToString() });
 
-            string syncEndMessage = $"--- KẾT THÚC SYNC CHO TRƯỜNG: {currentOrgId} ---";
-            _logger.LogInformation(syncEndMessage);
+            _logger.LogInformation("--- KẾT THÚC SYNC CHO TRƯỜNG: {CurrentOrgId} ---", currentOrgId);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Sync thất bại. Server này sẽ thử lại vào lần sau.");
         }
     }
-        private async Task SyncTableAsync<TEntity, TBqModel>(
+
+    private async Task SyncTableAsync<TEntity, TBqModel>(
         string dbTableName,
         string bqTableName,
         string orgId,
@@ -170,14 +193,12 @@ public class BigQuerySyncService
                 DateTimeOffset newCheckpoint = newRecords.Max(x => x.CreatedAtUtc);
                 await SaveLastSyncTimeAsync(dbTableName, newCheckpoint);
 
-                _logger.LogInformation($"[{dbTableName}] Đã sync {rows.Count} dòng mới lên BigQuery.");
+                _logger.LogInformation("[{DbTableName}] Đã sync {Count} dòng mới lên BigQuery.", dbTableName, rows.Count);
             }
         }
         catch (Exception ex)
         {
-
-            _logger.LogError(ex, $"Lỗi khi sync bảng {dbTableName}");
-
+            _logger.LogError(ex, "Lỗi khi sync bảng {DbTableName}", dbTableName);
         }
     }
 
@@ -227,8 +248,4 @@ public class BigQuerySyncService
         await _dbContext.SaveChangesAsync();
     }
 }
-#pragma warning restore CS8601 // Possible null reference assignment.
-#pragma warning restore S2629 // Logging templates should be constant
-#pragma warning restore CA2254 // Template should be a static expression
-#pragma warning restore S2325 // Methods and properties that don't access instance data should be static
 

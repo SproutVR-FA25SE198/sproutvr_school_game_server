@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.BigQuery.V2;
 
 namespace SproutVRSchool.Domain.Models.BigQueryModels;
+
 public class VRLessonBqModel : BaseBqModel
 {
     public string Id { get; set; }
@@ -9,7 +10,7 @@ public class VRLessonBqModel : BaseBqModel
     public string Name { get; set; }
     public string Description { get; set; }
     public string MaxDuration { get; set; }
-    public string PresetJsonRelativeFilePath { get; set; }
+    public string? PresetJsonRelativeFilePath { get; set; }
     public string Status { get; set; }
 
     public override BigQueryInsertRow ToBigQueryRow()
@@ -21,7 +22,7 @@ public class VRLessonBqModel : BaseBqModel
         row["Name"] = Name;
         row["Description"] = Description;
         row["MaxDuration"] = MaxDuration;
-        row["PresetJsonRelativeFilePath"] = PresetJsonRelativeFilePath;
+        row["PresetJsonRelativeFilePath"] = PresetJsonRelativeFilePath ?? string.Empty;
         row["Status"] = Status;
         row["CreatedAtUtc"] = CreatedAtUtc;
         row["UpdatedAtUtc"] = UpdatedAtUtc;

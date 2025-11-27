@@ -11,6 +11,7 @@ using OfficeOpenXml;
 using Polly;
 using Polly.Retry;
 using SproutVRSchool.Application.Abstractions.AccountServices;
+using SproutVRSchool.Application.Abstractions.AIServices;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Application.Abstractions.FileServices;
@@ -28,10 +29,11 @@ using SproutVRSchool.Infrastructure.Data.Seeders;
 using SproutVRSchool.Infrastructure.Repositories;
 using SproutVRSchool.Infrastructure.Services.AccountServices;
 using SproutVRSchool.Infrastructure.Services.AIServices;
-using SproutVRSchool.Infrastructure.Services.BackgroundServices;
+using SproutVRSchool.Infrastructure.Services.AIServices.Workers;
 using SproutVRSchool.Infrastructure.Services.Clock;
 using SproutVRSchool.Infrastructure.Services.FileServices;
 using SproutVRSchool.Infrastructure.Services.RoomServices;
+using SproutVRSchool.Infrastructure.Services.RoomServices.Workers;
 using StackExchange.Redis;
 
 namespace SproutVRSchool.Infrastructure.Extensions;
@@ -55,8 +57,6 @@ public static partial class ServiceCollectionExtensions
         service.AddVRLearningSessionService();
 
         service.AddAIService();
-
-        service.AddBackgroundService();
 
         service.AddAccountsService(configuration);
 
@@ -225,7 +225,13 @@ public static partial class ServiceCollectionExtensions
         service.AddScoped<IVRGlassVRLearningSessionService, RedisVRGlassVRLearningSessionService>();
         service.AddScoped<IRoomPublishingService, RoomPublishingService>();
         service.AddScoped<IRoomValidator, RoomValidator>();
+
         service.AddSingleton<IRoomCodeGeneratorService, RoomCodeGenerator>();
+
+        service.AddHostedService<ConsumerTaskUpdateWorker>();
+        service.AddHostedService<RoomExpiryWorker>();
+        service.AddHostedService<RoomSavedIntoDatabaseWorker>();
+
     }
 
     /// <summary>
@@ -234,7 +240,8 @@ public static partial class ServiceCollectionExtensions
     /// <param name="service"></param>
     private static void AddAIService(this IServiceCollection service)
     {
-        service.AddScoped<BigQuerySyncService>();
+        service.AddHostedService<BigQuerySyncWorker>();
+        service.AddScoped<IBigQuerySyncService, BigQuerySyncService>();
     }
 
     /// <summary>
@@ -272,17 +279,5 @@ public static partial class ServiceCollectionExtensions
 
         // Excel File EPPlus Service
         ExcelPackage.License.SetNonCommercialPersonal(configuration.GetValue<string>("Miscs:EPPlusLicenseContext"));
-    }
-
-    /// <summary>
-    /// Add group of backgrounds to handle computational parts
-    /// </summary>
-    /// <param name="service"></param>
-    private static void AddBackgroundService(this IServiceCollection service)
-    {
-        service.AddHostedService<ConsumerTaskUpdateBackgroundService>();
-        service.AddHostedService<RoomExpiryBackgroundService>();
-        service.AddHostedService<RoomSavedIntoDatabaseBackgroundService>();
-        service.AddHostedService<BigQueryWorker>();
     }
 }

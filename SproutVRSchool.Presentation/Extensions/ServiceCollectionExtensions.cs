@@ -37,16 +37,16 @@ internal static partial class ServiceCollectionExtensions
     private static void AddCorsConfigs(
         this IServiceCollection service, IConfiguration configuration)
     {
-        string? desktopAppUrl = configuration.GetValue<string>("DesktopAppUrl");
+        string[]? desktopAppUrls = configuration.GetSection("DesktopAppUrls").Get<string[]>();
         service.AddCors(options =>
         {
             options.AddPolicy("DesktopAppPolicy", policy =>
             {
-                if (!string.IsNullOrEmpty(desktopAppUrl))
+                if (desktopAppUrls != null && desktopAppUrls.Length > 0)
                 {
                     // Configure specific origin for the desktop app, allowing headers and credentials
                     // Note: AllowCredentials requires specifying the origin(s), not using AllowAnyOrigin()
-                    policy.WithOrigins(desktopAppUrl)
+                    policy.WithOrigins(desktopAppUrls)
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .AllowCredentials();

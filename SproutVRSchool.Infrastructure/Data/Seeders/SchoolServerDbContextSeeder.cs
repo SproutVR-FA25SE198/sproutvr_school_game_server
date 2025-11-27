@@ -1,7 +1,6 @@
 ﻿using SproutVRSchool.Application.Abstractions.Data;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.ActivityTypes;
-using SproutVRSchool.Domain.Entities.Lessons;
 using SproutVRSchool.Domain.Entities.MapObjects;
 using SproutVRSchool.Domain.Entities.Maps;
 using SproutVRSchool.Domain.Entities.MasterSubjects;
@@ -10,7 +9,6 @@ using SproutVRSchool.Domain.Entities.ObjectLocations;
 using SproutVRSchool.Domain.Entities.Subjects;
 using SproutVRSchool.Domain.Entities.TaskLocations;
 using SproutVRSchool.Domain.Entities.VRDevices;
-using SproutVRSchool.Domain.Entities.VRLessons;
 
 namespace SproutVRSchool.Infrastructure.Data.Seeders;
 

@@ -14,15 +14,15 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices.Workers;
 
-public class ConsumerTaskUpdateBackgroundService : BackgroundService
+public class ConsumerTaskUpdateWorker : BackgroundService
 {
     // ===============================
     // === Fields
     // ===============================
 
-    private readonly ILogger<ConsumerTaskUpdateBackgroundService> _logger;
+    private readonly ILogger<ConsumerTaskUpdateWorker> _logger;
     private readonly IDatabase _database;
     private readonly IServiceProvider _serviceProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -34,8 +34,8 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     // === Constructors
     // ===============================
 
-    public ConsumerTaskUpdateBackgroundService(
-        ILogger<ConsumerTaskUpdateBackgroundService> logger,
+    public ConsumerTaskUpdateWorker(
+        ILogger<ConsumerTaskUpdateWorker> logger,
         IConnectionMultiplexer connectionMultiplexer,
         IServiceProvider serviceProvider,
          ResiliencePipelineProvider<string> resiliencePipelineProvider,
@@ -55,7 +55,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
     // ===============================
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("ConsumerTaskUpdateBackgroundService is starting.");
+        _logger.LogInformation("ConsumerTaskUpdateWorker is starting.");
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -92,7 +92,7 @@ public class ConsumerTaskUpdateBackgroundService : BackgroundService
             catch (Exception ex)
             {
                 // UNDONE: Add proper exception handling and logging
-                _logger.LogError(ex, "Error in ConsumerTaskUpdateBackgroundService ExecuteAsync loop.");
+                _logger.LogError(ex, "Error in ConsumerTaskUpdateWorker ExecuteAsync loop.");
                 await Task.Delay(AppCts.Redis.ACTIVE_VR_LEARNING_SESSIONS_SCAN_INTERVAL_IN_MILSECONDS, stoppingToken);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.BigQuery.V2;
 
 namespace SproutVRSchool.Domain.Models.BigQueryModels;
+
 public class VRLearningSessionBqModel : BaseBqModel
 {
     public string Id { get; set; }
@@ -14,12 +15,12 @@ public class VRLearningSessionBqModel : BaseBqModel
 
     public override BigQueryInsertRow ToBigQueryRow()
     {
-        var row = new BigQueryInsertRow(Id); 
+        var row = new BigQueryInsertRow(Id);
         row["Id"] = Id;
         row["VRLessonId"] = VRLessonId;
         row["TeacherId"] = TeacherId;
         row["ClassName"] = ClassName;
-        row["StartTimeAtUtc"] = StartTimeAtUtc; 
+        row["StartTimeAtUtc"] = StartTimeAtUtc;
         row["EndTimeAtUtc"] = EndTimeAtUtc;
         row["DurationInMinutes"] = DurationInMinutes;
         row["Status"] = Status;
