@@ -38,10 +38,7 @@ public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
     /// Seeding all data in development mode
     /// </summary>
     /// <returns></returns>
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async Task SeedDevelopmentAsync()
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-#pragma warning disable S125 // Sections of code should not be commented out
     {
         // add subsequent files to seed here
         _dataSeeder.AddRelativePath<MasterSubject>(AppCts.SeederFilePaths.MasterSubjectFilePath);
@@ -53,29 +50,19 @@ public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
         _dataSeeder.AddRelativePath<ObjectActivityType>(AppCts.SeederFilePaths.ObjectActivityTypeFilePath);
         _dataSeeder.AddRelativePath<ObjectLocation>(AppCts.SeederFilePaths.ObjectLocationFilePath);
         _dataSeeder.AddRelativePath<VRDevice>(AppCts.SeederFilePaths.VRDeviceFilePath);
-        //_dataSeeder.AddRelativePath<Lesson>(AppCts.SeederFilePaths.LessonFilePath);
-        //_dataSeeder.AddRelativePath<VRLesson>(AppCts.SeederFilePaths.VRLessonFilePath);
 
         //// seeding all tables
         await _dataSeeder.SeedAllTablesAsync();
     }
-#pragma warning restore S125 // Sections of code should not be commented out
 
     /// <summary>
     /// Seedingh data for production mode only
     /// </summary>
     /// <returns></returns>
-#pragma warning disable S4144 // Methods should not have identical implementations
     public async Task SeedProductionAsync()
-#pragma warning restore S4144 // Methods should not have identical implementations
     {
         // add subsequent files to seed here
-        _dataSeeder.AddRelativePath<MasterSubject>(AppCts.SeederFilePaths.MasterSubjectFilePath);
-        _dataSeeder.AddRelativePath<Subject>(AppCts.SeederFilePaths.SubjectFilePath);
-        _dataSeeder.AddRelativePath<ActivityType>(AppCts.SeederFilePaths.ActivityTypeFilePath);
-        _dataSeeder.AddRelativePath<VRDevice>(AppCts.SeederFilePaths.VRDeviceFilePath);
 
         // seeding all tables
-        await _dataSeeder.SeedAllTablesAsync();
     }
 }
