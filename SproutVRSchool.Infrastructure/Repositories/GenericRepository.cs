@@ -45,7 +45,7 @@ public sealed class GenericRepository<T> : IGenericRepository<T>
     /// <returns>The task result contains an item based on a specification</returns>
     public async Task<T> GetEntityBySpec(ISpecification<T> spec)
     {
-        return await ApplySpecification(spec).AsNoTracking().FirstOrDefaultAsync();
+        return await ApplySpecification(spec).AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync();
     }
 
     /// <summary>
