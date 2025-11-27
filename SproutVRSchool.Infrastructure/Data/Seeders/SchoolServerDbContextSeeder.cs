@@ -54,15 +54,4 @@ public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
         //// seeding all tables
         await _dataSeeder.SeedAllTablesAsync();
     }
-
-    /// <summary>
-    /// Seedingh data for production mode only
-    /// </summary>
-    /// <returns></returns>
-    public async Task SeedProductionAsync()
-    {
-        // add subsequent files to seed here
-        await _dataSeeder.SeedAllTablesAsync();
-        // seeding all tables
-    }
 }

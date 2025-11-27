@@ -53,11 +53,9 @@ internal static class ApplicationBuilderExtensions
     public static async Task ApplySeedingProduction(this IApplicationBuilder app)
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
-        ISchoolServerDbContextSeeder seeder = scope.ServiceProvider.GetRequiredService<ISchoolServerDbContextSeeder>();
         IIdentityDbContextSeeder identitySeeder = scope.ServiceProvider.GetRequiredService<IIdentityDbContextSeeder>();
 
         await identitySeeder.SeedProductionAsync();
-        await seeder.SeedProductionAsync();
     }
 
     /// <summary>
