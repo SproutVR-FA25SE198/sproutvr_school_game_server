@@ -4,6 +4,7 @@
     <File Path=".editorconfig" />
     <File Path=".github/workflows/dev_cd_to_dockerhub.yaml" />
     <File Path=".github/workflows/dev_ci.yaml" />
+    <File Path=".github/workflows/prod_cd_to_dockerhub.yaml" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="docker-compose.prod.yml" />
