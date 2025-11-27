@@ -13,18 +13,18 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices.Workers;
 
 /// <summary>
 /// Run and checking endtime date for every 5s and move from active list to inactive list
 /// </summary>
-public class RoomExpiryBackgroundService : BackgroundService
+public class RoomExpiryWorker : BackgroundService
 {
     // ===============================
     // === Fields
     // ===============================
 
-    private readonly ILogger<RoomExpiryBackgroundService> _logger;
+    private readonly ILogger<RoomExpiryWorker> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IDatabase _database;
     private readonly JsonSerializerOptions _jsonOptions;
@@ -35,8 +35,8 @@ public class RoomExpiryBackgroundService : BackgroundService
     // === Constructors
     // ===============================
 
-    public RoomExpiryBackgroundService(
-        ILogger<RoomExpiryBackgroundService> logger,
+    public RoomExpiryWorker(
+        ILogger<RoomExpiryWorker> logger,
         IServiceProvider serviceProvider,
         ResiliencePipelineProvider<string> resiliencePipelineProvider,
         IDateTimeProvider dateTimeProvider,
@@ -56,7 +56,7 @@ public class RoomExpiryBackgroundService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("RoomExpiryBackgroundService is starting.");
+        _logger.LogInformation("RoomExpiryWorker is starting.");
 
         while (!stoppingToken.IsCancellationRequested)
         {

@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.BigQuery.V2;
 
 namespace SproutVRSchool.Domain.Models.BigQueryModels;
+
 public class VRDeviceTaskProgressBqModel : BaseBqModel
 {
     public string Id { get; set; }

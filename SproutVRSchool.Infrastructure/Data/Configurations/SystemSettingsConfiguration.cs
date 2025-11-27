@@ -4,6 +4,7 @@ using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Entities.SystemSettings;
 
 namespace SproutVRSchool.Infrastructure.Data.Configurations;
+
 public sealed class SystemSettingsConfiguration : IEntityTypeConfiguration<SystemSetting>
 {
     public void Configure(EntityTypeBuilder<SystemSetting> builder)
@@ -14,10 +15,10 @@ public sealed class SystemSettingsConfiguration : IEntityTypeConfiguration<Syste
 
         builder.Property(x => x.Key)
             .HasMaxLength(100)
-            .IsRequired(); 
+            .IsRequired();
 
         builder.Property(x => x.Value)
-            .IsRequired(false); 
+            .IsRequired(false);
 
         builder.Property(x => x.Description)
             .HasMaxLength(255)

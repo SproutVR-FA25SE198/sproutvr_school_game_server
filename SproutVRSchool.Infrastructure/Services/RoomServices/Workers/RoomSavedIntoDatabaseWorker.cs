@@ -13,18 +13,17 @@ using SproutVRSchool.Domain.Entities.VRDeviceSessionSummaries;
 using SproutVRSchool.Domain.Entities.VRDeviceTaskProgresses;
 using SproutVRSchool.Domain.Entities.VRLearningSessions;
 using SproutVRSchool.Domain.Models.VRLearningSession;
-using SproutVRSchool.Infrastructure.Services.RoomServices;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Services.BackgroundServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices.Workers;
 
-public class RoomSavedIntoDatabaseBackgroundService : BackgroundService
+public class RoomSavedIntoDatabaseWorker : BackgroundService
 {
     // =============================
     // === Constructors
     // =============================
 
-    private readonly ILogger<RoomSavedIntoDatabaseBackgroundService> _logger;
+    private readonly ILogger<RoomSavedIntoDatabaseWorker> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IDatabase _database;
     private readonly JsonSerializerOptions _jsonOptions;
@@ -33,8 +32,8 @@ public class RoomSavedIntoDatabaseBackgroundService : BackgroundService
     // === Fields
     // =============================
 
-    public RoomSavedIntoDatabaseBackgroundService(
-        ILogger<RoomSavedIntoDatabaseBackgroundService> logger,
+    public RoomSavedIntoDatabaseWorker(
+        ILogger<RoomSavedIntoDatabaseWorker> logger,
         IServiceProvider serviceProvider,
         IConnectionMultiplexer connectionMultiplexer)
     {

@@ -23,6 +23,9 @@ reated by https://www.toptal.com/developers/gitignore/api/visualstudio,aspnetcor
 *.sln.docstates
 
 
+# Secrets
+secrets/
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 
@@ -1056,8 +1059,7 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,aspnetcore
 
 
-
-
+/docker-compose.prod.yml
 /docker-compose.dcproj
 /docker-compose.yml
 /SproutVRSchool.Presentation/appsettings.json
