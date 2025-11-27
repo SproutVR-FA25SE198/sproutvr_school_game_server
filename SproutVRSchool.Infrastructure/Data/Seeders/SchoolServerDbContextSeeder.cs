@@ -62,7 +62,7 @@ public class SchoolServerDbContextSeeder : ISchoolServerDbContextSeeder
     public async Task SeedProductionAsync()
     {
         // add subsequent files to seed here
-
+        await _dataSeeder.SeedAllTablesAsync();
         // seeding all tables
     }
 }
