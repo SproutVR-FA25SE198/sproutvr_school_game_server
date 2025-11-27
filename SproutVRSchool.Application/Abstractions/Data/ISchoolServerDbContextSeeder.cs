@@ -3,5 +3,4 @@
 public interface ISchoolServerDbContextSeeder
 {
     Task SeedDevelopmentAsync();
-    Task SeedProductionAsync();
 }
