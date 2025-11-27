@@ -1,0 +1,173 @@
+﻿[
+  {
+    "Id": "b0000001-0000-0000-0000-000000000001",
+    "MapId": "a0000001-0000-0000-0000-000000000001",
+    "Name": "Khối trụ tròn",
+    "ObjectCode": "trutron",
+    "ImageUrl": "https://example.com/images/object-cylinder.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000002",
+    "MapId": "a0000001-0000-0000-0000-000000000001",
+    "Name": "Khối nón",
+    "ObjectCode": "non",
+    "ImageUrl": "https://example.com/images/object-cone.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000003",
+    "MapId": "a0000001-0000-0000-0000-000000000001",
+    "Name": "Khối cầu",
+    "ObjectCode": "cau",
+    "ImageUrl": "https://example.com/images/object-sphere.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Cốc H2SO4 ko nhãn + quỳ tím đỏ màu",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Fbeaker_h2so4.png?alt=media",
+    "ObjectCode": "beaker_h2so4",
+    "Id": "b0000001-0000-0000-0000-000000000004",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Cốc H2O ko nhãn + quỳ tím",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Fbeaker_h2o.png?alt=media",
+    "ObjectCode": "beaker_h2o",
+    "Id": "b0000001-0000-0000-0000-000000000005",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Cốc NaOH ko nhãn + quỳ tím xanh biển",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Fbeaker_naoh.png?alt=media",
+    "ObjectCode": "beaker_naoh",
+    "Id": "b0000001-0000-0000-0000-000000000006",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Ống chứa dung dịch CuSO4 màu xanh lam",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Ftube_cuso4.png?alt=media",
+    "ObjectCode": "tube_cuso4",
+    "Id": "b0000001-0000-0000-0000-000000000007",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Ống chứa dung dịch H2SO4 và các mẩu Cu",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Ftube_h2so4_cu.png?alt=media",
+    "ObjectCode": "tube_h2so4_cu",
+    "Id": "b0000001-0000-0000-0000-000000000008",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Ống chứa nước và đinh sắt bị rỉ, có vụn nâu đỏ",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Ftube_rusty.png?alt=media",
+    "ObjectCode": "tube_rusty",
+    "Id": "b0000001-0000-0000-0000-000000000009",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Ống chứa nước và đinh sắt quấn dây kẽm, có kết tủa keo trắng",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Ftube_zinc.png?alt=media",
+    "ObjectCode": "tube_zinc",
+    "Id": "b0000001-0000-0000-0000-000000000010",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Ống chứa dung dịch CuSO4 bị nhạt màu, có đinh sắt bám Cu màu nâu đỏ",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fobjects%2Ftube_cuso4_nail.png?alt=media",
+    "ObjectCode": "tube_cuso4_nail",
+    "Id": "b0000001-0000-0000-0000-000000000011",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000012",
+    "MapId": "a0000001-0000-0000-0000-000000000004",
+    "Name": "Mô hình ty thể",
+    "ObjectCode": "tythe",
+    "ImageUrl": "https://example.com/images/object-mitochondria-model.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000013",
+    "MapId": "a0000001-0000-0000-0000-000000000004",
+    "Name": "Mô hình lưới nội chất",
+    "ObjectCode": "luoinocthat",
+    "ImageUrl": "https://example.com/images/object-endoplasmic-reticulum-model.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000014",
+    "MapId": "a0000001-0000-0000-0000-000000000005",
+    "Name": "Mô hình tam giác vuông",
+    "ObjectCode": "tamgiacvuong",
+    "ImageUrl": "https://example.com/images/object-right-triangle-model.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000015",
+    "MapId": "a0000001-0000-0000-0000-000000000005",
+    "Name": "Mô hình tam giác cân",
+    "ObjectCode": "tamgiaccan",
+    "ImageUrl": "https://example.com/images/object-isosceles-triangle-model.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000016",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Pin AA",
+    "ObjectCode": "pinaa",
+    "ImageUrl": "https://example.com/images/object-aa-battery.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000017",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Bóng đèn LED",
+    "ObjectCode": "bongdenled",
+    "ImageUrl": "https://example.com/images/object-led-bulb.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000018",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Dây dẫn điện",
+    "ObjectCode": "daydandien",
+    "ImageUrl": "https://example.com/images/object-electrical-wire.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "b0000001-0000-0000-0000-000000000019",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Công tắc",
+    "ObjectCode": "congtac",
+    "ImageUrl": "https://example.com/images/object-switch.jpg",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  }
+]

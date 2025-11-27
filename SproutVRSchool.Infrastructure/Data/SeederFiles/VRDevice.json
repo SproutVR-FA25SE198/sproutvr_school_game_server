@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "Name": "Oculus Quest 2",
+    "Status": 1,
+    "SerialNumber": "SN-001-AQ2",
+    "CreatedAtUtc": "2024-09-01T10:00:00Z",
+    "UpdatedAtUtc": "2024-09-01T10:00:00Z"
+  },
+  {
+    "Id": "b1c2d3e4-f5a6-7890-1234-567890abcde0",
+    "Name": "Oculus Quest Pro",
+    "Status": 2,
+    "SerialNumber": "SN-002-QP",
+    "CreatedAtUtc": "2024-09-15T14:30:00Z",
+    "UpdatedAtUtc": "2024-10-05T08:15:00Z"
+  },
+  {
+    "Id": "c1d2e3f4-a5b6-7890-1234-567890abcde1",
+    "Name": "Pico 4 Enterprise",
+    "Status": 0,
+    "SerialNumber": "SN-003-P4E",
+    "CreatedAtUtc": "2024-10-01T09:00:00Z",
+    "UpdatedAtUtc": "2024-10-01T09:00:00Z"
+  }
+]

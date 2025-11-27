@@ -1,0 +1,12 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "LessonId": "c3333333-3333-3333-3333-333333333333",
+    "MapId": "a0000001-0000-0000-0000-000000000001",
+    "Name": "Solar System Exploration",
+    "Description": "A guided tour of the planets in our solar system.",
+    "MaxDuration": "00:45:00",
+    "PresetJsonRelativeFilePath": "",
+    "Status": "Active"
+  }
+]

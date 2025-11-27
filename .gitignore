@@ -23,6 +23,9 @@ reated by https://www.toptal.com/developers/gitignore/api/visualstudio,aspnetcor
 *.sln.docstates
 
 
+# Secrets
+secrets/
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 
@@ -307,7 +310,6 @@ publish/
 *.pubxml
 
 *.publishproj
-
 
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to
@@ -1057,7 +1059,11 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,aspnetcore
 
 
-
-
+/docker-compose.prod.yml
 /docker-compose.dcproj
 /docker-compose.yml
+/SproutVRSchool.Presentation/appsettings.json
+/SproutVRSchool.Presentation/appsettings.json
+/SproutVRSchool.Presentation/appsettings.Development.json
+/SproutVRSchool.Presentation/appsettings.Development.json
+/SproutVRSchool.Presentation/sproutvr-bigquery.json

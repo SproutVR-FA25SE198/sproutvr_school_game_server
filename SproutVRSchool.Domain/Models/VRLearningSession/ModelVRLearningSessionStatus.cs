@@ -1,0 +1,9 @@
+﻿namespace SproutVRSchool.Domain.Models.VRLearningSession;
+
+public enum ModelVRLearningSessionStatus
+{
+    Pending = 1,
+    Active = 2,
+    Completed = 3,
+    Cancelled = 4
+}

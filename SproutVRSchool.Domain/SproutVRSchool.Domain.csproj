@@ -1,3 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.BigQuery.V2" Version="3.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.9" />
+  </ItemGroup>
 </Project>

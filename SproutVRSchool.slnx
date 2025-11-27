@@ -1,8 +1,13 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/dev_cd_to_dockerhub.yaml" />
+    <File Path=".github/workflows/dev_ci.yaml" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
+    <File Path="docker-compose.prod.yml" />
+    <File Path="docker-compose.yml" />
   </Folder>
   <Project Path="SproutVRSchool.Application/SproutVRSchool.Application.csproj" />
   <Project Path="SproutVRSchool.Domain/SproutVRSchool.Domain.csproj" />

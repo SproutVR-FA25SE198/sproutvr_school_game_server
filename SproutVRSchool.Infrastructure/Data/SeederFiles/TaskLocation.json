@@ -1,0 +1,184 @@
+﻿[
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên trái bàn 1",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_1.png?alt=media",
+    "LocationCode": "map_lab_1_loc_1",
+    "Id": "c0000001-0000-0000-0000-000000000004"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên phải bàn 1",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_2.png?alt=media",
+    "LocationCode": "map_lab_1_loc_2",
+    "Id": "c0000001-0000-0000-0000-000000000005"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên trái bàn 2",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_3.png?alt=media",
+    "LocationCode": "map_lab_1_loc_3",
+    "Id": "c0000001-0000-0000-0000-000000000006"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên phải bàn 2",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_4.png?alt=media",
+    "LocationCode": "map_lab_1_loc_4",
+    "Id": "c0000001-0000-0000-0000-000000000007"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên trái bàn 3",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_5.png?alt=media",
+    "LocationCode": "map_lab_1_loc_5",
+    "Id": "c0000001-0000-0000-0000-000000000008"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên phải bàn 3",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_6.png?alt=media",
+    "LocationCode": "map_lab_1_loc_6",
+    "Id": "c0000001-0000-0000-0000-000000000009"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên trái bàn 4",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_7.png?alt=media",
+    "LocationCode": "map_lab_1_loc_7",
+    "Id": "c0000001-0000-0000-0000-000000000010"
+  },
+  {
+    "MapId": "a0000001-0000-0000-0000-000000000002",
+    "Name": "Bên phải bàn 4",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Flocations%2Fmap_lab_1_loc_8.png?alt=media",
+    "LocationCode": "map_lab_1_loc_8",
+    "Id": "c0000001-0000-0000-0000-000000000011"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000012",
+    "MapId": "a0000001-0000-0000-0000-000000000003",
+    "Name": "Trên bàn thí nghiệm",
+    "ImageUrl": "https://example.com/images/location-lab-table.jpg",
+    "LocationCode": "1",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000013",
+    "MapId": "a0000001-0000-0000-0000-000000000003",
+    "Name": "Trong tủ hóa chất",
+    "ImageUrl": "https://example.com/images/location-chemical-cabinet.jpg",
+    "LocationCode": "2",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000014",
+    "MapId": "a0000001-0000-0000-0000-000000000003",
+    "Name": "Trên giá ống nghiệm",
+    "ImageUrl": "https://example.com/images/location-test-tube-rack.jpg",
+    "LocationCode": "3",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000015",
+    "MapId": "a0000001-0000-0000-0000-000000000003",
+    "Name": "Gần bồn rửa",
+    "ImageUrl": "https://example.com/images/location-near-sink.jpg",
+    "LocationCode": "4",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000016",
+    "MapId": "a0000001-0000-0000-0000-000000000004",
+    "Name": "Trên bàn mô hình",
+    "ImageUrl": "https://example.com/images/location-model-table.jpg",
+    "LocationCode": "1",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000017",
+    "MapId": "a0000001-0000-0000-0000-000000000004",
+    "Name": "Trong hộp mô hình",
+    "ImageUrl": "https://example.com/images/location-model-box.jpg",
+    "LocationCode": "2",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000018",
+    "MapId": "a0000001-0000-0000-0000-000000000004",
+    "Name": "Trên kệ trưng bày",
+    "ImageUrl": "https://example.com/images/location-display-shelf.jpg",
+    "LocationCode": "3",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000019",
+    "MapId": "a0000001-0000-0000-0000-000000000005",
+    "Name": "Trên bàn hình học",
+    "ImageUrl": "https://example.com/images/location-geometry-table.jpg",
+    "LocationCode": "1",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000020",
+    "MapId": "a0000001-0000-0000-0000-000000000005",
+    "Name": "Góc phải bàn hình học",
+    "ImageUrl": "https://example.com/images/location-geometry-right-corner.jpg",
+    "LocationCode": "2",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000021",
+    "MapId": "a0000001-0000-0000-0000-000000000005",
+    "Name": "Góc trái bàn hình học",
+    "ImageUrl": "https://example.com/images/location-geometry-left-corner.jpg",
+    "LocationCode": "3",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000022",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Trên bàn điện học",
+    "ImageUrl": "https://example.com/images/location-electrical-table.jpg",
+    "LocationCode": "1",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000023",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Trong hộp linh kiện",
+    "ImageUrl": "https://example.com/images/location-component-box.jpg",
+    "LocationCode": "2",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000024",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Gần nguồn điện",
+    "ImageUrl": "https://example.com/images/location-near-power-source.jpg",
+    "LocationCode": "3",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "c0000001-0000-0000-0000-000000000025",
+    "MapId": "a0000001-0000-0000-0000-000000000006",
+    "Name": "Trên bảng mạch",
+    "ImageUrl": "https://example.com/images/location-circuit-board.jpg",
+    "LocationCode": "4",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  }
+]

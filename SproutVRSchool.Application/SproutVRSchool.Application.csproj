@@ -4,4 +4,25 @@
 		<ProjectReference Include="..\SproutVRSchool.Domain\SproutVRSchool.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+		<PackageReference Include="MediatR" Version="13.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Protobuf Include="Protos\learning_session.proto" GrpcServices="Server" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="RequestHandlers\Authorized\MasterSubjects\Commands\" />
+	  <Folder Include="RequestHandlers\Authorized\VRDeviceSessionSummaries\Commands\" />
+	  <Folder Include="RequestHandlers\Authorized\VRDevices\Commands\" />
+	  <Folder Include="RequestHandlers\Authorized\VRLearningSessions\Commands\" />
+	</ItemGroup>
+
 </Project>

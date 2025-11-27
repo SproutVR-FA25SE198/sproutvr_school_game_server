@@ -1,0 +1,72 @@
+﻿[
+  {
+    "Id": "a0000001-0000-0000-0000-000000000001",
+    "SubjectId": "10000001-0000-0000-0000-000000000001",
+    "Name": "Hình học không gian - Khối tròn xoay",
+    "MapCode": "MAP-01",
+    "Description": "Bản đồ học tập về các khối tròn xoay: hình trụ, hình nón, hình cầu và các tính chất của chúng",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fthumnails%2Fmap_lab_1_thumbnail.png?alt=media",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "a0000001-0000-0000-0000-000000000002",
+    "SubjectId": "10000001-0000-0000-0000-000000000002",
+    "MapCode": "map_lab_1",
+    "Name": "Phòng Lab Hóa",
+    "Description": "Chương 6 - Đại cương về kim loại",
+    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fthumnails%2Fmap_lab_1_thumbnail.png?alt=media",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active"
+  },
+  {
+    "Id": "a0000001-0000-0000-0000-000000000003",
+    "SubjectId": "20000001-0000-0000-0000-000000000001",
+    "Name": "Cơ học cơ bản",
+    "MapCode": "MAP-03",
+    "Description": "Bản đồ học tập về các khái niệm cơ học: lực, chuyển động, năng lượng",
+    "ImageUrl": "https://example.com/images/map-mechanics-10.jpg",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "a0000001-0000-0000-0000-000000000004",
+    "SubjectId": "20000001-0000-0000-0000-000000000002",
+    "Name": "Điện học và từ học",
+    "MapCode": "MAP-04",
+    "Description": "Bản đồ học tập về điện trường, từ trường và các hiện tượng điện từ",
+    "ImageUrl": "https://example.com/images/map-electromagnetism-11.jpg",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "a0000001-0000-0000-0000-000000000005",
+    "SubjectId": "30000001-0000-0000-0000-000000000001",
+    "Name": "Cấu trúc nguyên tử",
+    "MapCode": "MAP-05",
+    "Description": "Bản đồ học tập về cấu trúc nguyên tử và bảng tuần hoàn các nguyên tố",
+    "ImageUrl": "https://example.com/images/map-atomic-structure-10.jpg",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  },
+  {
+    "Id": "a0000001-0000-0000-0000-000000000006",
+    "SubjectId": "40000001-0000-0000-0000-000000000001",
+    "Name": "Tế bào và sinh học phân tử",
+    "MapCode": "MAP-06",
+    "Description": "Bản đồ học tập về cấu trúc tế bào và các quá trình sinh học phân tử",
+    "ImageUrl": "https://example.com/images/map-cell-biology-10.jpg",
+    "PreviewUrl": "https://firebasestorage.googleapis.com/v0/b/sprout-vr.firebasestorage.app/o/maps%2Fmap_lab_1%2Fpreviews%2Fmap_lab_1_preview.png?alt=media",
+    "Status": "Active",
+    "CreatedAtUtc": "2024-01-01T00:00:00Z",
+    "UpdatedAtUtc": "2024-01-01T00:00:00Z"
+  }
+]

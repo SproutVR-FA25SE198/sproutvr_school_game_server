@@ -2,6 +2,56 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
+		<PackageReference Include="EPPlus" Version="8.2.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+		<PackageReference Include="NRedisStack" Version="1.1.1" />
+		<PackageReference Include="Polly.Extensions" Version="8.6.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Data\SeederFiles\ActivityType.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\Lesson.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\MapObject.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\Map.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\MasterSubject.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\ObjectActivityType.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\ObjectLocation.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\Subject.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\TaskLocation.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\VRDevice.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\SeederFiles\VRLesson.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Data\Migrations\" />
 	</ItemGroup>
 
 </Project>
