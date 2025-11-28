@@ -61,6 +61,7 @@ public sealed class GetRoomStateResponseDto
                         deviceDto.Tasks.Select(taskDto => new TaskInfo
                         {
                             VrTaskId = taskDto.VRTaskId,
+                            TaskNumber = taskDto.TaskNumber,
                             IsCompleted = taskDto.IsCompleted,
                             IsCorrect = taskDto.IsCorrect,
                             CompletionTimeAtVietnam = taskDto.CompletionTimeAtVietnam ?? string.Empty,
@@ -71,16 +72,15 @@ public sealed class GetRoomStateResponseDto
             }
         };
     }
-
 }
 
-public sealed class TeacherInfoDto
+public sealed record TeacherInfoDto
 {
     public string TeacherId { get; init; } = default!;
     public string TeacherName { get; init; } = default!;
 }
 
-public sealed class VRLessonInfoDto
+public sealed record VRLessonInfoDto
 {
     public string VRLessonId { get; init; } = default!;
     public string Name { get; init; } = default!;
@@ -88,7 +88,7 @@ public sealed class VRLessonInfoDto
     public string PresetJsonRelativeFilePath { get; init; } = default!;
 }
 
-public sealed class DeviceInfoDto
+public sealed record DeviceInfoDto
 {
     public string VRDeviceSerialNumber { get; init; } = default!;
     public string StudentName { get; init; } = default!;
@@ -99,6 +99,7 @@ public sealed class DeviceInfoDto
 public sealed class TaskInfoDto
 {
     public string VRTaskId { get; init; } = default!;
+    public int TaskNumber { get; set; }
     public bool IsCompleted { get; init; }
     public bool IsCorrect { get; init; }
     public string? CompletionTimeAtVietnam { get; init; }

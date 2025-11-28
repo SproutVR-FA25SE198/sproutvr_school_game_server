@@ -115,6 +115,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             vrTask => new ModelTaskProgress
             {
                 VRTaskId = vrTask.Id.ToString(),
+                TaskNumber = vrTask.TaskNumber,
                 IsCompleted = false,
                 IsCorrect = false,
                 CompletionTimeAtUtc = null,
