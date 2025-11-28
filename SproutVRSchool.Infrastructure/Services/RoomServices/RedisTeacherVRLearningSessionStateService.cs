@@ -241,6 +241,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
                 Tasks = device.Tasks.Values.Select(task => new TaskInfoDto
                 {
                     VRTaskId = task.VRTaskId,
+                    TaskNumber = task.TaskNumber,
                     IsCompleted = task.IsCompleted,
                     IsCorrect = task.IsCorrect,
                     Status = task.Status.ToString(),
