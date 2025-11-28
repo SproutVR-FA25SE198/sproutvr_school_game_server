@@ -57,7 +57,9 @@ public class BigQuerySyncService : IBigQuerySyncService
         {
             if (!string.IsNullOrEmpty(credentialspath))
             {
-                var credential = GoogleCredential.FromFile(credentialspath);
+                using var stream = new FileStream(credentialspath, FileMode.Open, FileAccess.Read);
+                var raw = ServiceAccountCredential.FromServiceAccountData(stream);
+                var credential = raw.ToGoogleCredential();
                 return BigQueryClient.Create(_projectId, credential);
             }
             else
