@@ -1,4 +1,6 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Google.Api.Gax;
+using Google.Api.Gax.Grpc;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Dialogflow.Cx.V3;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Configuration;
@@ -67,9 +69,12 @@ public class ChatbotService(IConfiguration configuration) : IChatbotService
             };
         }
 
+        var callSettings = CallSettings.FromExpiration(
+            Expiration.FromTimeout(TimeSpan.FromMinutes(3))
+        );
 
         // 7. Call API
-        DetectIntentResponse response = await client.DetectIntentAsync(request);
+        DetectIntentResponse response = await client.DetectIntentAsync(request, callSettings);
 
         // 8. Handle response from AI agent
         string botReply = string.Join(" ", response.QueryResult.ResponseMessages
@@ -77,6 +82,6 @@ public class ChatbotService(IConfiguration configuration) : IChatbotService
             .SelectMany(m => m.Text.Text_));
 
         // if botReply is empty, return "..."
-        return new ChatResponseDto(){ ChatbotReply = string.IsNullOrEmpty(botReply) ? "..." : botReply };
+        return new ChatResponseDto() { ChatbotReply = string.IsNullOrEmpty(botReply) ? "..." : botReply };
     }
 }
