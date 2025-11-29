@@ -83,7 +83,7 @@ public static partial class ServiceCollectionExtensions
             .Get<string[]>()
             ?? throw new InvalidOperationException("JWT Audiences not configured");
 
-        // 2. Add
+        // 2. Add Validator for incoming JWT Token
         service.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer
@@ -119,9 +119,9 @@ public static partial class ServiceCollectionExtensions
                         Title = "Unauthorized Access",
                         Detail = context.Error switch
                         {
-                            "invalid_token" => "The token provided is invalid.",
-                            "expired_token" => "The token has expired.",
-                            _ => "You are not authorized to access this resource."
+                            "invalid_token" => "The token provided is invalid.",                // 403 Unauthorized: wrong token format
+                            "expired_token" => "The token has expired.",                        // 403 Unauthorized: expired token
+                            _ => "You are not authorized to access this resource."              // 403 Unauthorized: don't have token
                         },
                         Instance = context.Request.Path,
                         Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
@@ -129,7 +129,24 @@ public static partial class ServiceCollectionExtensions
 
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsJsonAsync(problemDetails);
-                }
+                },
+
+                OnForbidden = async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                    var problemDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status403Forbidden,
+                        Title = "Forbidden",
+                        Detail = "You do not have permission to access this resource.",         // 401 Forbidden: route teacher but using admin's token
+                        Instance = context.Request.Path,
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
+                    };
+
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsJsonAsync(problemDetails);
+                },
             };
         });
 
