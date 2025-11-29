@@ -44,6 +44,12 @@ public sealed class JwtTokenService(
             new("roles", JsonConvert.SerializeObject(roles), JsonClaimValueTypes.JsonArray),
         };
 
+        // 4.1. Add Valid Audiences
+        foreach (string aud in audiences)
+        {
+            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, aud));
+        }
+
         // 5. Create the token
         DateTimeOffset expiresAtUtc = dateTimeProvider.UtcDateTimeNow.Add(durationInMinutes);
 
@@ -51,8 +57,6 @@ public sealed class JwtTokenService(
         {
             Issuer = issuer,
             Subject = new ClaimsIdentity(claims),
-            Claims = claims.ToDictionary(c => c.Type, c => (object)c.Value),
-            Audience = string.Join(",", audiences),
             NotBefore = dateTimeProvider.UtcDateTimeNow.UtcDateTime,
             Expires = expiresAtUtc.UtcDateTime,
             SigningCredentials = creds

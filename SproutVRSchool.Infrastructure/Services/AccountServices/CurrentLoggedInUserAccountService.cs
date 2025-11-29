@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using Newtonsoft.Json;
 using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Domain.Entities.Identities;
@@ -28,15 +29,20 @@ public sealed class CurrentLoggedInUserAccountService(
     {
         get
         {
-            string? rolesJson = _user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (string.IsNullOrEmpty(rolesJson))
+            // compatible with old version using ClaimTypes.Role
+            // "roles" == ClaimTypes.Role
+            if (_user == null)
             {
                 return Array.Empty<string>();
             }
 
-            return JsonConvert.DeserializeObject<List<string>>(rolesJson) ?? new List<string>();
+            return _user.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
         }
     }
+
     public string? FirstName => _user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
 
     public string? LastName => _user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
