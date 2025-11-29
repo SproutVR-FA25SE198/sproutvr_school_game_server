@@ -38,6 +38,7 @@ internal static partial class ServiceCollectionExtensions
         this IServiceCollection service, IConfiguration configuration)
     {
         string[]? desktopAppUrls = configuration.GetSection("DesktopAppUrls").Get<string[]>();
+
         service.AddCors(options =>
         {
             options.AddPolicy("DesktopAppPolicy", policy =>

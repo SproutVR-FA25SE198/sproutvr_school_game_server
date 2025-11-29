@@ -242,6 +242,7 @@ public static partial class ServiceCollectionExtensions
     {
         service.AddHostedService<BigQuerySyncWorker>();
         service.AddScoped<IBigQuerySyncService, BigQuerySyncService>();
+        service.AddScoped<IChatbotService, ChatbotService>();
     }
 
     /// <summary>
