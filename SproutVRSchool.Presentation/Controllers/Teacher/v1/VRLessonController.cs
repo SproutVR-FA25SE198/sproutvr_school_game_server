@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
@@ -7,6 +8,7 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Teacher.v1;
 
+[Authorize(Roles = AppCts.Db.ROLE_TEACHER)]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/teacher/vrlessons")]
 public class VRLessonController(IMediator mediator) : BaseApiController

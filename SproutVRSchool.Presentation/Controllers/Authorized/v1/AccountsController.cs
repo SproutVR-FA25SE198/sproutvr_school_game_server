@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.GetTeacherAccountById;
@@ -8,6 +9,7 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
+[Authorize]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/authorized/accounts")]
 public sealed class AccountsController(IMediator mediator) : BaseApiController

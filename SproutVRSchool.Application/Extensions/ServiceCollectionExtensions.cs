@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SproutVRSchool.Application.Behaviors;
 
@@ -31,7 +32,6 @@ public static partial class ServiceCollectionExtensions
                     typeof(LoggingBehavior<,>),
                     typeof(ValidationBehavior<,>)
                 ]);
-
         });
 
         // Validatiors of Fluent Validation

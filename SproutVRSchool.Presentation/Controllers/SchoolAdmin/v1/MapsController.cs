@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.AssignMapStatus;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Maps.Commands.SeedMapBundle;
@@ -7,7 +8,7 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
 
-
+[Authorize(Roles = AppCts.Db.ROLE_SCHOOL_ADMIN)]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/school-admin/maps")]
 public class MapsController(IMediator mediator) : BaseApiController

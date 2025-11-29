@@ -1,6 +1,7 @@
 ﻿
 using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.VRDevices.Commands.AssignVRDeviceStatus;
 using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.VRDevices.Commands.ImportVRDevicesFromExcel;
@@ -8,6 +9,7 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.SchoolAdmin.v1;
 
+[Authorize(Roles = AppCts.Db.ROLE_SCHOOL_ADMIN)]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/school-admin/vrdevices")]
 public sealed class VRDevicesController(IMediator mediator) : BaseApiController

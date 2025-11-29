@@ -103,6 +103,16 @@ internal sealed class RedisTeacherVRLearningSessionService
             throw new SvrResourceNotFoundException($"VR Lesson with ID '{request.VrLessonId}' not found.");
         }
 
+        // If roomDurationInMinute > maxDuration, throw back an error to the client
+        if (request.RoomDurationInMinutes > vrLesson.MaxDuration.TotalMinutes)
+        {
+            throw new Exception("Room Duration must greater than the VR Lesson Minutes");
+        }
+
+        DateTimeOffset startTimeNowAtUtc = _dateTimeProvider.UtcDateTimeNow;
+        DateTimeOffset endTimeNowAtUtc = startTimeNowAtUtc.AddMinutes(request.RoomDurationInMinutes);
+
+
         // 2. Get the list tasks related to the VRLesson from repositories
         // - Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
         // - Get the list of initial device as well
@@ -132,8 +142,7 @@ internal sealed class RedisTeacherVRLearningSessionService
                 Tasks = new ConcurrentDictionary<string, ModelTaskProgress>(taskTemplate)
             });
 
-        DateTimeOffset startTimeNowAtUtc = _dateTimeProvider.UtcDateTimeNow;
-        DateTimeOffset endTimeNowAtUtc = startTimeNowAtUtc.AddMinutes(request.RoomDurationInMinutes);
+
 
         // 3. Retry execute the activate if failed due to room code conflict
         bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
@@ -148,7 +157,7 @@ internal sealed class RedisTeacherVRLearningSessionService
             _ = transaction.StringSetAsync(
                 roomCodeKey,
                 request.LearningSessionId,
-                vrLesson.MaxDuration,
+                new TimeSpan(0, request.RoomDurationInMinutes, 0),
                 When.NotExists);
 
             // Set into the active lists, but must be in the tranasction
