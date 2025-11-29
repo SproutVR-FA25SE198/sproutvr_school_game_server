@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
@@ -8,9 +9,10 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
+[Authorize]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/authorized/vrlessons")]
-public class VRLessonsController(IMediator mediator) : BaseApiController
+public sealed class VRLessonsController(IMediator mediator) : BaseApiController
 {
     // ========================
     // === GETs

@@ -193,6 +193,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         ISubscriber subscriber = _database.Multiplexer.GetSubscriber();
         var channel = Channel.CreateUnbounded<RedisValue>();
 
+        // 1. Define 
         await subscriber.SubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR), (redisChannel, message) =>
         {
             // When a redisMessage arrives from Redis, quickly write it to the in-memory queue.
@@ -204,7 +205,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             // Get the redisMessage from in-memory channel
             await foreach (string redisMessage in channel.Reader.ReadAllAsync(cancellationToken))
             {
-                _logger.LogInformation("recived redisMessage: {Text}", redisMessage);
+                _logger.LogInformation("Recived redisMessage: {Text}", redisMessage);
 
                 // If redisMessage null, do nothing
                 (string? identifier, string? eventType, string? message, bool isEventType) redisEvent = redisMessage.DeparseRedisEventMessage();

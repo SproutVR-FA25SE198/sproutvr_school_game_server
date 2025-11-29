@@ -1,6 +1,7 @@
 ﻿
 using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRDevices.Queries.GetVRDevice;
@@ -9,6 +10,7 @@ using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
 
+[Authorize]
 [ApiVersion(AppCts.Api.V1)]
 [Route("api/v{version:apiVersion}/authorized/vrdevices")]
 public sealed class VRDevicesController(IMediator mediator) : BaseApiController
