@@ -50,11 +50,11 @@ app.UseExceptionHandler();
 // Static Files & Routing
 app.ApplyStaticMiddleware();
 
-// Cors
-app.UseCors("DesktopAppPolicy");
-
 // Determine endpoints
 app.UseRouting();
+
+// Cors
+app.UseCors("DesktopAppPolicy");
 
 // Authentication & Authorization
 app.UseAuthentication();
