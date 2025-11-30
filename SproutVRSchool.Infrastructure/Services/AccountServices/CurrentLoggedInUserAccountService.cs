@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
-using Newtonsoft.Json;
+﻿using System.Security.Claims;
 using SproutVRSchool.Application.Abstractions.AccountServices;
 using SproutVRSchool.Domain.Entities.Identities;
 

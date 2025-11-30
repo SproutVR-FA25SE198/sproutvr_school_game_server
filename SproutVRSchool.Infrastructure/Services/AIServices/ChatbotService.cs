@@ -8,6 +8,7 @@ using SproutVRSchool.Application.Abstractions.AIServices;
 using SproutVRSchool.Application.RequestHandlers.Authorized.AIChatbot.Commands;
 
 namespace SproutVRSchool.Infrastructure.Services.AIServices;
+
 public class ChatbotService(IConfiguration configuration) : IChatbotService
 {
     public async Task<ChatResponseDto> Chat(string chatMessage, Guid userId, string? organizationId)

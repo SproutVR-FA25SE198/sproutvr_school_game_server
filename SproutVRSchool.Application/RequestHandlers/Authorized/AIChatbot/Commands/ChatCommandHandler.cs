@@ -3,7 +3,8 @@ using SproutVRSchool.Application.Abstractions.AIServices;
 using SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
 
 namespace SproutVRSchool.Application.RequestHandlers.Authorized.AIChatbot.Commands;
-public class ChatCommandHandler : IRequestHandler<ChatCommand, ChatResponseDto> 
+
+public class ChatCommandHandler : IRequestHandler<ChatCommand, ChatResponseDto>
 {
     private readonly IChatbotService _chatbotService;
     private readonly IMediator _mediator;
