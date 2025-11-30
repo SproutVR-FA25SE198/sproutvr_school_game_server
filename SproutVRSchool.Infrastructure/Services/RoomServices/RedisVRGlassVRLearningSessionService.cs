@@ -5,6 +5,7 @@ using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
@@ -27,6 +28,7 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
     private readonly ILocalStorageService _localStorageService;
     private readonly IRoomValidator _validator;
     private readonly IRoomPublishingService _serverPublishingService;
+    private readonly IRoomStreamNameService _roomStreamNameService;
     private readonly ResiliencePipelineProvider<string> _resiliencePipelineProvider;
 
     // ===============================
@@ -38,11 +40,13 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
         IDateTimeProvider dateTimeProvider,
         ILocalStorageService localStorageService,
         IRoomPublishingService serverPublishingService,
+        IRoomStreamNameService roomStreamNameService,
         ResiliencePipelineProvider<string> resiliencePipelineProvider,
         IRoomValidator validator)
     {
         _database = connectionMultiplexer.GetDatabase();
         _serverPublishingService = serverPublishingService;
+        _roomStreamNameService = roomStreamNameService;
         _dateTimeProvider = dateTimeProvider;
         _localStorageService = localStorageService;
         _resiliencePipelineProvider = resiliencePipelineProvider;
@@ -102,7 +106,8 @@ public sealed class RedisVRGlassVRLearningSessionService : IVRGlassVRLearningSes
 
     public Task PublishTaskUpdateToStreamAsync(PublishTaskUpdateRequestDto publishTaskUpdateRequestDto)
     {
-        string streamKey = $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAMS_TASK_UPDATED_EVENTS}:{publishTaskUpdateRequestDto.VrLearningSessionId}";
+        // 1. Add Task Update Events into the stream
+        string streamKey = _roomStreamNameService.GetTaskUpdatedStreamName(publishTaskUpdateRequestDto.VrLearningSessionId);
 
         var eventPayload = new NameValueEntry[]
         {

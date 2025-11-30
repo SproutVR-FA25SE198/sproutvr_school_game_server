@@ -7,7 +7,7 @@ using NRedisStack.RedisStackCommands;
 using Polly;
 using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
-using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Domain;
 using SproutVRSchool.Domain.Models.VRLearningSession;

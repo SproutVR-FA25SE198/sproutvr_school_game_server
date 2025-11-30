@@ -2,6 +2,7 @@
 using Grpc.Core;
 using LearningSession.V1;
 using SproutVRSchool.Application.Abstractions.Clock;
+using SproutVRSchool.Application.Abstractions.RoomServices.PubSub;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.VRGlassSession.Dtos;
 using SproutVRSchool.Application.Extensions;
@@ -19,6 +20,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
 
     private readonly IVRGlassVRLearningSessionService _vrGlassVRLearningSessionService;
     private readonly IDatabase _database;
+    private readonly IRoomChanneNameService _roomChanneNameService;
     private readonly ILogger<GrpcVRGlassVRLearningSessionService> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
 
@@ -30,9 +32,11 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         ILogger<GrpcVRGlassVRLearningSessionService> logger,
         IConnectionMultiplexer connectionMultiplexer,
         IDateTimeProvider dateTimeProvider,
+        IRoomChanneNameService roomChanneNameService,
         IVRGlassVRLearningSessionService vrGlassVRLearningSessionService)
     {
         _vrGlassVRLearningSessionService = vrGlassVRLearningSessionService;
+        _roomChanneNameService = roomChanneNameService;
         _logger = logger;
         _dateTimeProvider = dateTimeProvider;
         _database = connectionMultiplexer.GetDatabase();
@@ -58,7 +62,6 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         string vrLearningSessionId = null;
         string deviceSerialNumber = null;
 
-
         // Get the information on the first message, but not skip it since it contains important data.
         var vrLearningSessionIdGate = new TaskCompletionSource<bool>(false);
         Action<ClientToServerMessage> onFirstMessage = (message) =>
@@ -69,7 +72,6 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                 "VR device stream connected. SessionId: {SessionId}, SerialNumber: {SerialNumber}",
                 vrLearningSessionId,
                 deviceSerialNumber);
-
 
             vrLearningSessionIdGate.TrySetResult(true);
         };
@@ -145,6 +147,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
             {
                 switch (message.PayloadCase)
                 {
+                    // Normal Task Update
                     case ClientToServerMessage.PayloadOneofCase.TaskUpdate:
                         {
                             _logger.LogInformation("Received TaskUpdate from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
@@ -164,6 +167,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
                             break;
                         }
 
+                    // First Message without Payload and ClientToServerMessage without payload
                     case ClientToServerMessage.PayloadOneofCase.None:
                         {
                             _logger.LogWarning("Received redisMessage with no payload from VR device. Session ID: {SessionId}", message.VrLearningSessionId);
@@ -194,7 +198,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         var channel = Channel.CreateUnbounded<RedisValue>();
 
         // 1. Define 
-        await subscriber.SubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR), (redisChannel, message) =>
+        await subscriber.SubscribeAsync(RedisChannel.Literal(_roomChanneNameService.GetVRDeviceChannelNameOnVrLearningSessionId(vrLearningSessionId)), (redisChannel, message) =>
         {
             // When a redisMessage arrives from Redis, quickly write it to the in-memory queue.
             channel.Writer.TryWrite(message!);
@@ -255,7 +259,7 @@ public sealed class GrpcVRGlassVRLearningSessionService : VRGlassSessionManageme
         }
         finally
         {
-            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR));
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(_roomChanneNameService.GetVRDeviceChannelNameOnVrLearningSessionId(vrLearningSessionId)));
         }
     }
 }

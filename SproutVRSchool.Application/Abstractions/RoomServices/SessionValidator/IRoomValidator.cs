@@ -6,5 +6,5 @@ public interface IRoomValidator
             string roomCode,
             string deviceSerialNumber);
 
-    // UNDONE: will add more validation here
+    // UNDONE: will add more validation here for other methods
 }

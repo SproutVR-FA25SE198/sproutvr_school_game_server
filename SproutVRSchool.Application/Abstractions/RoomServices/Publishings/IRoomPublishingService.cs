@@ -1,6 +1,6 @@
 ﻿using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 
-namespace SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+namespace SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
 
 public interface IRoomPublishingService
 {
