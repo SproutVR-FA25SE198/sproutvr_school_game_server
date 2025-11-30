@@ -18,6 +18,8 @@ using SproutVRSchool.Application.Abstractions.FileServices;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
+using SproutVRSchool.Application.Abstractions.RoomServices.PubSub;
 using SproutVRSchool.Application.Abstractions.RoomServices.SessionValidator;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
@@ -33,6 +35,7 @@ using SproutVRSchool.Infrastructure.Services.AIServices.Workers;
 using SproutVRSchool.Infrastructure.Services.Clock;
 using SproutVRSchool.Infrastructure.Services.FileServices;
 using SproutVRSchool.Infrastructure.Services.RoomServices;
+using SproutVRSchool.Infrastructure.Services.RoomServices.Publishings;
 using SproutVRSchool.Infrastructure.Services.RoomServices.Workers;
 using StackExchange.Redis;
 
@@ -240,8 +243,11 @@ public static partial class ServiceCollectionExtensions
         service.AddScoped<ITeacherVRLearningSessionStateService, RedisTeacherVRLearningSessionStateService>();
         service.AddScoped<ITeacherVRLearningSessionService, RedisTeacherVRLearningSessionService>();
         service.AddScoped<IVRGlassVRLearningSessionService, RedisVRGlassVRLearningSessionService>();
-        service.AddScoped<IRoomPublishingService, RoomPublishingService>();
+        service.AddScoped<IRoomPublishingService, RedisRoomPublishingService>();
         service.AddScoped<IRoomValidator, RoomValidator>();
+
+        service.AddTransient<IRoomChanneNameService, RedisRoomMessagingNameService>();
+        service.AddTransient<IRoomStreamNameService, RedisRoomMessagingNameService>();
 
         service.AddSingleton<IRoomCodeGeneratorService, RoomCodeGenerator>();
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
+using SproutVRSchool.Application.Abstractions.RoomServices.PubSub;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.GetRoomState;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
@@ -30,6 +31,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly ILogger<RedisTeacherVRLearningSessionStateService> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IRoomChanneNameService _roomChanneNameService;
     private readonly IUnitOfWork _uow;
     private readonly UserManager<UserAccount> _userManager;
 
@@ -42,11 +44,13 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         IUnitOfWork uow,
         IDateTimeProvider dateTimeProvider,
         UserManager<UserAccount> userManager,
+        IRoomChanneNameService roomChanneNameService,
         ILogger<RedisTeacherVRLearningSessionStateService> logger
         )
     {
         _database = connectionMultiplexer.GetDatabase();
         _dateTimeProvider = dateTimeProvider;
+        _roomChanneNameService = roomChanneNameService;
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -74,16 +78,16 @@ internal sealed class RedisTeacherVRLearningSessionStateService
             SingleWriter = false
         });
 
-        // 2. Subscribe to Redis Pub/Sub channel
+        // 2. Subscribe to Desttop App Channel
         await subscriber.SubscribeAsync(
-         RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP),
-         (redisChannel, message) =>
-         {
-             if (!channel.Writer.TryWrite(message))
+             RedisChannel.Literal(_roomChanneNameService.GetDesktopChannelNameOnVrLearningSessionId(teacherRoomUpdateRequestDto.VrLearningSessionId)),
+             (redisChannel, message) =>
              {
-                 _logger.LogWarning("Failed to enqueue Redis message for session {SessionId}", teacherRoomUpdateRequestDto.VrLearningSessionId);
-             }
-         });
+                 if (!channel.Writer.TryWrite(message))
+                 {
+                     _logger.LogWarning("Failed to enqueue Redis message for session {SessionId}", teacherRoomUpdateRequestDto.VrLearningSessionId);
+                 }
+             });
 
         // 3. Read message (events) from the channel
         try
@@ -183,7 +187,7 @@ internal sealed class RedisTeacherVRLearningSessionStateService
         }
         finally
         {
-            await subscriber.UnsubscribeAsync(RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP));
+            await subscriber.UnsubscribeAsync(RedisChannel.Literal(_roomChanneNameService.GetDesktopChannelNameOnVrLearningSessionId(teacherRoomUpdateRequestDto.VrLearningSessionId)));
         }
     }
 

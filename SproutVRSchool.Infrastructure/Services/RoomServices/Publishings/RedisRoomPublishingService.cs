@@ -2,33 +2,38 @@
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
+using SproutVRSchool.Application.Abstractions.RoomServices.PubSub;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
 using SproutVRSchool.Application.Extensions;
 using SproutVRSchool.Domain;
 using StackExchange.Redis;
 
-namespace SproutVRSchool.Infrastructure.Services.RoomServices;
+namespace SproutVRSchool.Infrastructure.Services.RoomServices.Publishings;
 
-public class RoomPublishingService : IRoomPublishingService
+public class RedisRoomPublishingService : IRoomPublishingService
 {
     // ===============================
     // === Fields
     // ===============================
 
     private readonly IDatabase _database;
-    private readonly ILogger<RoomPublishingService> _logger;
+    private readonly ILogger<RedisRoomPublishingService> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly IRoomChanneNameService _roomChanneNameService;
 
     // ===============================
     // === Constructor
     // ===============================
 
-    public RoomPublishingService(
+    public RedisRoomPublishingService(
         IConnectionMultiplexer connectionMultiplexer,
-        ILogger<RoomPublishingService> logger)
+        IRoomChanneNameService roomChanneNameService,
+        ILogger<RedisRoomPublishingService> logger)
     {
         _database = connectionMultiplexer.GetDatabase();
         _logger = logger;
+        _roomChanneNameService = roomChanneNameService;
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -91,7 +96,7 @@ public class RoomPublishingService : IRoomPublishingService
 
             // 4. Publish to the Desktop channel
             await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP),
+                RedisChannel.Literal(_roomChanneNameService.GetDesktopChannelNameOnVrLearningSessionId(vrLearningSessionId)),
                 redisEvent);
 
             _logger.LogInformation("Published to Desktop Channel: {Event}", redisEvent);
@@ -117,7 +122,7 @@ public class RoomPublishingService : IRoomPublishingService
 
             // 3. Publish to the VR channel
             await subscriber.PublishAsync(
-                RedisChannel.Literal(AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR),
+                RedisChannel.Literal(_roomChanneNameService.GetVRDeviceChannelNameOnVrLearningSessionId(vrLearningSessionId)),
                 redisEvent);
 
             _logger.LogInformation("Published to VR Channel: {Event}", redisEvent);

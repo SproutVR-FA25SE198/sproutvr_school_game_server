@@ -7,7 +7,7 @@ using Polly.Registry;
 using SproutVRSchool.Application.Abstractions.Clock;
 using SproutVRSchool.Application.Abstractions.Repositories;
 using SproutVRSchool.Application.Abstractions.RoomServices.CodeGenerator;
-using SproutVRSchool.Application.Abstractions.RoomServices.Publishers;
+using SproutVRSchool.Application.Abstractions.RoomServices.Publishings;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSession.Dtos;
 using SproutVRSchool.Application.Abstractions.RoomServices.TeacherSessionState.Dtos.StreamRoomState;
@@ -103,15 +103,14 @@ internal sealed class RedisTeacherVRLearningSessionService
             throw new SvrResourceNotFoundException($"VR Lesson with ID '{request.VrLessonId}' not found.");
         }
 
-        // If roomDurationInMinute > maxDuration, throw back an error to the client
-        if (request.RoomDurationInMinutes > vrLesson.MaxDuration.TotalMinutes)
+        // If roomDurationInMinute < maxDuration, throw back an error to the client
+        if (request.RoomDurationInMinutes < vrLesson.MaxDuration.TotalMinutes)
         {
-            throw new Exception("Room Duration must greater than the VR Lesson Minutes");
+            throw new Exception("Room Duration must be greater than the VR Lesson Minutes");
         }
 
         DateTimeOffset startTimeNowAtUtc = _dateTimeProvider.UtcDateTimeNow;
         DateTimeOffset endTimeNowAtUtc = startTimeNowAtUtc.AddMinutes(request.RoomDurationInMinutes);
-
 
         // 2. Get the list tasks related to the VRLesson from repositories
         // - Set Tasks params for the devices, by default isCompleted = false, isCorrect = false
@@ -141,8 +140,6 @@ internal sealed class RedisTeacherVRLearningSessionService
                 IsAlreadyJoined = false,
                 Tasks = new ConcurrentDictionary<string, ModelTaskProgress>(taskTemplate)
             });
-
-
 
         // 3. Retry execute the activate if failed due to room code conflict
         bool isSuccess = await retryPipeline.ExecuteAsync<bool>(async (cancellationToken) =>
