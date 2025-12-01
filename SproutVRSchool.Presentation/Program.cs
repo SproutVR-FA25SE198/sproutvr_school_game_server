@@ -47,14 +47,15 @@ app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
 // Exception handlers
 app.UseExceptionHandler();
 
+// Cors
+app.UseCors("DesktopAppPolicy");
+
 // Static Files & Routing
 app.ApplyStaticMiddleware();
 
 // Determine endpoints
 app.UseRouting();
 
-// Cors
-app.UseCors("DesktopAppPolicy");
 
 // Authentication & Authorization
 app.UseAuthentication();
