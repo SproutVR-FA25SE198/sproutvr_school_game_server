@@ -38,13 +38,13 @@ internal sealed class AccountExceptionHandler(ILogger<AccountExceptionHandler> l
                 };
                 break;
 
-            // 400 - OTP Failure
-            case SvrOtpFailureException otpFailureException:
+            // 400 - Password Mismatch
+            case SvrPasswordMismatchException passwordMismatchException:
                 problemDetails = new ProblemDetails
                 {
                     Status = StatusCodes.Status400BadRequest,
-                    Title = "OTP Verification Failed",
-                    Detail = otpFailureException.Message,
+                    Title = "Password Validation Failed",
+                    Detail = passwordMismatchException.Message,
                     Instance = httpContext.Request.Path,
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
                 };
@@ -57,6 +57,18 @@ internal sealed class AccountExceptionHandler(ILogger<AccountExceptionHandler> l
                     Status = StatusCodes.Status400BadRequest,
                     Title = "Invalid Account Type",
                     Detail = invalidAccountTypeException.Message,
+                    Instance = httpContext.Request.Path,
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                };
+                break;
+
+            // 400 - Invalid Password Format
+            case SvrInvalidPasswordFormatException invalidPasswordException:
+                problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Invalid Password Format",
+                    Detail = invalidPasswordException.Message,
                     Instance = httpContext.Request.Path,
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
                 };
