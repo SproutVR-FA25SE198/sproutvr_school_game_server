@@ -27,7 +27,7 @@ public sealed class AuthGetCurrentUserCommandHandler(
             || currentUser.Status == null
             || currentUser.Status == UserAccountStatus.Disabled.ToString())
         {
-            throw new SvrUnauthorizedAccessException("Your account has been disabled. Please contact support for assistance.");
+            throw new SvrSelfAccountStatusChangeException("Your account has been disabled. Please contact support for assistance.");
         }
 
         // 3. Throw exception if dont have user id

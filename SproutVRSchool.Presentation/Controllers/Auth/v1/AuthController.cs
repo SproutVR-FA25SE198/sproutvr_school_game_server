@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Auth.Commands.ChangePassword;
 using SproutVRSchool.Application.RequestHandlers.Auth.Commands.Login;
 using SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.SearchAccounts;
@@ -21,19 +22,10 @@ public sealed class AuthController(IMediator mediator) : BaseApiController
     // GET: api/v1/auth/profile
     [Authorize]
     [HttpGet("profile")]
-    public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCurrentUserProfile(CancellationToken cancellationToken)
     {
         var request = new AuthGetCurrentUserCommand();
         AuthGetCurrentUserCommandResponseDto response = await mediator.Send(request, cancellationToken);
-        return Ok(response);
-    }
-
-    // GET: api/v1/school-admin/accounts
-    [HttpGet]
-    public async Task<IActionResult> GetAccounts([FromQuery] AuthorizedSearchAccountsQueryParams queryParams, CancellationToken cancellationToken)
-    {
-        var request = new AuthorizedSearchAccountsQuery(queryParams);
-        GetListResultResponseDto<AuthorizedSearchAccountsQueryResponseDto> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -56,5 +48,13 @@ public sealed class AuthController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
-}
 
+    // PATCH: api/v1/auth/change-password
+    [Authorize]
+    [HttpPatch("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] AuthChangePasswordCommand request, CancellationToken cancellationToken)
+    {
+        AuthChangePasswordCommandResponseDto response = await mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+}
