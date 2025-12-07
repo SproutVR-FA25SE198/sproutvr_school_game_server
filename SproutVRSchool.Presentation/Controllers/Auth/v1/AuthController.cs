@@ -2,11 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Auth.Commands.ChangePassword;
 using SproutVRSchool.Application.RequestHandlers.Auth.Commands.Login;
 using SproutVRSchool.Application.RequestHandlers.Auth.Queries.GetCurrentUser;
-using SproutVRSchool.Application.RequestHandlers.Authorized.Accounts.Queries.SearchAccounts;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Auth.v1;

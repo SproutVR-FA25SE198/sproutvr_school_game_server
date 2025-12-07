@@ -10,13 +10,13 @@ public class RedisRoomMessagingNameService : IRoomChanneNameService, IRoomStream
         return $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_DESKTOP}:{vrLearningSesisonId}";
     }
 
-    public string GetTaskUpdatedStreamName(string vrLearningSessionId)
-    {
-        return $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAMS_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
-    }
-
     public string GetVRDeviceChannelNameOnVrLearningSessionId(string vrLearningSesisonId)
     {
         return $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_CHANNELS_NOTIFY_EVENTS_TO_VR}:{vrLearningSesisonId}";
+    }
+
+    public string GetTaskUpdatedStreamName(string vrLearningSessionId)
+    {
+        return $"{AppCts.Redis.NAMESPACE_VR_LEARNING_SESSIONS_STREAMS_TASK_UPDATED_EVENTS}:{vrLearningSessionId}";
     }
 }
