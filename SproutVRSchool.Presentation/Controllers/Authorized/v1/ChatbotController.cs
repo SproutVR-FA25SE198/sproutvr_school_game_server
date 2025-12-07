@@ -23,6 +23,7 @@ public sealed class ChatbotController(IMediator mediator) : BaseApiController
 
     // POST: api/v1/authorized/chatbot
     [HttpPost]
+    [Authorize]
     [RequestTimeout(120000)]
     public async Task<IActionResult> Post([FromBody] ChatCommand chatCommand)
     {
