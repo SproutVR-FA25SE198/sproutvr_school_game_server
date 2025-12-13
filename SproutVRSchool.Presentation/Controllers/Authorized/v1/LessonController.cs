@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.GetLessonById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.Lessons.Queries.SearchLessons;
+using SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 using SproutVRSchool.Domain;
 
 namespace SproutVRSchool.Presentation.Controllers.Authorized.v1;
@@ -52,5 +53,17 @@ public sealed class LessonsController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
+
+    // PATCH: api/v1/authorized/lessons/{id}/assign-status
+    [HttpPatch("{id}/assign-status")]
+    public async Task<IActionResult> AssignStatus(
+    [FromRoute] Guid id,
+    [FromBody] AuthorizedAssignLessonStatusCommand request,
+    CancellationToken cancellationToken)
+    {
+        request.LessonId = id;
+        AuthorizedAssignLessonStatusCommandResponseDto result = await mediator.Send(request, cancellationToken);
+        return Ok(result);
+    }
 
 }
