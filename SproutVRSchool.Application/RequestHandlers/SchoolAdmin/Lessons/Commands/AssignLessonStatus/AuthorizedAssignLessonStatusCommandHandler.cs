@@ -7,14 +7,14 @@ using SproutVRSchool.Domain.Entities.Lessons;
 
 namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 
-public sealed class SAAssignLessonStatusCommandHandler(
+public sealed class AuthorizedAssignLessonStatusCommandHandler(
     IUnitOfWork uow,
-    ILogger<SAAssignLessonStatusCommandHandler> logger
+    ILogger<AuthorizedAssignLessonStatusCommandHandler> logger
     )
-    : IRequestHandler<SAAssignLessonStatusCommand, SAAssignLessonStatusCommandResponseDto>
+    : IRequestHandler<AuthorizedAssignLessonStatusCommand, AuthorizedAssignLessonStatusCommandResponseDto>
 {
-    public async Task<SAAssignLessonStatusCommandResponseDto> Handle(
-        SAAssignLessonStatusCommand request,
+    public async Task<AuthorizedAssignLessonStatusCommandResponseDto> Handle(
+        AuthorizedAssignLessonStatusCommand request,
         CancellationToken cancellationToken)
     {
         // 1. Find existing lesson or throw
@@ -31,7 +31,7 @@ public sealed class SAAssignLessonStatusCommandHandler(
 
         logger.LogInformation("Lesson '{LessonName}' status updated to {Status}", lesson.Name, lesson.Status);
 
-        return new SAAssignLessonStatusCommandResponseDto(
+        return new AuthorizedAssignLessonStatusCommandResponseDto(
             LessonId: request.LessonId,
             LessonName: lesson.Name,
             Message: $"Status {request.Status} assigned successfully.",

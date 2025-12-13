@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SproutVRSchool.Application.Commons.Responses;
+using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Commands.AssignVRLesson;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.GetVRLessonById;
 using SproutVRSchool.Application.RequestHandlers.Authorized.VRLessons.Queries.SearchVRLessons;
 using SproutVRSchool.Domain;
@@ -51,6 +52,18 @@ public sealed class VRLessonsController(IMediator mediator) : BaseApiController
     // ========================
     // === PATCHs
     // ========================
+
+    // PATCH: api/v1/authorized/vrlessons/{id}/assign-status
+    [HttpPatch("{id}/asign-status")]
+    public async Task<IActionResult> AssignStatus(
+       [FromRoute] Guid id,
+       [FromBody] AuthorizedAssignVRLessonStatusCommand request,
+       CancellationToken cancellationToken)
+    {
+        request.VRLessonId = id;
+        AuthorizedAssignVRLessonStatusCommandResponseDto result = await mediator.Send(request, cancellationToken);
+        return Ok(result);
+    }
 
 }
 
