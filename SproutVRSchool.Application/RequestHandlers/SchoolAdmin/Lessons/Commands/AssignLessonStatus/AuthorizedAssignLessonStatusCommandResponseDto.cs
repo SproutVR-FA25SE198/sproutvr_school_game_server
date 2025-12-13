@@ -2,7 +2,7 @@
 
 namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 
-public sealed record SAAssignLessonStatusCommandResponseDto(
+public sealed record AuthorizedAssignLessonStatusCommandResponseDto(
     Guid LessonId,
     string LessonName,
     string Message,

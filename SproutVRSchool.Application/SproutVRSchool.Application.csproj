@@ -23,6 +23,7 @@
 	  <Folder Include="RequestHandlers\Authorized\VRDeviceSessionSummaries\Commands\" />
 	  <Folder Include="RequestHandlers\Authorized\VRDevices\Commands\" />
 	  <Folder Include="RequestHandlers\Authorized\VRLearningSessions\Commands\" />
+	  <Folder Include="RequestHandlers\SchoolAdmin\VRLessons\" />
 	</ItemGroup>
 
 </Project>

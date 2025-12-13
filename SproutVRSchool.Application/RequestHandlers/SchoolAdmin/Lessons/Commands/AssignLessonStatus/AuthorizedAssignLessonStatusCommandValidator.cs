@@ -2,9 +2,9 @@
 
 namespace SproutVRSchool.Application.RequestHandlers.SchoolAdmin.Lessons.Commands.AssignLessonStatus;
 
-public sealed class SAAssignLessonStatusCommandValidator : AbstractValidator<SAAssignLessonStatusCommand>
+public sealed class AuthorizedAssignLessonStatusCommandValidator : AbstractValidator<AuthorizedAssignLessonStatusCommand>
 {
-    public SAAssignLessonStatusCommandValidator()
+    public AuthorizedAssignLessonStatusCommandValidator()
     {
         RuleFor(x => x.LessonId)
             .NotEmpty().WithMessage("LessonId is required.");
