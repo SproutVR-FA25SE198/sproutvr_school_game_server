@@ -54,7 +54,7 @@ public sealed class VRLessonsController(IMediator mediator) : BaseApiController
     // ========================
 
     // PATCH: api/v1/authorized/vrlessons/{id}/assign-status
-    [HttpPatch("{id}/asign-status")]
+    [HttpPatch("{id}/assign-status")]
     public async Task<IActionResult> AssignStatus(
        [FromRoute] Guid id,
        [FromBody] AuthorizedAssignVRLessonStatusCommand request,
