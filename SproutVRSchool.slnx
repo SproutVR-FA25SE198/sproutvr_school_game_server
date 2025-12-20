@@ -14,4 +14,5 @@
   <Project Path="SproutVRSchool.Domain/SproutVRSchool.Domain.csproj" />
   <Project Path="SproutVRSchool.Infrastructure/SproutVRSchool.Infrastructure.csproj" />
   <Project Path="SproutVRSchool.Presentation/SproutVRSchool.Presentation.csproj" />
+  <Project Path="SproutVRSchool.Tests/SproutVRSchool.Tests.csproj" Id="64c1f9b1-c336-430a-9e3e-50c8f41c2bcb" />
 </Solution>
