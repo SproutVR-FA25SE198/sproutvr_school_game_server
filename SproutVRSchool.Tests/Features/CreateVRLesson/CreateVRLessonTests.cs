@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 
 namespace SproutVRSchool.Tests.Features.CreateVRLesson;
