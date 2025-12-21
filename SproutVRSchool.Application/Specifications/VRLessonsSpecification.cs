@@ -65,6 +65,4 @@ internal sealed class VRLessonsSpecification : BaseSpecification<VRLesson>
         AddThenInclude(vrLesson => vrLesson.Include(j => j.VRTasks).ThenInclude(j => j.ActivityType));
         AddThenInclude(vrLesson => vrLesson.Include(j => j.VRTasks).ThenInclude(j => j.TaskLocation));
     }
-
-
 }

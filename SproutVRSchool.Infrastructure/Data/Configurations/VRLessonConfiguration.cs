@@ -46,6 +46,9 @@ internal sealed class VRLessonConfiguration : BaseEntityConfiguration<VRLesson>
             .HasMaxLength(50)
             .HasConversion<EnumToStringConverter<VRLessonStatus>>();
 
+        builder.Property(vrl => vrl.PlayedAtUtc)
+            .IsRequired(false);
+
         // Relationships
         builder.HasOne(vrl => vrl.Lesson)
                .WithMany(l => l.VRLessons)

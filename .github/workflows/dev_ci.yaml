@@ -23,4 +23,4 @@ jobs:
               run: dotnet restore ./SproutVRSchool.slnx
 
             - name: Run All Unit Tests
-              run: dotnet test ./SproutVRSchool.slnx  --configuration Release --no-build --verbosity normal
+              run: dotnet test ./SproutVRSchool.slnx --configuration Release --verbosity normal

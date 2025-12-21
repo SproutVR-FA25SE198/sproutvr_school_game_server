@@ -27,6 +27,7 @@ public sealed class AuthorizedSearchVRLessonsQueryHandler(
             MaxDuration = vrLesson.MaxDuration,
             PresetJsonRelativeFilePath = vrLesson.PresetJsonRelativeFilePath,
             Status = new StatusDto(vrLesson.Status),
+            PlayedAtUtc = vrLesson.PlayedAtUtc,
             CreatedAtUtc = vrLesson.CreatedAtUtc,
             CreatedAtVietNam = dateTimeProvider.ConvertToVietNamTime(vrLesson.CreatedAtUtc),
 
