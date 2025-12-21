@@ -61,7 +61,7 @@ public sealed class SchoolServerDbContext : IdentityDbContext<UserAccount, UserA
     }
 
     // =============================
-    // ==== Methods
+    // ==== Mehods
     // =============================
 
     /// <summary>

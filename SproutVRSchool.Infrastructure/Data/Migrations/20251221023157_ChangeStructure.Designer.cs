@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SproutVRSchool.Infrastructure.Data;
@@ -11,9 +12,11 @@ using SproutVRSchool.Infrastructure.Data;
 namespace SproutVRSchool.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SchoolServerDbContext))]
-    partial class SchoolServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221023157_ChangeStructure")]
+    partial class ChangeStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

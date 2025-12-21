@@ -184,6 +184,11 @@ internal sealed class RedisTeacherVRLearningSessionService
             throw new Exception("Failed to activate session. Please try again.");
         }
 
+        // Update playedAt time
+        vrLesson.SetPlayedAtTime();
+        _unitOfWork.Repository<VRLesson>().Update(vrLesson);
+        await _unitOfWork.SaveChangesAsync();
+
         return new ActivateRoomResponseDto(
             startTimeNowAtUtc,
             endTimeNowAtUtc,

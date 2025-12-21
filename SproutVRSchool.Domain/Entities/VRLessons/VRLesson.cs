@@ -14,6 +14,7 @@ public sealed class VRLesson : BaseEntity
     public TimeSpan MaxDuration { get; set; }
     public string? PresetJsonRelativeFilePath { get; set; }
     public VRLessonStatus Status { get; set; }
+    public DateTimeOffset? PlayedAtUtc { get; set; }
 
     // navigation properties
     public Lesson Lesson { get; set; }
@@ -61,6 +62,12 @@ public sealed class VRLesson : BaseEntity
     {
         PresetJsonRelativeFilePath = presetJsonRelativeFilePath;
         UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+    public void SetPlayedAtTime()
+    {
+        PlayedAtUtc = DateTimeOffset.UtcNow;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
     }
 
     public void UpdateStatus(VRLessonStatus status)

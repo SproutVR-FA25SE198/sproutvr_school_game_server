@@ -10,7 +10,6 @@ public sealed class TeacherCreateLessonCommandValidator : AbstractValidator<Teac
 
     // 10 MB
     private const long MaxFileSizeInBytes = 10 * 1024 * 1024;
-
     private static readonly string[] AllowedExtensions = { ".pdf" };
 
     // ============================

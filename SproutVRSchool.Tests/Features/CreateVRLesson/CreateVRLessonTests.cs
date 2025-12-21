@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using FluentValidation.TestHelper;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.CreateVRLesson;
 
 namespace SproutVRSchool.Tests.Features.CreateVRLesson;
@@ -13,7 +14,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { LessonId = Guid.Empty };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "LessonId");
@@ -24,7 +25,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { MapId = Guid.Empty };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "MapId");
@@ -35,7 +36,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Name = string.Empty };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "Name");
@@ -46,7 +47,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Name = new string('A', 101) };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "Name");
@@ -57,7 +58,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Description = string.Empty };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "Description");
@@ -68,7 +69,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Description = new string('D', 1001) };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "Description");
@@ -79,7 +80,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { MaxDuration = TimeSpan.Zero };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "MaxDuration");
@@ -90,7 +91,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "Tasks");
@@ -102,7 +103,7 @@ public class CreateVRLessonTests
         CreateVRLessonTaskRequestDto task = CreateValidTask() with { TaskLocationId = Guid.Empty };
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [task] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
     }
@@ -113,7 +114,7 @@ public class CreateVRLessonTests
         CreateVRLessonTaskRequestDto task = CreateValidTask() with { MapObjectId = Guid.Empty };
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [task] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
     }
@@ -124,7 +125,7 @@ public class CreateVRLessonTests
         CreateVRLessonTaskRequestDto task = CreateValidTask() with { ActivityTypeId = Guid.Empty };
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [task] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
     }
@@ -135,7 +136,7 @@ public class CreateVRLessonTests
         CreateVRLessonTaskRequestDto task = CreateValidTask() with { Description = string.Empty };
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [task] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
     }
@@ -146,7 +147,7 @@ public class CreateVRLessonTests
         CreateVRLessonTaskRequestDto task = CreateValidTask() with { Description = new string('X', 256) };
         TeacherCreateVRLessonCommand command = CreateValidCommand() with { Tasks = [task] };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
     }
@@ -156,7 +157,7 @@ public class CreateVRLessonTests
     {
         TeacherCreateVRLessonCommand command = CreateValidCommand();
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.True(result.IsValid);
         Assert.Empty(result.Errors);

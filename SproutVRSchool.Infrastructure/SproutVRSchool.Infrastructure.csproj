@@ -4,6 +4,10 @@
 		<ProjectReference Include="..\SproutVRSchool.Application\SproutVRSchool.Application.csproj" />
 		<PackageReference Include="EPPlus" Version="8.2.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="Google.Cloud.Dialogflow.Cx.V3" Version="2.25.0" />
 	</ItemGroup>
