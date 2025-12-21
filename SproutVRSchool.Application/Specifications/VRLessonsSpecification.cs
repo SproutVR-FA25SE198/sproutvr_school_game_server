@@ -10,7 +10,6 @@ internal sealed class VRLessonsSpecification : BaseSpecification<VRLesson>
     public VRLessonsSpecification(AuthorizedSearchVRLessonsQueryParams searchVRLessonsParam)
         : base(x =>
             (string.IsNullOrEmpty(searchVRLessonsParam.Name) || x.Name.Contains(searchVRLessonsParam.Name)) &&
-            (!searchVRLessonsParam.TeacherId.HasValue || x.LessonId == searchVRLessonsParam.TeacherId) &&
             (!searchVRLessonsParam.LessonId.HasValue || x.LessonId == searchVRLessonsParam.LessonId) &&
             (!searchVRLessonsParam.MapId.HasValue || x.MapId == searchVRLessonsParam.MapId) &&
             (!searchVRLessonsParam.VRLessonStatus.HasValue || x.Status == searchVRLessonsParam.VRLessonStatus))
