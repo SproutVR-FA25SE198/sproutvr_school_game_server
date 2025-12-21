@@ -12,6 +12,7 @@ public record AuthorizedSearchVRLessonsQueryResponseDto
     public TimeSpan MaxDuration { get; init; }
     public string? PresetJsonRelativeFilePath { get; init; }
     public StatusDto Status { get; init; }
+    public DateTimeOffset? PlayedAtUtc { get; init; }
     public DateTimeOffset CreatedAtUtc { get; init; }
     public DateTimeOffset CreatedAtVietNam { get; init; }
 }

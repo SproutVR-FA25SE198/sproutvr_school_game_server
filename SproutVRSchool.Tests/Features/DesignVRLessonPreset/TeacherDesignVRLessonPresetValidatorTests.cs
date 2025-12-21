@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using FluentValidation.TestHelper;
 using Microsoft.EntityFrameworkCore;
 using SproutVRSchool.Application.RequestHandlers.Teacher.VRLessons.Commands.DesignVRLessonPreset;
 using SproutVRSchool.Infrastructure.Data;
@@ -47,7 +48,7 @@ public class TeacherDesignVRLessonPresetValidatorTests
         TeacherDesignVRLessonPresetCommand command = CreateValidCommand();
         command.VRLessonId = Guid.Empty;
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == "VRLessonId");
@@ -57,7 +58,7 @@ public class TeacherDesignVRLessonPresetValidatorTests
     public void DesignVRLessonPresetValidator_ValidCommand_ShouldPass()
     {
         TeacherDesignVRLessonPresetCommand command = CreateValidCommand();
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.True(result.IsValid);
         Assert.Empty(result.Errors);
@@ -85,7 +86,7 @@ public class TeacherDesignVRLessonPresetValidatorTests
             VRLessonId = Guid.NewGuid()
         };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName.Contains("Text"));
@@ -113,7 +114,7 @@ public class TeacherDesignVRLessonPresetValidatorTests
             VRLessonId = Guid.NewGuid()
         };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName.Contains("Answers"));
@@ -138,7 +139,7 @@ public class TeacherDesignVRLessonPresetValidatorTests
             VRLessonId = Guid.NewGuid()
         };
 
-        ValidationResult result = _validator.Validate(command);
+        ValidationResult result = _validator.TestValidate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName.Contains("Question"));
